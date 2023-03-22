@@ -1,4 +1,8 @@
 from pathlib import Path
+import requests
+def webinst(installto):
+    a = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/main/h.py')
+    print(a.text)
 
 def install(installto,iswin,devmode= False):
     print("installing to: "+str(installto))#,iswin=False)
@@ -29,11 +33,11 @@ def install(installto,iswin,devmode= False):
             to.write(first.read())
             to.close()
             first.close()
-        if iswin:
-            print("createing-extra-commands")
-            a = open(installto / "run.bat", "wt")
-            a.write("h.py")
-            a.close()
+        #if iswin:
+        #    print("createing-extra-commands")
+        #    a = open(installto / "run.bat", "wt")
+        #    a.write("h.py")
+        #    a.close()
         
         
         #a = input("add as 'hiss' to .bashrc (y/[n]):")
@@ -42,6 +46,6 @@ def install(installto,iswin,devmode= False):
 if __package__ == None:
     import os
     #input("pls run from hiss shell")
-    install(Path(input("input path to install:")),os.name == "nt")#,True)
+    webinst(Path(input("input path to install:")))#,os.name == "nt")#,True)
     
     #raise Exception
