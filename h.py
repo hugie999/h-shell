@@ -213,9 +213,9 @@ try:
                         cooltxt = cooltxt.zfill(10)
                         cooltxt = cooltxt.replace("0"," ")
                         if tempdepends[i] == 0:
-                            print(cooltxt+"█")
+                            print(cooltxt+"Y")
                         else:
-                            print(cooltxt+"░")
+                            print(cooltxt+"N")
                     print(tempdepends)
                     pass
                 if comman == "testbmp":

@@ -1,8 +1,38 @@
 from pathlib import Path
 import requests
 def webinst(installto):
-    a = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/main/files.txt')
-    print(a.text)
+    filesreq = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/main/files.txt')
+    files = []
+    filenam = files
+    #print(files)
+    final = []
+    for i in filesreq.iter_lines():
+        #print(i)
+        files.append("https://raw.githubusercontent.com/hugie999/h-shell/main/"+str(i)[2:-1])
+        final.append(str(i)[2:-1])
+        
+        #print(filenam[i])
+    print(files)
+    data = []
+    #filenam = []
+    
+    for i in range(len(files)):
+        data.append(requests.get(files[i]).text)
+        
+        #files.append(i)
+        #filenam.append(files[i])
+        print(filenam[i])
+        final[i] = (installto / Path(final[i]))
+    print(final)
+    for i in range(len(files)):
+        #first = data[i]#open(files[i],"rt")
+        to = open(final[i],"wt")
+        print(str(files[i])+" > "+str(final[i]))
+        to.write(data[i])
+        to.close()
+        #" ".encode("utf-8")
+        #first.close()
+    
 
 def install(installto,iswin,devmode= False):
     print("installing to: "+str(installto))#,iswin=False)
