@@ -2,7 +2,7 @@ import os
 from hlib import *
 HELPS = ["general","help","cd","goto","hist","py"]
 HELPTEX = [
-    """--EZ Bash--
+    """--h-shell--
 to type a command input the command and then enter (if a command isnt dound it will try bash)""",
 """--the help command--
 the help command will pull from either the in built help or the 'man' command""",
