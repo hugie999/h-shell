@@ -14,8 +14,8 @@ system = platform.system()
 
 wi = os.get_terminal_size().columns
 hi = os.get_terminal_size().lines
-print('hight =' + str(hi))
-print('width =' + str(wi))
+#print('hight =' + str(hi))
+#print('width =' + str(wi))
 
 def printEscape(a):
     print("\x1b"+a,end="")

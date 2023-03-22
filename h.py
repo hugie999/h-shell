@@ -1,30 +1,72 @@
 #input("press [ENTER] to load h.py:")
 #logs.log(1,"importing: log")
+#printEscape("[1A")
+print("importing [0/7] |")
+print("\x1b[1A",end="")
 import logs
 try:
-    logs.log(1,"importing----------")
-    logs.log(1,"importing: h-lib")
-    from hlib import *
-    logs.log(1,"importing: aliases")
-    import aliases
-    logs.log(1,"importing: installer script")
-    import installer
-    logs.log(1,"importing: special commands")
-    import spcoms
-    logs.log(1,"importing: os")
-    import os
-    logs.log(1,"importing: sys")
-    import sys
-    logs.log(1,"importing: pathlib")
-    from pathlib import Path
-    #print("importing: special commands")
-    #import importlib
-    logs.log(1,"importing: platform")
-    import platform
+    if logs.Llevel > 3:
+        logs.log(1,"importing----------")
+        logs.log(1,"importing: h-lib")
+        from hlib import *
+        logs.log(1,"importing: aliases")
+        import aliases
+        logs.log(1,"importing: installer script")
+        import installer
+        logs.log(1,"importing: special commands")
+        import spcoms
+        logs.log(1,"importing: os")
+        import os
+        logs.log(1,"importing: sys")
+        import sys
+        logs.log(1,"importing: pathlib")
+        from pathlib import Path
+        #print("importing: special commands")
+        #import importlib
+        logs.log(1,"importing: platform")
+        import platform
 
-    imports = [os,spcoms,sys,aliases]
-    depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
-    logs.log(1,"done---------------")
+        imports = [os,spcoms,sys,aliases]
+        depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
+        logs.log(1,"done---------------")
+    elif logs.Llevel < 3:
+        logs.log(1,"importing----------")
+        logs.log(1,"importing: h-lib")
+        print("importing [1/8] /")
+        from hlib import *
+        logs.log(1,"importing: aliases")
+        printEscape("[1A")
+        print("importing [2/8] -")
+        import aliases
+        logs.log(1,"importing: installer script")
+        printEscape("[1A")
+        print("importing [3/8] \\")
+        import installer
+        logs.log(1,"importing: special commands")
+        printEscape("[1A")
+        print("importing [4/8] |")
+        import spcoms
+        logs.log(1,"importing: os")
+        printEscape("[1A")
+        print("importing [5/8] /")
+        import os
+        logs.log(1,"importing: sys")
+        printEscape("[1A")
+        print("importing [6/8] -")
+        import sys
+        logs.log(1,"importing: pathlib")
+        printEscape("[1A")
+        print("importing [7/8] \\")
+        from pathlib import Path
+
+        logs.log(1,"importing: platform")
+        printEscape("[1A")
+        print("importing [8/8] |")
+        import platform
+
+        imports = [os,spcoms,sys,aliases]
+        depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
+        logs.log(1,"done---------------")
 except:
     try:
         logs.save()
@@ -43,7 +85,7 @@ except:
 iswindows = False
 isfloppy  = False
 isinserted= True
-ver = "0.1 A3"
+ver = "0.1 A4"
 title = "h shell"
 theme = 0
 proghome = Path(__file__).parent
@@ -74,7 +116,7 @@ if isfloppy:
 input("press [enter]")
 pluginreserved = []
 
-prefs = [":","H-shell",0]
+prefs = [":","H-shell",0,False]#unused, unused, unused, quick clear?
 prompt = prefs[0]
 title  = prefs[1]
 theme  = prefs[2]
@@ -171,7 +213,12 @@ try:
                 b = 0
             elif a[:5] == "clear":
                 clear()
-                printappname(title + "-:{}".format(cd))
+                if not prefs[3]:
+                    print(THEMES[theme])
+                    for i in range(hi-1):
+                        for i in range(wi):
+                            print(" ",end="")
+                #printappname(title + "-:{}".format(cd))
                 b = 0
             elif a[:3] == "dev":
                 #print(__file__)
@@ -192,6 +239,7 @@ try:
                     logs.log(0,"new log level: {}".format(str(newlev)))
                     LlevF.write(newlev)
                     LlevF.close()
+                    logs.reload()
                 if comman == "slogs":
                     logs.save()
                 if comman == "install":
