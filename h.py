@@ -26,12 +26,17 @@ try:
     depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
     logs.log(1,"done---------------")
 except:
-    logs.save()
     try:
-        doerror(True,"error importing modules (check log.log)")
+        logs.save()
+        try:
+            doerror(True,"error importing modules (check log.log)")
+        except:
+            print("error while importing! (check log.log)")
+            exit()
     except:
-        print("error while importing! (check log.log)")
-        exit()
+        print("an error occoured saveing logs")
+        print(logs.logs)
+    
 #print("\x1b[=1h")
 #printEscape("[?47h")
 #clear()
@@ -192,7 +197,7 @@ try:
                 if comman == "install":
                     installer.install(cd,iswindows)
                 if comman == "webinst":
-                    installer.install(cd)
+                    installer.webinst(cd)
                 if comman == "fstest":
                     times = range(int(input("number (bytes):")))
                     filething = open(str(cd)+"/file.txt","wt")
