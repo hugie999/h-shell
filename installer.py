@@ -1,7 +1,7 @@
 from pathlib import Path
 import requests
 def webinst(installto):
-    a = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/main/h.py')
+    a = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/main/files.txt')
     print(a.text)
 
 def install(installto,iswin,devmode= False):

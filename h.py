@@ -4,7 +4,7 @@ import logs
 try:
     logs.log(1,"importing----------")
     logs.log(1,"importing: h-lib")
-    from stdstuffs import *
+    from hlib import *
     logs.log(1,"importing: aliases")
     import aliases
     logs.log(1,"importing: installer script")

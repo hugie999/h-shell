@@ -1,5 +1,5 @@
 import os
-from stdstuffs import *
+from hlib import *
 HELPS = ["general","help","cd","goto","hist","py"]
 HELPTEX = [
     """--EZ Bash--
