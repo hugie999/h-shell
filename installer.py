@@ -1,6 +1,7 @@
 from pathlib import Path
 import requests
 def webinst(installto):
+    input("installing to "+str(installto))
     filesreq = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/main/files.txt')
     files = []
     filenam = files

@@ -191,6 +191,8 @@ try:
                     logs.save()
                 if comman == "install":
                     installer.install(cd,iswindows)
+                if comman == "webinst":
+                    installer.install(cd)
                 if comman == "fstest":
                     times = range(int(input("number (bytes):")))
                     filething = open(str(cd)+"/file.txt","wt")
