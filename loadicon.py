@@ -24,6 +24,7 @@ def loadupdate():
     global loadframe
     global loadcompletetxt
     print("\x1b[1A",end="")
+    print("\x1b[0K",end="")
     if loadpar < loadmax:
         print("{} [{}/{}] {}".format(loadtxt,loadpar,loadmax,loadframes[loadframe]))
     else:
