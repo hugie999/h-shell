@@ -1,5 +1,6 @@
 from pathlib import Path
 import requests
+import loadicon as load
 def webinst(installto):
     input("installing to "+str(installto))
     filesreq = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/main/files.txt')
@@ -56,7 +57,7 @@ def install(installto,iswin,devmode= False):
                 files.append(i)
                 names.append(i.name)
                 final.append(installto / i.name)
-                
+        
         for i in range(len(files)):
             first = open(files[i],"rt")
             to = open(final[i],"wt")

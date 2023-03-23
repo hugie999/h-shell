@@ -1,6 +1,7 @@
 Llevel = 4
 logs = []
 import time
+from pathlib import Path
 
 def reload():
     Llevelf = open(".loglev")
@@ -35,12 +36,13 @@ def log(level=0,text="None"): #logs the input text | log levels 0 = verbose (non
 def save():
     log(1,"saveing logs")
     Lfile = open("log.log","a")
-    Lfile.write("-time: "+str(time.time))
+    #Lfile.write("-time: "+str(time.time()))
     for i in range(len(logs)):
         #if Llevel >= 2:
         #    print()
         
-        Lfile.write("[{}]: {} \n".format(str(time.time()),logs[i]))
+        Lfile.write("[{}]: {} \n".format("",logs[i]))
+    Lfile.close()    
     log(1,"logs saved!")
 try:
     Llevelf = open(".loglev")

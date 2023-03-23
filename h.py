@@ -1,8 +1,8 @@
-#input("press [ENTER] to load h.py:")
-#logs.log(1,"importing: log")
-#printEscape("[1A")
-print("importing [0/7] |")
-print("\x1b[1A",end="")
+
+import loadicon as load
+load.makeloader(8,"importing","importing complete")
+#print("importing [0/8] |")
+#print("\x1b[1A",end="")
 import logs
 try:
     if logs.Llevel > 3:
@@ -29,56 +29,67 @@ try:
         imports = [os,spcoms,sys,aliases]
         depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
         logs.log(1,"done---------------")
-    elif logs.Llevel < 3:
+    else:
         logs.log(1,"importing----------")
         logs.log(1,"importing: h-lib")
-        print("importing [1/8] /")
+        load.loadupdate()
+        #print("importing [1/8] /")
         from hlib import *
         logs.log(1,"importing: aliases")
-        printEscape("[1A")
-        print("importing [2/8] -")
+        #printEscape("[1A")
+        #print("importing [2/8] -")
+        load.loadupdate()
         import aliases
         logs.log(1,"importing: installer script")
-        printEscape("[1A")
-        print("importing [3/8] \\")
+        # printEscape("[1A")
+        # print("importing [3/8] \\")
+        load.loadupdate()
         import installer
         logs.log(1,"importing: special commands")
-        printEscape("[1A")
-        print("importing [4/8] |")
+        # printEscape("[1A")
+        # print("importing [4/8] |")
+        load.loadupdate()
         import spcoms
         logs.log(1,"importing: os")
-        printEscape("[1A")
-        print("importing [5/8] /")
+        # printEscape("[1A")
+        # print("importing [5/8] /")
+        load.loadupdate()
         import os
         logs.log(1,"importing: sys")
-        printEscape("[1A")
-        print("importing [6/8] -")
+        # printEscape("[1A")
+        # print("importing [6/8] -")
+        load.loadupdate()
         import sys
         logs.log(1,"importing: pathlib")
-        printEscape("[1A")
-        print("importing [7/8] \\")
+        # printEscape("[1A")
+        # print("importing [7/8] \\")
+        load.loadupdate()
         from pathlib import Path
-
         logs.log(1,"importing: platform")
-        printEscape("[1A")
-        print("importing [8/8] |")
+        # printEscape("[1A")
+        # print("importing [8/8] |")
+        load.loadupdate()
         import platform
 
         imports = [os,spcoms,sys,aliases]
         depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
         logs.log(1,"done---------------")
-except:
+except Exception as ex:
+    logs.log(4,str(ex))
+    print(ex)
     try:
         logs.save()
         try:
             doerror(True,"error importing modules (check log.log)")
+            print(ex)
         except:
+            print(ex)
             print("error while importing! (check log.log)")
-            exit()
+            
     except:
         print("an error occoured saveing logs")
         print(logs.logs)
-    
+    exit()
 #print("\x1b[=1h")
 #printEscape("[?47h")
 #clear()
@@ -110,7 +121,7 @@ limbo = False
 hist = []
 prompt = ":"
 if iswindows:
-    logs.log(2,"note: running on windows does work but isnt fully supported :(")
+    logs.log(1,"note: running on windows")
 if isfloppy:
     print("you may eject teh disk now")
 input("press [enter]")
@@ -120,6 +131,10 @@ prefs = [":","H-shell",0,False]#unused, unused, unused, quick clear?
 prompt = prefs[0]
 title  = prefs[1]
 theme  = prefs[2]
+
+startingcoms = ["clear"]
+startcomnum = 0
+startcomdone = False
 # print("importing plugins-----------------------")
 
 # plugin = Path(__file__).parent
@@ -175,7 +190,15 @@ try:
         
         printEscape("[2K")
         #print("\x1b[0x07")
-        a = input("\x1b[5m{}\x1b[25m".format(prompt))
+        
+        if startcomdone:
+            a = input("\x1b[5m{}\x1b[25m".format(prompt))
+        else:
+            a = startingcoms[startcomnum]
+            startcomnum += 1
+            if startcomnum == len(startingcoms):
+                startcomdone = True
+        
         print("\x1b[25m\x1b[24m",end="")
         a = aliases.repacecom(a,str(cd))
         printEscape("[1A")
