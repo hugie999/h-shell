@@ -4,3 +4,4 @@ installer.py
 logs.py
 spcoms.py
 hlib.py
+loadicon.py

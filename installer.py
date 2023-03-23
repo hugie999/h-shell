@@ -3,35 +3,42 @@ import requests
 import loadicon as load
 def webinst(installto):
     input("installing to "+str(installto))
+    print("getting files list...")
+    print("\x1b[1A",end="")
     filesreq = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/main/files.txt')
     files = []
     filenam = files
     #print(files)
     final = []
+    
     for i in filesreq.iter_lines():
+        
         #print(i)
         files.append("https://raw.githubusercontent.com/hugie999/h-shell/main/"+str(i)[2:-1])
         final.append(str(i)[2:-1])
         
         #print(filenam[i])
-    print(files)
+    #print(files)
     data = []
     #filenam = []
-    
+    print()
+    load.makeloader(len(files),"getting files","got files!")
     for i in range(len(files)):
         data.append(requests.get(files[i]).text)
-        
+        load.loadupdate()
         #files.append(i)
         #filenam.append(files[i])
-        print(filenam[i])
+        #print(filenam[i])
         final[i] = (installto / Path(final[i]))
-    print(final)
+    #print(final)
+    load.makeloader(len(files),"copying files","copying files")
     for i in range(len(files)):
         #first = data[i]#open(files[i],"rt")
         to = open(final[i],"wt")
-        print(str(files[i])+" > "+str(final[i]))
+        #print(str(files[i])+" > "+str(final[i]))
         to.write(data[i])
         to.close()
+        load.loadupdate()
         #" ".encode("utf-8")
         #first.close()
     
@@ -57,11 +64,12 @@ def install(installto,iswin,devmode= False):
                 files.append(i)
                 names.append(i.name)
                 final.append(installto / i.name)
-        
+        load.makeloader(len(files),"installing","install done!")
         for i in range(len(files)):
             first = open(files[i],"rt")
             to = open(final[i],"wt")
-            print(str(files[i])+" > "+str(final[i]))
+            #print(str(files[i])+" > "+str(final[i]))
+            load.loadupdate()
             to.write(first.read())
             to.close()
             first.close()
@@ -74,7 +82,7 @@ def install(installto,iswin,devmode= False):
         
         #a = input("add as 'hiss' to .bashrc (y/[n]):")
         print("run h.py to start!")
-        print("install compleated!")
+        #print("install compleated!")
 if __package__ == None:
     import os
     #input("pls run from hiss shell")
