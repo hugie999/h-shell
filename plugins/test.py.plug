@@ -1,0 +1,4 @@
+COMS = ["test"]
+PLUGVER = 1 #this is for compatibility or somthing
+def docom(comfull,themestr,cd):
+    print(themestr+"hello world im a plugin lol")

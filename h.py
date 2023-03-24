@@ -119,16 +119,16 @@ if iswindows:
     logs.log(1,"note: running on windows")
 if isfloppy:
     print("you may eject teh disk now")
-input("press [enter]")
-pluginreserved = []
+
+
 
 prefs = [":","H-shell",0,False]#unused, unused, unused, quick clear?
 prompt = prefs[0]
 title  = prefs[1]
 theme  = prefs[2]
-startingcoms = ["clear"]
+startingcoms = []
 startcomnum = 0
-startcomdone = False
+startcomdone = True
 
 def checkfor(filename=""):
     logs.log(0,str(proghome)+"/"+filename)
@@ -140,19 +140,40 @@ def checkfor(filename=""):
     except FileNotFoundError:
         logs.log(0,"false")
         return False
-plugindata = []
-drawhead = not checkfor(".notitle")
+class plugins:
+    pluginreserved = []
+    pluginreservednum = []
+    plugindata = []
+class prefs:
+    qclear = checkfor(".quickclear")
+    drawhead = not checkfor(".notitle")
 if checkfor(".loadplugs"):
+    z = 0
+    logs.log(1,"loading plugins!----")
+    load.makeloader(0,"loading plugins","done!",True)
     logs.log(0,str(proghome/"plugins"))
     for i in (proghome/"plugins").iterdir():
-        #input(i)
-    pass
+        logs.log(1,i)
+        logs.log(0,str(i)[-5:])
+        if str(i)[-5:] == ".plug":
+            load.loadupdate()
+            plugins.plugindata.append(SourceFileLoader(str(i.name),str(i)).load_module())
+            logs.log(0,z)
+            logs.log(0,type(plugins.plugindata[z]))
+            for i in range(len(plugins.plugindata[z].COMS)):
+                plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
+                plugins.pluginreservednum.append(z)
+            
+            z += 1
+    logs.log(1,"done!----")
+    load.loadcomplete()
 #input()
+input("press [enter]")
 clear()
 def prnthead():
     global prompt
     strcd = str(cd)
-    if drawhead:
+    if prefs.drawhead:
         
         if iswindows:
             titletemp = title + "| "+strcd.replace("\\","[")
@@ -170,7 +191,8 @@ prnthead()
 print("Welcome to h-shell")
 print("type 'help' then press [ENTER] for help!")
 #print("HISS running on: "+ sys.platform)
-
+com = 0
+b = 0
 try:
     wi = os.get_terminal_size().columns
     hi = os.get_terminal_size().lines
@@ -202,19 +224,22 @@ try:
         printEscape("[1A")
         printEscape("[2K")
         print(printcenter(":{}:".format(a),DoAsReturn=True))
-        
-        com = spcoms.docom(a)
         logs.log(0,"usr: "+str(a))
-        if a != "hist" and a != "":
-            hist.append(a)
-        if com == 0:
+        try:
+            comsec = plugins.pluginreserved.index(a)
+            plugins.plugindata[comsec].docom(a,THEMES[theme],cd)
+            com = 0
             b = 0
-        elif com != 0:
-            b = com
-        #print(a[:5] == "@hist")
-        #printEscape("[6n")
-        
-        
+        except ValueError as ex:
+            #logs.log(0,str(ex))
+            #logs.log(0,"command not in plugin!")
+            com = spcoms.docom(a)
+            if a != "hist" and a != "":
+                hist.append(a)
+            if com == 0:
+                b = 0
+            elif com != 0:
+                b = com
         if com == 1:
             if a[:5] == "@hist":
                 num = ""
@@ -234,7 +259,7 @@ try:
                 b = 0
             elif a[:5] == "clear":
                 clear()
-                if not prefs[3]:
+                if not prefs.qclear:
                     print(THEMES[theme])
                     for i in range(hi-1):
                         for i in range(wi):

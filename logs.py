@@ -7,7 +7,8 @@ def reload():
     Llevelf = open(".loglev")
     Llevel = int(Llevelf.read())
     Llevelf.close()
-def log(level=0,text="None"): #logs the input text | log levels 0 = verbose (non important) 1 = log 2 = warn 3 = error 4 = info (use with error or warning)
+def log(level=0,tex="None"): #logs the input text | log levels 0 = verbose (non important) 1 = log 2 = warn 3 = error 4 = info (use with error or warning)
+    text = str(tex)
     try:
         if level == 0:
             if Llevel == 4:
