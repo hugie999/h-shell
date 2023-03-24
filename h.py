@@ -1,6 +1,7 @@
+#1
 
 import loadicon as load
-load.makeloader(8,"importing","importing complete")
+load.makeloader(8,"importing","importing done")
 #print("importing [0/8] |")
 #print("\x1b[1A",end="")
 import logs
@@ -27,7 +28,7 @@ try:
         import platform
 
         imports = [os,spcoms,sys,aliases]
-        depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
+        depends = ["bash"] #thease are
         logs.log(1,"done---------------")
     else:
         logs.log(1,"importing----------")
@@ -96,12 +97,14 @@ except Exception as ex:
 iswindows = False
 isfloppy  = False
 isinserted= True
-ver = "0.1 A4"
+ver = "0.1 A5"
+vernum = 1
 title = "h shell"
 theme = 0
 proghome = Path(__file__).parent
 logs.log(0,"version {}".format(ver))
-THEMES = ["\x1b[37;40m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[30;42m','\x1b[32;40m','\x1b[33;44m','\x1b[30;43m']
+THEMES = ["\x1b[37;40m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[30;42m','\x1b[32;40m','\x1b[33;44m','\x1b[39;43m']
+TOPBAR = ["\x1b[30;47m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[32;40m','\x1b[30;42m','\x1b[34;42m','\x1b[33;49m']
 #print(os.environ['HOME'])
 if os.name =="nt":
     iswindows = True
@@ -165,9 +168,9 @@ def prnthead():
     if limbo:
         strcd += " FS ERROR :("
     if isroot:
-        printappname(titletemp+"|RUNING AS ROOT")
+        printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
     else:
-        printappname(titletemp)
+        printappname(titletemp,THEMES[theme],TOPBAR[theme])
 prnthead()
 print("Welcome to h-shell")
 print("type 'help' then press [ENTER] for help!")
@@ -306,7 +309,9 @@ try:
                     print('--themes--\x1b[0m')
                     print()
                     for i in range(len(THEMES)):
-                        print(THEMES[i]+"theme{}\x1b[0m".format(i))
+                        print(THEMES[i]+"theme{}\x1b[0m".format(i),end="")
+                        print("   ",end="")
+                        print(TOPBAR[i]+"title{}\x1b[0m".format(i))
                         print()
                 if comman == "reload":
                     for i in range(len(imports)):

@@ -1,11 +1,16 @@
 from pathlib import Path
-import requests
+try:
+    import requests
+except ModuleNotFoundError as ex:
+    print(ex)
+    print("'requests' modual not found (is it installed?)")
+    exit()
 import loadicon as load
-def webinst(installto):
+def webinst(installto,isgit=True,version="main"):
     input("installing to "+str(installto))
     print("getting files list...")
     print("\x1b[1A",end="")
-    filesreq = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/main/files.txt')
+    filesreq = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/{}/files.txt'.format(version))
     files = []
     filenam = files
     #print(files)
@@ -14,7 +19,7 @@ def webinst(installto):
     for i in filesreq.iter_lines():
         
         #print(i)
-        files.append("https://raw.githubusercontent.com/hugie999/h-shell/main/"+str(i)[2:-1])
+        files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
         final.append(str(i)[2:-1])
         
         #print(filenam[i])
@@ -41,8 +46,6 @@ def webinst(installto):
         load.loadupdate()
         #" ".encode("utf-8")
         #first.close()
-    
-
 def install(installto,iswin,devmode= False):
     print("installing to: "+str(installto))#,iswin=False)
     a = input("continue?[y]/n:")
