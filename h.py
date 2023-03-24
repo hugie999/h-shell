@@ -304,7 +304,6 @@ try:
                 if comman == "alies":
                     print("input: {}".format(aliases.INCOM))
                     print("output: {}".format(aliases.OUTCOM))
-                
                 if comman == "depends":
                     tempdepends = []
                     for i in range(len(depends)):
@@ -326,13 +325,15 @@ try:
                     #print(h.read1())
                 if comman == "themes":
                     
-                    print('--themes--\x1b[0m')
+                    #print('-----themes----\x1b[0m')
+                    printappname("themes",custBannerColour=TOPBAR[theme])
                     print()
                     for i in range(len(THEMES)):
                         print(THEMES[i]+"theme{}\x1b[0m".format(i),end="")
                         print("   ",end="")
                         print(TOPBAR[i]+"title{}\x1b[0m".format(i))
                         print()
+                    printappname("")
                 if comman == "reload":
                     for i in range(len(imports)):
                         #print(sys.modules)

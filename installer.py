@@ -86,6 +86,8 @@ def install(installto,iswin,devmode= False):
         #a = input("add as 'hiss' to .bashrc (y/[n]):")
         print("run h.py to start!")
         #print("install compleated!")
+def postint(installto):
+    pass
 if __package__ == None:
     import os
     #input("pls run from hiss shell")
