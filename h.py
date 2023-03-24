@@ -26,7 +26,8 @@ try:
         #import importlib
         logs.log(1,"importing: platform")
         import platform
-
+        logs.log(1,"importing: SourceFileLoader")
+        from importlib.machinery import SourceFileLoader
         imports = [os,spcoms,sys,aliases]
         depends = ["bash"] #thease are
         logs.log(1,"done---------------")
@@ -71,7 +72,9 @@ try:
         # print("importing [8/8] |")
         load.loadupdate()
         import platform
-
+        logs.log(1,"importing: SourceFileLoader")
+        load.loadupdate()
+        from importlib.machinery import SourceFileLoader
         imports = [os,spcoms,sys,aliases]
         depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
         logs.log(1,"done---------------")
@@ -94,6 +97,7 @@ except Exception as ex:
 #print("\x1b[=1h")
 #printEscape("[?47h")
 #clear()
+
 iswindows = False
 isfloppy  = False
 isinserted= True
@@ -134,43 +138,41 @@ prefs = [":","H-shell",0,False]#unused, unused, unused, quick clear?
 prompt = prefs[0]
 title  = prefs[1]
 theme  = prefs[2]
-
 startingcoms = ["clear"]
 startcomnum = 0
 startcomdone = False
-# print("importing plugins-----------------------")
 
-# plugin = Path(__file__).parent
-# plugin = plugin / "plugins"
-# plugins = []
-# plugnames = []
-# print("from {}".format(str(plugin)))
-# for i in plugin.iterdir():
-#     print(i)
-#     plugnames.append(i.name.replace(".py",""))
-#     print(plugnames[len(plugnames)-1])
-#     #imp.load_source(plugnames[len(plugnames)-1],str(i))
-#     plugins.append(importlib.util.spec_from_file_location(plugnames[len(plugnames)-1],i))
-#     print(plugins[0])
-#     #print(template.reservedstrs)
-#     #exec("pluginreserved.append("+plugnames[len(plugnames)-1]+".reservedstrs)")
-# #print(plugins.iterdir())
+def checkfor(filename=""):
+    try:
+        checkfile = open(str(proghome)+filename)
+        return True
+    except FileNotFoundError:
+        return False
+plugindata = []
+drawhead = not checkfor(".notitle")
+if checkfor(".loadplugs"):
+    for i in Path(__file__+"/plugins").iterdir():
+        input(i)
+    pass
 
-# print("----------------------------------------")
-#input(":")
 clear()
 def prnthead():
+    global prompt
     strcd = str(cd)
-    if iswindows:
-        titletemp = title + "| "+strcd.replace("\\","[")
+    if drawhead:
+        
+        if iswindows:
+            titletemp = title + "| "+strcd.replace("\\","[")
+        else:
+            titletemp = title + "|:"+strcd.replace("/","[")
+        if limbo:
+            strcd += " FS ERROR :("
+        if isroot:
+            printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
+        else:
+            printappname(titletemp,THEMES[theme],TOPBAR[theme])
     else:
-        titletemp = title + "|:"+strcd.replace("/","[")
-    if limbo:
-        strcd += " FS ERROR :("
-    if isroot:
-        printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
-    else:
-        printappname(titletemp,THEMES[theme],TOPBAR[theme])
+        prompt = strcd + ":"
 prnthead()
 print("Welcome to h-shell")
 print("type 'help' then press [ENTER] for help!")

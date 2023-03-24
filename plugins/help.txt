@@ -1,0 +1,2 @@
+plugins folder lol
+plugins have .plug extension so extra moduals can have a .py one
