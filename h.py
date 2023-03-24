@@ -1,7 +1,7 @@
 #1
 
 import loadicon as load
-load.makeloader(8,"importing","importing done")
+load.makeloader(5,"importing","importing done")
 #print("importing [0/8] |")
 #print("\x1b[1A",end="")
 import logs
@@ -53,24 +53,12 @@ try:
         load.loadupdate()
         import spcoms
         logs.log(1,"importing: os")
-        # printEscape("[1A")
-        # print("importing [5/8] /")
-        load.loadupdate()
         import os
         logs.log(1,"importing: sys")
-        # printEscape("[1A")
-        # print("importing [6/8] -")
-        load.loadupdate()
         import sys
         logs.log(1,"importing: pathlib")
-        # printEscape("[1A")
-        # print("importing [7/8] \\")
-        load.loadupdate()
         from pathlib import Path
         logs.log(1,"importing: platform")
-        # printEscape("[1A")
-        # print("importing [8/8] |")
-        load.loadupdate()
         import platform
         logs.log(1,"importing: SourceFileLoader")
         load.loadupdate()
@@ -143,18 +131,23 @@ startcomnum = 0
 startcomdone = False
 
 def checkfor(filename=""):
+    logs.log(0,str(proghome)+"/"+filename)
     try:
-        checkfile = open(str(proghome)+filename)
+        checkfile = open(str(proghome)+"/"+filename)
+        checkfile.close()
+        logs.log(0,"true")
         return True
     except FileNotFoundError:
+        logs.log(0,"false")
         return False
 plugindata = []
 drawhead = not checkfor(".notitle")
 if checkfor(".loadplugs"):
-    for i in Path(__file__+"/plugins").iterdir():
-        input(i)
+    logs.log(0,str(proghome/"plugins"))
+    for i in (proghome/"plugins").iterdir():
+        #input(i)
     pass
-
+#input()
 clear()
 def prnthead():
     global prompt
