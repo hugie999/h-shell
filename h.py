@@ -235,7 +235,7 @@ try:
         logs.log(0,"usr: "+str(a))
         try:
             comsec = plugins.pluginreserved.index(a)
-            plugins.plugindata[comsec].docom(a,THEMES[theme],cd)
+            plugins.plugindata[comsec].docom(a,[THEMES[theme],TOPBAR[theme]],cd)
             com = 0
             b = 0
         except ValueError as ex:
