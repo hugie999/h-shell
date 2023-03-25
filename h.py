@@ -280,7 +280,7 @@ try:
                 #print(comman)
                 if comman == "plugman":
                     for i in range(len(plugins.plugindata)):
-                        print(plugins.plugindata[i].META[0])
+                        print(plugins.plugindata[i].META["name"])
                     pass
                 if comman == "loglev":
                     print("enter level")
@@ -360,7 +360,7 @@ try:
                 if iswindows:
                     os.system("dir")# '{}'".format(cd))
                 else:
-                    os.system("ls '{}'".format(cd))
+                    os.system("ls".format(cd))
                 b = 0
             elif a[:3] == "sys":
                 a = a[4:]

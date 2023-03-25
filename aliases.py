@@ -1,5 +1,5 @@
-INCOM = ["download","cls","dir","l","stux","tux","theme-set"]
-OUTCOM = ["wget","clear","ls","ls","supertux2","supertux2","py theme="]
+INCOM = ["download","cls","stux","tux","theme-set"]
+OUTCOM = ["wget","clear","supertux2","supertux2","py theme="]
 def repacecom(com= "",cd= ""):
     comnew = com
     try:
