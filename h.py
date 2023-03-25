@@ -89,8 +89,8 @@ except Exception as ex:
 iswindows = False
 isfloppy  = False
 isinserted= True
-ver = "0.1 A5"
-vernum = 1
+ver = "0.1 Beta 1"
+vernum = 2
 title = "h shell"
 theme = 0
 proghome = Path(__file__).parent
@@ -321,15 +321,6 @@ try:
                     installer.install(cd,iswindows)
                 if comman == "webinst":
                     installer.webinst(cd)
-                if comman == "fstest":
-                    times = range(int(input("number (bytes):")))
-                    filething = open(str(cd)+"/file.txt","wt")
-                    f = ""
-                    for i in times:
-                        print(i)
-                        f += (str(i)[-1])
-                    filething.write(f)
-                    filething.close()
                 if comman == "alies":
                     print("input: {}".format(aliases.INCOM))
                     print("output: {}".format(aliases.OUTCOM))
@@ -347,11 +338,6 @@ try:
                             print(cooltxt+"N")
                     print(tempdepends)
                     pass
-                if comman == "testbmp":
-                    h = open("a.bmp","rt")
-                    for i in h:
-                        print(i.encode())
-                    #print(h.read1())
                 if comman == "themes":
                     
                     #print('-----themes----\x1b[0m')
@@ -363,15 +349,6 @@ try:
                         print(TOPBAR[i]+"title{}\x1b[0m".format(i))
                         print()
                     printappname("")
-                if comman == "reload":
-                    for i in range(len(imports)):
-                        #print(sys.modules)
-                        print(imports[i])
-                        
-                        #importlib.reload(imports[i])
-                    logs.log(2,"pathlib and stdstuffs cant be reloaded!")
-                b = 0
-                pass
             elif a == "ls":
                 if iswindows:
                     os.system("dir")# '{}'".format(cd))
