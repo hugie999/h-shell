@@ -1,5 +1,5 @@
 
-
+import shutil
 if __package__ == None:
     raise Exception('NonModualUseForbidden')
 #print('importing...')
@@ -11,9 +11,12 @@ import platform
 from time import sleep
 from unittest import skip
 system = platform.system()
-
-wi = os.get_terminal_size().columns
-hi = os.get_terminal_size().lines
+try:
+    wi = os.get_terminal_size().columns
+    hi = os.get_terminal_size().lines
+except:
+    wi = shutil.get_terminal_size().columns
+    hi = shutil.get_terminal_size().lines
 #print('hight =' + str(hi))
 #print('width =' + str(wi))
 

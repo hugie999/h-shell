@@ -155,7 +155,7 @@ if checkfor(".loadplugs"):
     for i in (proghome/"plugins").iterdir():
         logs.log(1,i)
         logs.log(0,str(i)[-5:])
-        if str(i)[-5:] == ".plug":
+        if str(i)[-8:] == ".plug.py" and not "__pycache__" in str(i):
             load.loadupdate()
             plugins.plugindata.append(SourceFileLoader(str(i.name),str(i)).load_module())
             logs.log(0,z)
@@ -176,9 +176,9 @@ def prnthead():
     if prefs.drawhead:
         
         if iswindows:
-            titletemp = title + "| "+strcd.replace("\\","[")
+            titletemp = title + " | "+strcd.replace("\\","[")
         else:
-            titletemp = title + "|:"+strcd.replace("/","[")
+            titletemp = title + " |:"+strcd.replace("/","[")
         if limbo:
             strcd += " FS ERROR :("
         if isroot:
@@ -193,12 +193,20 @@ print("type 'help' then press [ENTER] for help!")
 #print("HISS running on: "+ sys.platform)
 com = 0
 b = 0
-try:
-    wi = os.get_terminal_size().columns
-    hi = os.get_terminal_size().lines
-except:
-    logs.log(3,"error getting terminal size")
-    exit()
+# try:
+#     try:
+#         wi = os.get_terminal_size().columns
+#         hi = os.get_terminal_size().lines
+#     except:
+#         wi = shutil.get_terminal_size().columns
+#         hi = shutil.get_terminal_size().lines
+# except:
+#     logs.log(3,"error getting terminal size")
+#     exit()
+
+
+
+
 
 for i in range(hi-2):
         printEscape("[1B")
@@ -270,6 +278,10 @@ try:
                 #print(__file__)
                 comman = a[4:]
                 #print(comman)
+                if comman == "plugman":
+                    for i in range(len(plugins.plugindata)):
+                        print(plugins.plugindata[i].META[0])
+                    pass
                 if comman == "loglev":
                     print("enter level")
                     print("4: everything")
@@ -279,6 +291,7 @@ try:
                     print("0: nothing")
                     newlev = input(":")
                     LlevF = open(str(proghome)+".loglev","wt")
+                    logs.log(0,"{}".format(str(newlev)))
                     if newlev == "" or not newlev in "1234":
                         newlev = "1"
                     
