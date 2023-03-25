@@ -37,8 +37,10 @@ def webinst(installto,isgit=True,version="main"):
         print("getting files")
     for i in range(len(files)):
         data.append(requests.get(files[i]).text)
-        print(i)
-        #load.loadupdate()
+        if noloader:
+            print(i)
+        else:
+            load.loadupdate()
         #files.append(i)
         #filenam.append(files[i])
         #print(filenam[i])
@@ -54,8 +56,10 @@ def webinst(installto,isgit=True,version="main"):
         #print(str(files[i])+" > "+str(final[i]))
         to.write(data[i])
         to.close()
-        print(i)
-        #load.loadupdate()
+        if noloader:
+            print(i)
+        else:
+            load.loadupdate()
         #" ".encode("utf-8")
         #first.close()
     postint(installto)

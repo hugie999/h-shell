@@ -294,6 +294,12 @@ try:
                 #print(__file__)
                 comman = a[4:]
                 #print(comman)
+                if comman == "h-inf":
+                    print("h-shell version: {} ({})".format(ver,str(vernum)))
+                    print("plugins: {}".format(len(plugins.plugindata)))
+                    print("program: {}".format(__file__))
+                    print("theme: {}".format(theme))
+                    pass
                 if comman == "plugman":
                     for i in range(len(plugins.plugindata)):
                         print(plugins.plugindata[i].META["name"])
