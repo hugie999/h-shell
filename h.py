@@ -140,6 +140,22 @@ def checkfor(filename=""):
     except FileNotFoundError:
         logs.log(0,"false")
         return False
+def gettxtfrom(filename=""):
+    logs.log(0,str(proghome)+"/"+filename)
+    try:
+        checkfile = open(str(proghome)+"/"+filename)
+        return checkfile.readlines()
+        checkfile.close()
+        #logs.log(0,"true")
+        
+    except FileNotFoundError:
+        #logs.log(0,"false")
+        return ""
+
+if checkfor(".path"):
+    path = gettxtfrom(".path")
+else:
+    path = []
 class plugins:
     pluginreserved = []
     pluginreservednum = []
