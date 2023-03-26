@@ -52,7 +52,7 @@ def webinst(installto,isgit=True,version="main"):
         print("copying")
     for i in range(len(files)):
         #first = data[i]#open(files[i],"rt")
-        to = open(final[i],"wt")
+        to = open(str(final[i]),"wt")
         #print(str(files[i])+" > "+str(final[i]))
         to.write(data[i])
         to.close()
@@ -105,9 +105,15 @@ def install(installto,iswin,devmode= False):
         #print("install compleated!")
 def postint(installto= Path()):
     doplugs = input("will you use plugins ([Y]/n):")
-    (installto/"plugins").mkdir()
-    if not doplugs.upper() == "N":
-        (installto/".loadplugs").touch()
+    try:
+        (installto/"plugins").mkdir()
+    except FileExistsError:
+        pass
+    try:
+        if not doplugs.upper() == "N":
+            (installto/".loadplugs").touch()
+    except FileExistsError:
+        pass
 if __package__ == None:
     import os
     #input("pls run from hiss shell")
