@@ -565,16 +565,17 @@ try:
             print("working directory will be set to root")
             print(";) dont worry you probably just cd'ed into a file lol")
             print('\x1b[0m',end="")
-        printEscape("[H")
-        #prompt = prefs[0]
-        #title  = prefs[1]
-        #theme  = prefs[2]
-        prnthead()
-        
-        #print(title + "-:{}".format(str(cd)))
-        
-        for i in range(hi-2):
-            printEscape("[1B")
+        if prefs.drawhead:
+            printEscape("[H")
+            #prompt = prefs[0]
+            #title  = prefs[1]
+            #theme  = prefs[2]
+            prnthead()
+            
+            #print(title + "-:{}".format(str(cd)))
+            
+            for i in range(hi-2):
+                printEscape("[1B")
 
         
 except KeyboardInterrupt:
