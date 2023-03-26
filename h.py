@@ -1,4 +1,4 @@
-#1
+#!/usr/bin/python3
 
 import loadicon as load
 load.makeloader(5,"importing","importing done")
