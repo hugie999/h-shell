@@ -28,6 +28,7 @@ try:
         import platform
         logs.log(1,"importing: SourceFileLoader")
         from importlib.machinery import SourceFileLoader
+        import time
         imports = [os,spcoms,sys,aliases]
         depends = ["bash"] #thease are
         logs.log(1,"done---------------")
@@ -63,6 +64,7 @@ try:
         logs.log(1,"importing: SourceFileLoader")
         load.loadupdate()
         from importlib.machinery import SourceFileLoader
+        import time
         imports = [os,spcoms,sys,aliases]
         depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
         logs.log(1,"done---------------")
@@ -192,9 +194,9 @@ def prnthead():
     if prefs.drawhead:
         
         if iswindows:
-            titletemp = title + " | "+strcd.replace("\\","[")
+            titletemp = title + " | "+strcd.replace("\\","[") + " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
         else:
-            titletemp = title + " |:"+strcd.replace("/","[")
+            titletemp = title + " |:"+strcd.replace("/","[") + " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
         if limbo:
             strcd += " FS ERROR :("
         if isroot:
@@ -202,7 +204,7 @@ def prnthead():
         else:
             printappname(titletemp,THEMES[theme],TOPBAR[theme])
     else:
-        prompt = strcd + ":"
+        prompt = "[{}/{}/{}] {} | : ".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2],strcd)
 prnthead()
 print("Welcome to h-shell")
 print("type 'help' then press [ENTER] for help!")
@@ -291,6 +293,7 @@ try:
                 #printappname(title + "-:{}".format(cd))
                 b = 0
             elif a[:3] == "dev":
+                b = 0
                 #print(__file__)
                 comman = a[4:]
                 #print(comman)
