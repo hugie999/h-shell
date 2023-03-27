@@ -576,7 +576,8 @@ try:
             
             for i in range(hi-2):
                 printEscape("[1B")
-
+        else:
+            prnthead()
         
 except KeyboardInterrupt:
     print("\x1b[25m\x1b[0m")
