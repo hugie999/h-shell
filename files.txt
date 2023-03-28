@@ -5,4 +5,4 @@ logs.py
 spcoms.py
 hlib.py
 loadicon.py
-plugins\dir_buitin.plug.py
+plugins/dir_buitin.plug.py

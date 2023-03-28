@@ -1,5 +1,6 @@
 from pathlib import Path
 noloader = False
+verbose = True
 try:
     import requests
 except ModuleNotFoundError as ex:
@@ -28,6 +29,8 @@ def webinst(installto,isgit=True,version="main"):
         
         #print(i)
         files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
+        if verbose:
+            print("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
         final.append(str(i)[2:-1])
         
         #print(filenam[i])
