@@ -128,9 +128,9 @@ prefs = [":","H-shell",0,False]#unused, unused, unused, quick clear?
 prompt = prefs[0]
 title  = prefs[1]
 theme  = prefs[2]
-startingcoms = []
+
 startcomnum = 0
-startcomdone = True
+startcomdone = False
 
 def checkfor(filename=""):
     logs.log(0,str(proghome)+"/"+filename)
@@ -146,14 +146,17 @@ def gettxtfrom(filename=""):
     logs.log(0,str(proghome)+"/"+filename)
     try:
         checkfile = open(str(proghome)+"/"+filename)
-        return checkfile.readlines()
+        a = checkfile.readlines()
+        for i in range(len(a)-1):
+            a[i] = a[i][:-1]
+        return a
         checkfile.close()
         #logs.log(0,"true")
         
     except FileNotFoundError:
         #logs.log(0,"false")
         return ""
-
+startingcoms = gettxtfrom(".autoexec")
 if checkfor(".path"):
     path = gettxtfrom(".path")
 else:
