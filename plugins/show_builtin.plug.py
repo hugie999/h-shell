@@ -24,7 +24,7 @@ def docom(comfull="",themestr="",cd= Path(__file__)):
                 #if i.is_dir():
                     #print(themestr[1]+str(i) + " -[dir]-"+themestr[0])
                 print(themestr[0]+str(i),end="")
-                if a == hi - 2:
+                if a == hi - 1 or a == hi:
                     input(themestr[1]+"--press enter to show more--"+themestr[0])
                     print("\x1B[1A",end="")
                     print("\x1B[2K",end="")
