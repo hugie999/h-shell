@@ -204,7 +204,7 @@ def prnthead():
         else:
             printappname(titletemp,THEMES[theme],TOPBAR[theme])
     else:
-        prompt = "[{}/{}/{}] {} | : ".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2],strcd)
+        prompt = "\x1b[34;40m[{}/{}/{}]\x1b[0m|\x1b[30;47m{}\x1b[0m|\x1b[37;42m:\x1b[0m ".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2],strcd)
 prnthead()
 print("Welcome to h-shell")
 print("type 'help' then press [ENTER] for help!")
@@ -238,7 +238,12 @@ try:
         #print("\x1b[0x07")
         
         if startcomdone:
-            a = input("\x1b[5m{}\x1b[25m".format(prompt))
+            if prefs.drawhead:
+                a = input("\x1b[5m{}\x1b[25m".format(prompt))
+            else:
+                a = input(prompt)
+                
+
         else:
             a = startingcoms[startcomnum]
             startcomnum += 1
@@ -252,7 +257,7 @@ try:
         print(printcenter(":{}:".format(a),DoAsReturn=True))
         logs.log(0,"usr: "+str(a))
         try:
-            comsec = plugins.pluginreserved.index(a)
+            comsec = plugins.pluginreservednum[plugins.pluginreserved.index(a)]
             plugins.plugindata[comsec].docom(a,[THEMES[theme],TOPBAR[theme]],cd)
             com = 0
             b = 0

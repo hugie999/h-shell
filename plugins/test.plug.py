@@ -1,4 +1,4 @@
-COMS = ["test"] #commands used
+COMS = ["test","test2"] #commands used
 META = {
     "name": "test plugin",
     "desc": "shows a simple hello world message",
