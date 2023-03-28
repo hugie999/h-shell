@@ -12,6 +12,10 @@ except ModuleNotFoundError: #for if its downloaded from the internet
     noloader = True
 def webinst(installto,isgit=True,version="main"):
     input("installing to "+str(installto))
+    try:
+        (installto/"plugins").mkdir()
+    except FileExistsError:
+        pass
     print("getting files list...")
     print("\x1b[1A",end="")
     filesreq = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/{}/files.txt'.format(version))
@@ -69,6 +73,17 @@ def install(installto,iswin,devmode= False):
     if a.lower() == "n":
         print("install canceled")
     else:
+        try:
+            (installto/"plugins").mkdir()
+        except FileExistsError:
+            pass
+        try:
+            if not doplugs.upper() == "N":
+                (installto/".loadplugs").touch()
+        except FileExistsError:
+            pass
+        
+        
         print("installing!---------")
         folder =Path(__file__).parent
         print(folder)
@@ -104,16 +119,17 @@ def install(installto,iswin,devmode= False):
         print("run h.py to start!")
         #print("install compleated!")
 def postint(installto= Path()):
-    doplugs = input("will you use plugins ([Y]/n):")
-    try:
-        (installto/"plugins").mkdir()
-    except FileExistsError:
-        pass
-    try:
-        if not doplugs.upper() == "N":
-            (installto/".loadplugs").touch()
-    except FileExistsError:
-        pass
+    pass
+    # doplugs = input("will you use plugins ([Y]/n):")
+    # try:
+    #     (installto/"plugins").mkdir()
+    # except FileExistsError:
+    #     pass
+    # try:
+    #     if not doplugs.upper() == "N":
+    #         (installto/".loadplugs").touch()
+    # except FileExistsError:
+    #     pass
 if __package__ == None:
     import os
     #input("pls run from hiss shell")
