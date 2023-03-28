@@ -13,7 +13,6 @@ def docom(comfull,themestr,cd= Path(__file__)):
         hi = os.get_terminal_size()[1]
         print(themestr[1]+"---"+"listing of " + str(cd)+"---"+themestr[0])
         a = 0
-        doneonce = False
         for i in cd.iterdir():
             a += 1
             if i.is_dir():
@@ -22,7 +21,6 @@ def docom(comfull,themestr,cd= Path(__file__)):
                 print(themestr[0]+str(i))
             
             if a == hi - 1 or a == hi:
-                doneonce = True
                 input(themestr[1]+"--press enter to show more--"+themestr[0])
                 print("\x1B[1A",end="")
                 print("\x1B[2K",end="")
