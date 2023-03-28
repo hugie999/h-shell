@@ -304,6 +304,19 @@ try:
                             print(" ",end="")
                 #printappname(title + "-:{}".format(cd))
                 b = 0
+            elif a == "theme-sel" or a == "theme":
+                printappname("themes",custBannerColour=TOPBAR[theme])
+                print()
+                for i in range(len(THEMES)):
+                    print(THEMES[i]+"theme{}\x1b[0m".format(i),end="")
+                    print("   ",end="")
+                    print(TOPBAR[i]+"title{}\x1b[0m".format(i))
+                    print()
+                printappname("",custBannerColour=TOPBAR[theme])
+                print("")
+                printappname("",custBannerColour=TOPBAR[theme])
+                print("\x1B[2A",end="")
+                theme = int(input("new theme"))
             elif a[:3] == "dev":
                 b = 0
                 #print(__file__)
@@ -369,7 +382,7 @@ try:
                         print("   ",end="")
                         print(TOPBAR[i]+"title{}\x1b[0m".format(i))
                         print()
-                    printappname("")
+                    printappname("",custBannerColour=TOPBAR[theme])
             elif a == "ls":
                 if iswindows:
                     os.system("dir")# '{}'".format(cd))
