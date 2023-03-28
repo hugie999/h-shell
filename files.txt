@@ -6,3 +6,4 @@ spcoms.py
 hlib.py
 loadicon.py
 plugins/dir_buitin.plug.py
+plugins/show_buitin.plug.py
