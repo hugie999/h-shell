@@ -14,8 +14,8 @@ def docom(comfull="",themestr="",cd= Path(__file__)):
         print(themestr[0]+"please input a file")
     else:
         try:
-            print(themestr[1]+"---"+"contents of " + comfull[1]+"---"+themestr[0])
             file = open(comfull[1])
+            print(themestr[1]+"---"+"contents of " + comfull[1]+"---"+themestr[0])
             hi = os.get_terminal_size()[1]
             #print(comfull)
             a = 0
@@ -32,5 +32,7 @@ def docom(comfull="",themestr="",cd= Path(__file__)):
             #print(themestr[1]+"hello world im a plugin lol")
         except KeyboardInterrupt:
             pass
+        except FileNotFoundError:
+            print(themestr[0]+"file not found")
         print("\x1B[2K",end="")
         print("\x1B[0E",end="")
