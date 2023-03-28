@@ -316,7 +316,7 @@ try:
                 print("")
                 printappname("",custBannerColour=TOPBAR[theme])
                 print("\x1B[2A",end="")
-                theme = int(input("new theme"))
+                theme = int(input("new theme: "))
             elif a[:3] == "dev":
                 b = 0
                 #print(__file__)
