@@ -261,11 +261,14 @@ try:
         print(printcenter(":{}:".format(a),DoAsReturn=True))
         logs.log(0,"usr: "+str(a))
         try:
-            comsec = plugins.pluginreservednum[plugins.pluginreserved.index(a)]
+            try:
+                comsec = plugins.pluginreservednum[plugins.pluginreserved.index(a.split()[0])]
+            except IndexError:
+                raise ValueError
             plugins.plugindata[comsec].docom(a,[THEMES[theme],TOPBAR[theme]],cd)
             com = 0
             b = 0
-        except ValueError as ex:
+        except ValueError:
             #logs.log(0,str(ex))
             #logs.log(0,"command not in plugin!")
             com = spcoms.docom(a)

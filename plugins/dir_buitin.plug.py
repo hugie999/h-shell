@@ -11,7 +11,7 @@ import os
 def docom(comfull,themestr,cd= Path(__file__)):
     try:
         hi = os.get_terminal_size()[1]
-        print("listing of " + str(cd))
+        print(themestr[1]+"---"+"listing of " + str(cd)+"---"+themestr[0])
         a = 0
         for i in cd.iterdir():
             a += 1
