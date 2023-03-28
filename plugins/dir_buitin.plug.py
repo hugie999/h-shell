@@ -9,18 +9,24 @@ PLUGVER = 1 #this is for compatibility or somthing
 from pathlib import Path
 import os
 def docom(comfull,themestr,cd= Path(__file__)):
-    hi = os.get_terminal_size()[1]
-    print("listing of " + str(cd))
-    a = 0
-    for i in cd.iterdir():
-        a += 1
-        if i.is_dir():
-            print(themestr[1]+str(i) + " -[dir]-"+themestr[0])
-        else:
-            print(themestr[0]+str(i))
-        if a == hi - 2:
-            input(themestr[1]+"--press enter to show more--"+themestr[0])
-            print("\x1B[1A",end="")
-            print("\x1B[2K",end="")
-            a = 0
-    #print(themestr[1]+"hello world im a plugin lol")
+    try:
+        hi = os.get_terminal_size()[1]
+        print("listing of " + str(cd))
+        a = 0
+        for i in cd.iterdir():
+            a += 1
+            if i.is_dir():
+                print(themestr[1]+str(i) + " -[dir]-"+themestr[0])
+            else:
+                print(themestr[0]+str(i))
+            if a == hi - 2:
+                input(themestr[1]+"--press enter to show more--"+themestr[0])
+                print("\x1B[1A",end="")
+                print("\x1B[2K",end="")
+                a = 0
+        #print(themestr[1]+"hello world im a plugin lol")
+    except KeyboardInterrupt:
+        pass
+    #print("\x1B[1A",end="")
+    print("\x1B[2K",end="")
+    print("\x1B[0E",end="")
