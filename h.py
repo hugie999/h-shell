@@ -542,8 +542,9 @@ try:
                         if len(a) == 2:
                             try:
                                 bkcd = cd
-                                cd = Path(a)
-                                os.chdir(cd)
+                                
+                                os.chdir(a)
+                                cd = Path(os.getcwd())
                                 b = 0
                             except FileNotFoundError:
                                 logs.log(3,"drive not avalible")
