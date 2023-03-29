@@ -23,15 +23,19 @@ except:
 def printEscape(a):
     print("\x1b"+a,end="")
 
-def printappname(name, custColour="\x1b[0m", custBannerColour= "\x1b[30;47m"):
-    appname = custBannerColour
-    appname += '---'
-    appname += name
-    for i in range(wi - len(name) - 3):
-        appname += '-'
-    appname += custColour
-    printcenter(appname)
-    return(appname)
+def printappname(name="", custColour="\x1b[0m", custBannerColour= "\x1b[30;47m",center=False):
+    if not center:
+        appname = custBannerColour
+        appname += '---'
+        appname += name
+        for i in range(wi - len(name) - 3):
+            appname += '-'
+        appname += custColour
+        printcenter(appname)
+        return(appname)
+    else:
+        print(custBannerColour + name.center(wi,"-") + custColour)
+        return custBannerColour + name.center(wi,"-") + custColour
 def doerror(doquit = False, errortype = ''):
     #printcenter("\x1b[30;47m error \x1b[0m")
     print('\x1b[30;41;1m')

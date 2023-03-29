@@ -29,9 +29,12 @@ def docom(comfull="",themestr="",cd= Path(__file__)):
                     print("\x1B[1A",end="")
                     print("\x1B[2K",end="")
                     a = 0
+            print()
+                    
             #print(themestr[1]+"hello world im a plugin lol")
         except KeyboardInterrupt:
             pass
+            print()
         except FileNotFoundError:
             print(themestr[0]+"file not found")
         print("\x1B[2K",end="")

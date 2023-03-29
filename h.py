@@ -29,6 +29,7 @@ try:
         logs.log(1,"importing: SourceFileLoader")
         from importlib.machinery import SourceFileLoader
         import time
+        import getpass
         imports = [os,spcoms,sys,aliases]
         depends = ["bash"] #thease are
         logs.log(1,"done---------------")
@@ -65,6 +66,7 @@ try:
         load.loadupdate()
         from importlib.machinery import SourceFileLoader
         import time
+        import getpass
         imports = [os,spcoms,sys,aliases]
         depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
         logs.log(1,"done---------------")
@@ -106,7 +108,8 @@ if os.name =="nt":
     if cd.drive.lower == "a:":
         isfloppy = True
 else:
-    cd = Path(os.environ['HOME'])
+    cd = proghome
+    #cd = Path(os.environ['HOME'])
 logs.log(1,"running on {}/{}/{} (py {})".format(os.name,platform.system(),platform.release(),platform.python_version()))
 logs.log(1,"starting dir: {}".format(cd))
 isroot = False
@@ -192,21 +195,30 @@ if checkfor(".loadplugs"):
 #input()
 input("press [enter]")
 clear()
+centertitle = False
+showpathintitle = True
 def prnthead():
     global prompt
     strcd = str(cd)
     if prefs.drawhead:
-        
-        if iswindows:
-            titletemp = title + " | "+strcd.replace("\\","[") + " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
+        if showpathintitle:
+            if iswindows:
+                titletemp = title + " | "+strcd.replace("\\","[") + " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
+            else:
+                titletemp = title + " |:"+strcd.replace("/","[") + " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
+            if limbo:
+                strcd += " FS ERROR :("
+            if isroot:
+                printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
+            else:
+                printappname(titletemp,THEMES[theme],TOPBAR[theme],centertitle)
         else:
-            titletemp = title + " |:"+strcd.replace("/","[") + " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
-        if limbo:
-            strcd += " FS ERROR :("
-        if isroot:
-            printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
-        else:
-            printappname(titletemp,THEMES[theme],TOPBAR[theme])
+            titletemp = title+ " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
+            if isroot:
+                printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
+            else:
+                printappname(titletemp,THEMES[theme],TOPBAR[theme],centertitle)
+            prompt = "{} {}:".format(THEMES[theme],strcd)
     else:
         prompt = "\x1b[34;40m[{}/{}/{}]\x1b[0m|\x1b[30;47m{}\x1b[0m|\x1b[37;42m:\x1b[0m ".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2],strcd)
 prnthead()
@@ -227,7 +239,14 @@ b = 0
 #     exit()
 
 
-
+def doplug(command = ""):
+    try:
+        comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
+    except IndexError:
+        print("plugin for commmand: "+command+" not found")
+    plugins.plugindata[comsec].docom(command,[THEMES[theme],TOPBAR[theme]],cd)
+    com = 0
+    b = 0
 
 
 for i in range(hi-2):
@@ -242,7 +261,7 @@ try:
         #print("\x1b[0x07")
         
         if startcomdone:
-            if prefs.drawhead:
+            if prefs.drawhead and showpathintitle:
                 a = input("\x1b[5m{}\x1b[25m".format(prompt))
             else:
                 a = input(prompt)
@@ -279,9 +298,15 @@ try:
             elif com != 0:
                 b = com
         if com == 1:
-            if a[:5] == "@hist":
+            a = a.split()
+            if len(a) == 0:
+                a = " "
+            astr = ""
+            for i in range(len(a)):
+                astr += str(a[i]+" ")
+            if a[0] == "@hist":
                 num = ""
-                a = a.replace("@hist","")
+                a[0] = a[0].replace("@hist","")
                 for i in range(len(a)):
                     if a[i] not in "1234567890":
                         print(a[i] not in "1234567890")
@@ -295,7 +320,23 @@ try:
                     a = hist[num]
                 hist.pop(num)
                 b = 0
-            elif a[:5] == "clear":
+            elif a[0] == "drv" or a[0] == "drive":
+                if not iswindows:
+                    
+                    usr = getpass.getuser()
+                    if len(a) != 2:
+                        print("incorect args")
+                    elif a[1] == "-l":
+                        #print("ls "+"/media/"+usr)
+                        doplug("ls "+"/media/"+usr)
+                        b = 0
+                    else:
+                        if Path("/media/"+usr+"/"+a[1]).exists() and Path("/media/"+usr+"/"+a[1]).is_dir():
+                            cd = Path("/media/"+usr+"/"+a[1])
+                            b = 0
+                        else:
+                            print("no drive: "+a[1])
+            elif a[0] == "clear":
                 clear()
                 if not prefs.qclear:
                     print(THEMES[theme])
@@ -304,7 +345,7 @@ try:
                             print(" ",end="")
                 #printappname(title + "-:{}".format(cd))
                 b = 0
-            elif a == "theme-sel" or a == "theme":
+            elif a[0] == "theme-sel" or a[0] == "theme":
                 printappname("themes",custBannerColour=TOPBAR[theme])
                 print()
                 for i in range(len(THEMES)):
@@ -319,10 +360,10 @@ try:
                 theme = int(input("new theme: "))
                 print("")
                 b = 0
-            elif a[:3] == "dev":
+            elif a[0] == "dev":
                 b = 0
                 #print(__file__)
-                comman = a[4:]
+                comman = a[1]
                 #print(comman)
                 if comman == "h-inf":
                     print("h-shell version: {} ({})".format(ver,str(vernum)))
@@ -385,31 +426,43 @@ try:
                         print(TOPBAR[i]+"title{}\x1b[0m".format(i))
                         print()
                     printappname("",custBannerColour=TOPBAR[theme])
-            elif a == "ls":
-                if iswindows:
-                    os.system("dir")# '{}'".format(cd))
-                else:
-                    os.system("ls".format(cd))
-                b = 0
-            elif a[:3] == "sys":
+            elif a[0][:3] == "sys":
                 a = a[4:]
                 c = os.system(a)
                 b = 0
                 logs.log(0,"user forced sys command")
                 if c != 0:
                     logs.log(0,"user forced syscommand")
-            elif a == "hist":
-                print(printcenter("--{}--".format("history"),DoAsReturn=True))
-                for i in range(len(hist)):
-                    print(printcenter("[{}] :{}:".format(str(i),hist[i]),DoAsReturn=True))
-                b = 0
-            elif a == "hist -c":
-                hist = []
-                b = 0
-                logs.log(0,"history cleared")
-            elif a == "hist -s":
+            elif a[0] == "hist":
+                try:
+                    if a[1] == "-c":
+                        hist = []
+                        b = 0
+                        logs.log(0,"history cleared")
+                    elif a[1] == "-s":
+                        histfile = open(str(proghome)+"/hiss.hist.txt","at")
+                        histfile.write("------------------\n")
+                        for i in range(len(hist)):
+                            print(i)
+                            
+                            histfile.write(hist[i]+"\n")
+                        histfile.close()
+                        b = 0
+                    else:
+                        print(printcenter("--{}--".format("history"),DoAsReturn=True))
+                        for i in range(len(hist)):
+                            print(printcenter("[{}] :{}:".format(str(i),hist[i]),DoAsReturn=True))
+                        b = 0
+                except IndexError:
+                    print(printcenter("--{}--".format("history"),DoAsReturn=True))
+                    for i in range(len(hist)):
+                        print(printcenter("[{}] :{}:".format(str(i),hist[i]),DoAsReturn=True))
+                    b = 0
+            elif astr == "hist -c":
+                pass
+            elif astr == "hist -s":
                 #check = Path(os.environ['HOME']+"/hiss.hist.txt").exists()
-                histfile = open(os.environ['HOME']+"/hiss.hist.txt","at")
+                histfile = open(str(proghome)+"/hiss.hist.txt","at")
                 histfile.write("------------------\n")
                 for i in range(len(hist)):
                     print(i)
@@ -444,8 +497,8 @@ try:
                     #print("not implamented")
                     b = 0
                 
-                elif a[0] == "c" and a[1] == "d":
-                    c = a.replace("cd ","")
+                elif a[0] == "cd":
+                    c = astr.replace("cd ","")
                 
                     
                     
@@ -482,22 +535,22 @@ try:
                     else:
                         print("{} dosent exsist".format(str(cd)+str(c)))
                         b = 1
-            elif a=="s-prefs":
+            elif a[0] == "s-prefs":
                 save = open(".hprefs","wt")
                 for i in range(len(prefs)):
                     save.write(str(prefs[i])+"\n")
                 b = 0
-            elif "goto" in a: #warning VARY MESSY DONT TOUCH
-                if not "/" in a and not "\\" in a:
+            elif a[0] == "goto": #warning VARY MESSY DONT TOUCH
+                if not "/" in a[1] and not "\\" in a[1]:
                     logs.log(3,"no dir detected")
                     if iswindows:
                         logs.log(3,"goto cant be used to go into a drive letter")
                 #if ".." in a:
                 #    print("not implamented")
                 #    b = 2
-                if "$" in a:
-                    c = a
-                    c = c.replace("goto ","")
+                if "$" in a[1]:
+                    c = a[1]
+                    #c = c.replace("goto ","")
                     print(c)
                     #print(c)
                     newc = spcoms.expaths(c)
@@ -508,8 +561,8 @@ try:
                     else:
                         cd = Path(newc)
                         b = 0
-                elif a[0] == "g" and a[1] == "o" and a[2] == "t" and a[3] == "o":
-                    c = a.replace("goto ","")
+                elif a[0] == "goto":
+                    c = a[1]
                     c = Path(c)
                     cstr = str(c)
                     
@@ -528,11 +581,11 @@ try:
                 elif a == "path":
                     print("cd: "+str(cd))
                     b = 0
-            elif a[:2]=="py":
+            elif a[0]=="py":
                 
                 c = ""
                 for i in range(len(a)-3):
-                    c+=a[i+3]
+                    c+=astr[i+3]
                     #print(a[i+3])
                 #sprint(c)
                 try:
@@ -551,8 +604,8 @@ try:
                 #b = os.system(str(cd)+a)
                 #if b == 32512:
                     #printEscape("[?47l")
-            elif len(a) == 2:
-                if a[1] == ":":
+            elif len(a[0]) == 2:
+                if a[0][1] == ":":
                     if iswindows:
                         if len(a) == 2:
                             try:
@@ -571,15 +624,15 @@ try:
                                 b = 1
             else:
                 #print(a[:2])
-                if a[:2] == "./":
-                    a.replace("./",str(cd)+"/")
+                if astr[:2] == "./":
+                    astr.replace("./",str(cd)+"/")
                 
-                b = os.system(a)
+                b = os.system(astr)
         
         if b == 32512:
             printEscape("[1A")
             printEscape("[2k")
-            print(str('"{}" command not found :(').format(a))
+            print(str('"{}" command not found :(').format(astr))
         if b != 0:
            print("\x1b[30;41m E:{}\x1b[0m".format(b))
         try:

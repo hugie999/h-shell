@@ -1,5 +1,20 @@
 import os
 from hlib import *
+GHELP = """---help---
+hist [-c/-s]        > shows history
+drv/drive [-l]      > switches to a mounted drive (unix)
+[driveletter]:      > switches to the specified drive letter (win)
+theme               > opens theme switcher
+dev (command)       > dev commands
+clear               > clears the screen
+cd (directory)      > goes to the specifired dir
+goto (path)         > goes to the path specified
+py (python command) > runs the command under python
+---------"""
+
+
+
+
 HELPS = ["general","help","cd","goto","hist","py"]
 HELPTEX = [
     """--h-shell--
@@ -27,7 +42,11 @@ def docom(a):
     if a[:4] == "help":
         b = a[5:]
         if b == "":
-            print("for general help type: 'help general'")
+            a = GHELP.splitlines()
+            for i in range(len(GHELP.splitlines())):
+                print(a[i])
+            
+            
         elif b == "list":
             for i in range(len(HELPS)):
                 print(HELPS[i])
