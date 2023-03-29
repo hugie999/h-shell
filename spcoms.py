@@ -1,6 +1,6 @@
 import os
 from hlib import *
-GHELP = """---help---
+GHELP = """---help-----------------------------------------------------------
 hist [-c/-s]        > shows history
 drv/drive [-l]      > switches to a mounted drive (unix)
 [driveletter]:      > switches to the specified drive letter (win)
@@ -10,7 +10,8 @@ clear               > clears the screen
 cd (directory)      > goes to the specifired dir
 goto (path)         > goes to the path specified
 py (python command) > runs the command under python
----------"""
+pref/prefs          > shows prefrences picker
+------------------------------------------------------------------"""
 
 
 

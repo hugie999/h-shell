@@ -321,14 +321,42 @@ try:
                     a = hist[num]
                 hist.pop(num)
                 b = 0
+            elif a[0] == "plugman":
+                if a[1] == "list":
+                    print(TOPBAR[theme]+"--plugins--"+THEMES[theme])
+                    for i in range(len(plugins.plugindata)):
+                        print("[{}] ".format(str(i))+plugins.plugindata[i].META["name"])
+                    b = 0
+                if a[1] == "show":
+                    try:
+                        pluginnumber = int(a[2])
+                        print("name: {}".format(plugins.plugindata[pluginnumber].META["name"]))
+                        print("version: {}".format(plugins.plugindata[pluginnumber].META["pluginver"]))
+                        print("--description--")
+                        print(plugins.plugindata[pluginnumber].META["desc"])
+                        b = 0
+                    except ValueError:
+                        print(TOPBAR[theme]+"please refrence plugin by number (from plugman list)"+THEMES[theme])
+                        b = 0
+                if a[1] == "help":
+                    print("--plugman-command--")
+                    print("list - lists installed plugins")
+                    print("show - shows specified plugin")
+                    b = 0
+                pass
             elif a[0] == "prefs" or a[0] == "pref":
                 printappname("prefs")
                 print("draw title        : {}".format(prefs.drawhead))
                 print("center title      : {}".format(prefs.centertitle))
                 print("show path in title: {}".format(prefs.showpathintitle))
                 printappname("set")
-                if input("draw title?         ([Y]/n):").lower() == "n":
-                    (proghome / ".notitle").touch()
+                try:
+                    if input("draw title?         ([Y]/n):").lower() == "n":
+                        (proghome / ".notitle").touch()
+                    else:
+                        (proghome / ".notitle").unlink()
+                except FileNotFoundError:
+                    pass
                 if input("center title?       (y/[N]):").lower() != "y":
                     prefs.centertitle = False
                 else:
@@ -337,6 +365,7 @@ try:
                     prefs.showpathintitle = True
                 else:
                     prefs.showpathintitle = False
+                b = 0
             elif a[0] == "drv" or a[0] == "drive":
                 if not iswindows:
                     
