@@ -656,7 +656,7 @@ try:
                         try:
                             bkcd = cd
                             
-                            os.chdir(a)
+                            os.chdir(a[0])
                             cd = Path(os.getcwd())
                             b = 0
                         except FileNotFoundError:
