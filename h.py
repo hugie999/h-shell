@@ -174,8 +174,15 @@ class prefs:
     centertitle = False
     showpathintitle = True
     
-if checkfor(".loadplugs"):
+#if checkfor(".loadplugs"):
+def pluginreload():
     z = 0
+    # global plugins.pluginreserved
+    # global plugins.pluginreservednum
+    # global plugins.plugindata
+    plugins.pluginreserved = []
+    plugins.pluginreservednum = []
+    plugins.plugindata = []
     logs.log(1,"loading plugins!----")
     load.makeloader(0,"loading plugins","done!",True)
     logs.log(0,str(proghome/"plugins"))
@@ -195,6 +202,7 @@ if checkfor(".loadplugs"):
     logs.log(1,"done!----")
     load.loadcomplete()
 #input()
+pluginreload()
 input("press [enter]")
 clear()
 
@@ -204,9 +212,9 @@ def prnthead():
     if prefs.drawhead:
         if prefs.showpathintitle:
             if iswindows:
-                titletemp = title + " | "+strcd.replace("\\","[") + " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
+                titletemp = title + " | "+strcd.replace("\\","[") + " [{}/{}/{}]".format(time.localtime()[0],time.localtime()[1],time.localtime()[2])
             else:
-                titletemp = title + " |:"+strcd.replace("/","[") + " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
+                titletemp = title + " |:"+strcd.replace("/","[") + " [{}/{}/{}]".format(time.localtime()[0],time.localtime()[1],time.localtime()[2])
             if limbo:
                 strcd += " FS ERROR :("
             if isroot:
@@ -214,14 +222,14 @@ def prnthead():
             else:
                 printappname(titletemp,THEMES[theme],TOPBAR[theme],prefs.centertitle)
         else:
-            titletemp = title+ " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
+            titletemp = title+ " [{}/{}/{}]".format(time.localtime()[0],time.localtime()[1],time.localtime()[2])
             if isroot:
                 printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
             else:
                 printappname(titletemp,THEMES[theme],TOPBAR[theme],prefs.centertitle)
             prompt = "{} {}:".format(THEMES[theme],strcd)
     else:
-        prompt = "\x1b[34;40m[{}/{}/{}]\x1b[0m|\x1b[30;47m{}\x1b[0m|\x1b[37;42m:\x1b[0m ".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2],strcd)
+        prompt = "\x1b[34;40m[{}/{}/{}]\x1b[0m|\x1b[30;47m{}\x1b[0m|\x1b[37;42m:\x1b[0m ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
 prnthead()
 print("Welcome to h-shell")
 print("type 'help' then press [ENTER] for help!")
@@ -285,7 +293,10 @@ try:
                 comsec = plugins.pluginreservednum[plugins.pluginreserved.index(a.split()[0])]
             except IndexError:
                 raise ValueError
-            plugins.plugindata[comsec].docom(a,[THEMES[theme],TOPBAR[theme]],cd)
+            try:
+                plugins.plugindata[comsec].docom(a,[THEMES[theme],TOPBAR[theme]],cd)
+            except Exception as e:
+                print("plugin error occoured on plugin {} : {}".format(comsec,e))
             com = 0
             b = 0
         except ValueError:
@@ -322,12 +333,18 @@ try:
                 hist.pop(num)
                 b = 0
             elif a[0] == "plugman":
-                if a[1] == "list":
+                if len(a) < 2:
+                    print("please input a command")
+                    b = 0
+                elif a[1] == "reload":
+                    pluginreload()
+                    b = 0
+                elif a[1] == "list":
                     print(TOPBAR[theme]+"--plugins--"+THEMES[theme])
                     for i in range(len(plugins.plugindata)):
                         print("[{}] ".format(str(i))+plugins.plugindata[i].META["name"])
                     b = 0
-                if a[1] == "show":
+                elif a[1] == "show":
                     try:
                         pluginnumber = int(a[2])
                         print("name: {}".format(plugins.plugindata[pluginnumber].META["name"]))
@@ -338,7 +355,7 @@ try:
                     except ValueError:
                         print(TOPBAR[theme]+"please refrence plugin by number (from plugman list)"+THEMES[theme])
                         b = 0
-                if a[1] == "help":
+                elif a[1] == "help":
                     print("--plugman-command--")
                     print("list - lists installed plugins")
                     print("show - shows specified plugin")
