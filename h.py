@@ -127,10 +127,9 @@ if isfloppy:
 
 
 
-prefs = [":","H-shell",0,False]#unused, unused, unused, quick clear?
-prompt = prefs[0]
-title  = prefs[1]
-theme  = prefs[2]
+prompt = ":"
+title  = "h-shell"
+theme  = 0
 
 startcomnum = 0
 startcomdone = False
@@ -172,6 +171,9 @@ class plugins:
 class prefs:
     qclear = checkfor(".quickclear")
     drawhead = not checkfor(".notitle")
+    centertitle = False
+    showpathintitle = True
+    
 if checkfor(".loadplugs"):
     z = 0
     logs.log(1,"loading plugins!----")
@@ -195,13 +197,12 @@ if checkfor(".loadplugs"):
 #input()
 input("press [enter]")
 clear()
-centertitle = False
-showpathintitle = True
+
 def prnthead():
     global prompt
     strcd = str(cd)
     if prefs.drawhead:
-        if showpathintitle:
+        if prefs.showpathintitle:
             if iswindows:
                 titletemp = title + " | "+strcd.replace("\\","[") + " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
             else:
@@ -211,13 +212,13 @@ def prnthead():
             if isroot:
                 printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
             else:
-                printappname(titletemp,THEMES[theme],TOPBAR[theme],centertitle)
+                printappname(titletemp,THEMES[theme],TOPBAR[theme],prefs.centertitle)
         else:
             titletemp = title+ " [{}/{}/{}]".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2])
             if isroot:
                 printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
             else:
-                printappname(titletemp,THEMES[theme],TOPBAR[theme],centertitle)
+                printappname(titletemp,THEMES[theme],TOPBAR[theme],prefs.centertitle)
             prompt = "{} {}:".format(THEMES[theme],strcd)
     else:
         prompt = "\x1b[34;40m[{}/{}/{}]\x1b[0m|\x1b[30;47m{}\x1b[0m|\x1b[37;42m:\x1b[0m ".format(time.gmtime()[0],time.gmtime()[1],time.gmtime()[2],strcd)
@@ -261,7 +262,7 @@ try:
         #print("\x1b[0x07")
         
         if startcomdone:
-            if prefs.drawhead and showpathintitle:
+            if prefs.drawhead and prefs.showpathintitle:
                 a = input("\x1b[5m{}\x1b[25m".format(prompt))
             else:
                 a = input(prompt)
@@ -320,6 +321,22 @@ try:
                     a = hist[num]
                 hist.pop(num)
                 b = 0
+            elif a[0] == "prefs" or a[0] == "pref":
+                printappname("prefs")
+                print("draw title        : {}".format(prefs.drawhead))
+                print("center title      : {}".format(prefs.centertitle))
+                print("show path in title: {}".format(prefs.showpathintitle))
+                printappname("set")
+                if input("draw title?         ([Y]/n):").lower() == "n":
+                    (proghome / ".notitle").touch()
+                if input("center title?       (y/[N]):").lower() != "y":
+                    prefs.centertitle = False
+                else:
+                    prefs.centertitle = True
+                if input("show path in title? ([Y]/n):").lower() != "n":
+                    prefs.showpathintitle = True
+                else:
+                    prefs.showpathintitle = False
             elif a[0] == "drv" or a[0] == "drive":
                 if not iswindows:
                     
@@ -365,6 +382,10 @@ try:
                 #print(__file__)
                 comman = a[1]
                 #print(comman)
+                if a[1] == "var-set":
+                    exec("{} = {}({})".format(a[2],a[3],a[4]))
+                
+                
                 if comman == "h-inf":
                     print("h-shell version: {} ({})".format(ver,str(vernum)))
                     print("plugins: {}".format(len(plugins.plugindata)))
