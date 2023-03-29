@@ -649,29 +649,24 @@ try:
                     b = 5
                 finally:
                     b = 0
-            
-                #printEscape("[1B")
-                #b = os.system(str(cd)+a)
-                #if b == 32512:
-                    #printEscape("[?47l")
             elif len(a[0]) == 2:
+                
                 if a[0][1] == ":":
                     if iswindows:
-                        if len(a) == 2:
-                            try:
-                                bkcd = cd
-                                
-                                os.chdir(a)
-                                cd = Path(os.getcwd())
-                                b = 0
-                            except FileNotFoundError:
-                                logs.log(3,"drive not avalible")
-                                cd = bkcd
-                                b = 1
-                            except PermissionError:
-                                logs.log(3,"drive not ready (got PermissionError)")
-                                cd = bkcd
-                                b = 1
+                        try:
+                            bkcd = cd
+                            
+                            os.chdir(a)
+                            cd = Path(os.getcwd())
+                            b = 0
+                        except FileNotFoundError:
+                            logs.log(3,"drive not avalible")
+                            cd = bkcd
+                            b = 1
+                        except PermissionError:
+                            logs.log(3,"drive not ready (got PermissionError)")
+                            cd = bkcd
+                            b = 1
             else:
                 #print(a[:2])
                 if astr[:2] == "./":
