@@ -391,11 +391,23 @@ try:
                         print("incorect args")
                     elif a[1] == "-l":
                         #print("ls "+"/media/"+usr)
-                        doplug("ls "+"/media/"+usr)
+                        tmp = 0
+                        if (Path("media") / Path(usr)).exists():
+                            doplug("ls "+"/media/"+usr)
+                            tmp += 1
+                        if Path("/mnt/").exists():
+                            doplug("ls "+"/mnt/")
+                            tmp += 1
+                        if tmp == 2:
+                            print(TOPBAR[theme]+"note: media folder will be prioritized over mnt"+THEMES[theme])
                         b = 0
+                        
                     else:
                         if Path("/media/"+usr+"/"+a[1]).exists() and Path("/media/"+usr+"/"+a[1]).is_dir():
                             cd = Path("/media/"+usr+"/"+a[1])
+                            b = 0
+                        elif Path("/mnt/"+a[1]).exists() and Path("/mnt/"+a[1]).is_dir():
+                            cd = Path("/mnt/"+a[1])
                             b = 0
                         else:
                             print("no drive: "+a[1])
@@ -493,9 +505,9 @@ try:
                         print(TOPBAR[i]+"title{}\x1b[0m".format(i))
                         print()
                     printappname("",custBannerColour=TOPBAR[theme])
-            elif a[0][:3] == "sys":
-                a = a[4:]
-                c = os.system(a)
+            elif a[0] == "sys":
+                d = astr[4:]
+                c = os.system(d)
                 b = 0
                 logs.log(0,"user forced sys command")
                 if c != 0:
@@ -537,9 +549,9 @@ try:
                     histfile.write(hist[i]+"\n")
                 histfile.close()
                 b = 0
-            elif "cd" in a: #warning VARY MESSY DONT TOUCH
+            elif a[0] == "cd": #warning VARY MESSY DONT TOUCH
                 
-                if "$" in a:
+                if "$" in a[1]:
                     c = a
                     c = c.replace("cd ","")
                     #print(c)
@@ -550,7 +562,7 @@ try:
                     else:
                         cd = Path(newc)
                         b = 0
-                elif ".." in a:
+                elif ".." in a[1]:
                     cd = cd.parent
                     # ncd = str(cd)
                     # for i in range(len(str(cd))-1):
@@ -564,7 +576,7 @@ try:
                     #print("not implamented")
                     b = 0
                 
-                elif a[0] == "cd":
+                else:
                     c = astr.replace("cd ","")
                 
                     
