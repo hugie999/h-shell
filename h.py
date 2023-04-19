@@ -89,7 +89,7 @@ except Exception as ex:
 #print("\x1b[=1h")
 #printEscape("[?47h")
 #clear()
-
+LETTERS = "abcdefghijklmnopqrstuvwxyz"
 iswindows = False
 isfloppy  = False
 isinserted= True
@@ -99,8 +99,8 @@ title = "h shell"
 theme = 0
 proghome = Path(__file__).parent
 logs.log(0,"version {}".format(ver))
-THEMES = ["\x1b[37;40m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[30;42m','\x1b[32;40m','\x1b[33;44m','\x1b[39;43m']
-TOPBAR = ["\x1b[30;47m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[32;40m','\x1b[30;42m','\x1b[34;42m','\x1b[33;49m']
+THEMES = ["\x1b[37;40m","\x1b[37;40m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[30;42m','\x1b[32;40m','\x1b[33;44m','\x1b[39;43m']
+TOPBAR = ["\x1b[30;47m","\x1b[37;40m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[32;40m','\x1b[30;42m','\x1b[34;42m','\x1b[33;49m']
 #print(os.environ['HOME'])
 if os.name =="nt":
     iswindows = True
@@ -349,8 +349,10 @@ try:
                         pluginnumber = int(a[2])
                         print("name: {}".format(plugins.plugindata[pluginnumber].META["name"]))
                         print("version: {}".format(plugins.plugindata[pluginnumber].META["pluginver"]))
+                        print("commands: "+str(plugins.pluginreserved[pluginnumber]))
                         print("--description--")
                         print(plugins.plugindata[pluginnumber].META["desc"])
+                        
                         b = 0
                     except ValueError:
                         print(TOPBAR[theme]+"please refrence plugin by number (from plugman list)"+THEMES[theme])
@@ -411,6 +413,27 @@ try:
                             b = 0
                         else:
                             print("no drive: "+a[1])
+                else:
+                    
+                    if a[1] == "-l":
+                        print("-drives-")
+                        for i in range(26):
+                            if Path(LETTERS[i]+":").exists():
+                                print(LETTERS[i]+":")
+
+                        b =0
+                    else:
+                        if len(a[1]) == 2:
+                            if a[1][1] == ":" and a[1][0].lower() in LETTERS and len(a[1]) == 2 and Path(a[1]).exists():
+                                cd = Path(a[1])
+                            else:
+                                print(a[1]+" is not a drive")
+                        elif a[1][0].lower() in LETTERS and len(a[1]) == 1 and Path(a[1]+":").exists():
+                            cd = Path(a[1]+":")
+                            b = 0
+                        else:
+                            print(a[1]+" is not a drive")
+                        b = 0
             elif a[0] == "clear":
                 clear()
                 if not prefs.qclear:
@@ -579,7 +602,7 @@ try:
                     b = 0
                 
                 else:
-                    c = a[1]
+                    c = astr.replace("cd ","")
                     c = Path(c)
                     #print(cd.is_dir())
                     
@@ -595,35 +618,29 @@ try:
                     # else:
                     #    c = "/"+c
                     #print(cd / c)
-
-                    if Path(str(cd)+"/"+str(c).upper()).is_dir():
+                    if (cd / c).is_dir():
+                        print(cd / c)
+                    elif Path(str(cd)+"/"+str(c).upper()).is_dir():
                         c = Path(str(c).upper())
-                        
+                        print(c)
+                        print(Path(str(cd)+"/"+str(c).upper()).is_dir())
                     elif Path(str(cd)+"/"+str(c).title()).is_dir():
                         c = Path(str(c).title())
-                        
+                        print(c)
+                        print(Path(str(cd)+"/"+str(c).upper()).is_dir())
                     elif Path(str(cd)+"/"+str(c).lower()).is_dir():
                         c = Path(str(c).lower())
-                        
+                        print(c)
+                        print(Path(str(cd)+"/"+str(c).upper()).is_dir())
                        
                     # if c[0] != "/":
                     #     c = "/"+c
-                    if str(c) != "/" and str(cd) != "/":
-                        c = Path("{}".format("/")+str(c))
-                    
-                    
-                        cstr = str(c)
-                    if Path(str(cd)+"/"+str(c)+"/").is_dir():
-                        #print((cd / c).exists())
+                    if True:#Path(str(cd)+"/"+str(c)+"/").is_dir():
+                        print((cd / c).exists())
                         #cd = cd.joinpath
-                        #print(cd)
-                        
-                        #print(Path(str(cd)+"/"+str(c)+"/"))
-                        cd = Path(str(cd)+"/"+str(c)+"/")
-                        #repr(str(cd)+"/"+str(c)+"/")
-                        #print(repr(cd))
-                        #print(cd)
-                        #print(cd.is_dir())
+                        cd = cd / c
+                        print(cd)
+                        print(cd.is_dir())
                         b = 0
                     # else:
                     #     print("{} dosent exsist".format(str(cd)+"/"+str(c)))
@@ -724,7 +741,7 @@ try:
         if b != 0:
            print("\x1b[30;41m E:{}\x1b[0m".format(b))
         try:
-            os.chdir(cd)
+            os.chdir(str(cd))
             limbo = False
         except NotADirectoryError:
             os.chdir(Path("/"))
