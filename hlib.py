@@ -4,7 +4,7 @@ if __package__ == None:
     raise Exception('NonModualUseForbidden')
 #print('importing...')
 import sys
-if sys.version_info < (3, 7):
+if sys.version_info < (3,0):
     raise Exception('updateToV3')
 import os
 import platform

@@ -440,6 +440,8 @@ try:
                 #print(__file__)
                 comman = a[1]
                 #print(comman)
+                if a[1] == "pwd":
+                    print(cd)
                 if a[1] == "var-set":
                     exec("{} = {}({})".format(a[2],a[3],a[4]))
                 
@@ -577,9 +579,9 @@ try:
                     b = 0
                 
                 else:
-                    c = astr.replace("cd ","")
-                
-                    
+                    c = a[1]
+                    c = Path(c)
+                    #print(cd.is_dir())
                     
                     #cstr = str(c)
                     
@@ -587,33 +589,45 @@ try:
                     #print(Path(str(cd)+"/"+str(c).upper()))#.exists())
                     #print(Path(str(cd)+"/"+str(c).title()))#.exists())
                     #print(Path(str(cd)+"/"+str(c).lower()))#.exists())
-                    if Path(str(cd)+"/"+str(c).upper()).exists():
-                        c = Path(str(c).upper())
-                        #print(c)
-                    elif Path(str(cd)+"/"+str(c).title()).exists():
-                        c = Path(str(c).title())
-                        #print(c)
-                    elif Path(str(cd)+"/"+str(c).lower()).exists():
-                        c = Path(str(c).lower())
-                        #print(c)
-                    #if c[-1] == "/":
-                    #    c -= 1
+                    # if c[0] == "/":
+                    #    #c -= 1
                     #    c = c
-                    #else:
-                    #    c =c
+                    # else:
+                    #    c = "/"+c
+                    #print(cd / c)
+
+                    if Path(str(cd)+"/"+str(c).upper()).is_dir():
+                        c = Path(str(c).upper())
+                        
+                    elif Path(str(cd)+"/"+str(c).title()).is_dir():
+                        c = Path(str(c).title())
+                        
+                    elif Path(str(cd)+"/"+str(c).lower()).is_dir():
+                        c = Path(str(c).lower())
+                        
                        
+                    # if c[0] != "/":
+                    #     c = "/"+c
                     if str(c) != "/" and str(cd) != "/":
                         c = Path("{}".format("/")+str(c))
                     
                     
                         cstr = str(c)
-                    if Path(str(cd)+str(c)).exists():
-                    
-                        cd = Path(str(cd)+str(c))
+                    if Path(str(cd)+"/"+str(c)+"/").is_dir():
+                        #print((cd / c).exists())
+                        #cd = cd.joinpath
+                        #print(cd)
+                        
+                        #print(Path(str(cd)+"/"+str(c)+"/"))
+                        cd = Path(str(cd)+"/"+str(c)+"/")
+                        #repr(str(cd)+"/"+str(c)+"/")
+                        #print(repr(cd))
+                        #print(cd)
+                        #print(cd.is_dir())
                         b = 0
-                    else:
-                        print("{} dosent exsist".format(str(cd)+str(c)))
-                        b = 1
+                    # else:
+                    #     print("{} dosent exsist".format(str(cd)+"/"+str(c)))
+                    #     b = 1
             elif a[0] == "s-prefs":
                 save = open(".hprefs","wt")
                 for i in range(len(prefs)):
