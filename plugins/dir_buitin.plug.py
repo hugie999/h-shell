@@ -9,13 +9,13 @@ PLUGVER = 1 #this is for compatibility or somthing
 from pathlib import Path
 import os
 def docom(comfull="",themestr="",cdreal= Path(__file__)):
+
     if len(comfull.split()) > 1:
         #print(comfull)
         cd = Path(comfull.split()[len(comfull.split())-1])
     else:
         cd = cdreal
     try:
-        
         hi = os.get_terminal_size()[1]
         print(themestr[1]+"---"+"listing of " + str(cd)+"---"+themestr[0])
         a = 0

@@ -173,6 +173,7 @@ class prefs:
     drawhead = not checkfor(".notitle")
     centertitle = False
     showpathintitle = True
+    defaultshell = "/bin/bash"
     
 #if checkfor(".loadplugs"):
 def pluginreload():
@@ -203,8 +204,16 @@ def pluginreload():
     load.loadcomplete()
 #input()
 pluginreload()
+if not iswindows:
+    usr = getpass.getuser()
+else:
+    usr = "WindowsUser"
+if usr == "root":
+    isroot = True
+print(usr)
 input("press [enter]")
 clear()
+
 
 def prnthead():
     global prompt
@@ -236,6 +245,7 @@ print("type 'help' then press [ENTER] for help!")
 #print("HISS running on: "+ sys.platform)
 com = 0
 b = 0
+
 # try:
 #     try:
 #         wi = os.get_terminal_size().columns
@@ -249,6 +259,7 @@ b = 0
 
 
 def doplug(command = ""):
+    
     try:
         comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
     except IndexError:
@@ -262,10 +273,13 @@ for i in range(hi-2):
         printEscape("[1B")
 try:
     while True:
+        if usr == "root":
+            isroot = True
+        if iswindows:
+            usr = getpass.getuser()
         #wi = os.get_terminal_size().columns
         #hi = os.get_terminal_size().lines
         print(THEMES[theme],end="")
-        
         printEscape("[2K")
         #print("\x1b[0x07")
         
@@ -286,6 +300,7 @@ try:
         a = aliases.repacecom(a,str(cd))
         printEscape("[1A")
         printEscape("[2K")
+        
         print(printcenter(":{}:".format(a),DoAsReturn=True))
         logs.log(0,"usr: "+str(a))
         try:
@@ -392,11 +407,13 @@ try:
                     if len(a) != 2:
                         print("incorect args")
                     elif a[1] == "-l":
-                        #print("ls "+"/media/"+usr)
+                        print("ls "+"/media/"+usr+"/")
                         tmp = 0
-                        if (Path("media") / Path(usr)).exists():
+                        if (Path("/media") / Path(usr)).exists():
                             doplug("ls "+"/media/"+usr)
                             tmp += 1
+                        else:
+                            logs.log(0,"no media folder found! | "+str(Path("/media") / Path(usr)))
                         if Path("/mnt/").exists():
                             doplug("ls "+"/mnt/")
                             tmp += 1
@@ -463,21 +480,23 @@ try:
                 #print(__file__)
                 comman = a[1]
                 #print(comman)
+                if a[1] == "help":
+                    print("{}---dev commands---{}".format(TOPBAR[theme],THEMES[theme]))
+                    print("pwd    : prints 'cd' var")
+                    print("info   : shows info")
+                    print("loglev : [DOES NOT WORK] changes log level")
+                    print("slogs  : saves logs")
+                    print("intsall: [DOES NOT WORK] use webinst")
+                    print("webinst: installs from web")
+                    print("alies  : prints alieases")
+                    print("themes : prints themes [just use theme command]")
                 if a[1] == "pwd":
                     print(cd)
-                if a[1] == "var-set":
-                    exec("{} = {}({})".format(a[2],a[3],a[4]))
-                
-                
-                if comman == "h-inf":
+                if comman == "info":
                     print("h-shell version: {} ({})".format(ver,str(vernum)))
                     print("plugins: {}".format(len(plugins.plugindata)))
                     print("program: {}".format(__file__))
                     print("theme: {}".format(theme))
-                    pass
-                if comman == "plugman":
-                    for i in range(len(plugins.plugindata)):
-                        print(plugins.plugindata[i].META["name"])
                     pass
                 if comman == "loglev":
                     print("enter level")
@@ -505,20 +524,6 @@ try:
                 if comman == "alies":
                     print("input: {}".format(aliases.INCOM))
                     print("output: {}".format(aliases.OUTCOM))
-                if comman == "depends":
-                    tempdepends = []
-                    for i in range(len(depends)):
-                        tempdepends.append(os.system("which {}".format(depends[i])))
-                    for i in range(len(tempdepends)):
-                        cooltxt = "{}: ".format(depends[i])
-                        cooltxt = cooltxt.zfill(10)
-                        cooltxt = cooltxt.replace("0"," ")
-                        if tempdepends[i] == 0:
-                            print(cooltxt+"Y")
-                        else:
-                            print(cooltxt+"N")
-                    print(tempdepends)
-                    pass
                 if comman == "themes":
                     
                     #print('-----themes----\x1b[0m')
@@ -532,7 +537,7 @@ try:
                     printappname("",custBannerColour=TOPBAR[theme])
             elif a[0] == "sys":
                 d = astr[4:]
-                c = os.system(d)
+                c = os.system(prefs.defaultshell+d)
                 b = 0
                 logs.log(0,"user forced sys command")
                 if c != 0:
@@ -575,8 +580,12 @@ try:
                 histfile.close()
                 b = 0
             elif a[0] == "cd": #warning VARY MESSY DONT TOUCH
+                if len(a) == 1:
+                    print(cd)
+                    b = 0
                 
-                if "$" in a[1]:
+                
+                elif "$" in a[1]:
                     c = a
                     c = c.replace("cd ","")
                     #print(c)
@@ -602,8 +611,11 @@ try:
                     b = 0
                 
                 else:
-                    c = astr.replace("cd ","")
-                    c = Path(c)
+                    c = ""
+                    for i in range(len(a)-1):
+                        c += a[i+1]
+                    
+                    
                     #print(cd.is_dir())
                     
                     #cstr = str(c)
@@ -618,29 +630,18 @@ try:
                     # else:
                     #    c = "/"+c
                     #print(cd / c)
-                    if (cd / c).is_dir():
-                        print(cd / c)
-                    elif Path(str(cd)+"/"+str(c).upper()).is_dir():
+                    if Path(str(cd)+"/"+str(c).upper()).is_dir():
                         c = Path(str(c).upper())
-                        print(c)
-                        print(Path(str(cd)+"/"+str(c).upper()).is_dir())
                     elif Path(str(cd)+"/"+str(c).title()).is_dir():
                         c = Path(str(c).title())
-                        print(c)
-                        print(Path(str(cd)+"/"+str(c).upper()).is_dir())
                     elif Path(str(cd)+"/"+str(c).lower()).is_dir():
                         c = Path(str(c).lower())
-                        print(c)
-                        print(Path(str(cd)+"/"+str(c).upper()).is_dir())
                        
                     # if c[0] != "/":
                     #     c = "/"+c
-                    if True:#Path(str(cd)+"/"+str(c)+"/").is_dir():
-                        print((cd / c).exists())
+                    if Path(str(cd)+"/"+str(c)+"/").is_dir():
                         #cd = cd.joinpath
-                        cd = cd / c
-                        print(cd)
-                        print(cd.is_dir())
+                        cd = cd / a[1]
                         b = 0
                     # else:
                     #     print("{} dosent exsist".format(str(cd)+"/"+str(c)))
@@ -732,7 +733,7 @@ try:
                 if astr[:2] == "./":
                     astr.replace("./",str(cd)+"/")
                 
-                b = os.system(astr)
+                b = os.system(prefs.defaultshell+astr)
         
         if b == 32512:
             printEscape("[1A")
@@ -741,7 +742,7 @@ try:
         if b != 0:
            print("\x1b[30;41m E:{}\x1b[0m".format(b))
         try:
-            os.chdir(str(cd))
+            os.chdir(cd)
             limbo = False
         except NotADirectoryError:
             os.chdir(Path("/"))
