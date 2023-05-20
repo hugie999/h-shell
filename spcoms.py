@@ -63,8 +63,8 @@ def docom(a):
     if a == "bash":
         a.replace("bash ", "")
         os.system(a)
-    if a == "exit":
-        exit()
+    # if a == "exit":
+    #     exit()
     if a == "vi" or a == "vim" or a == "neovim":
         os.system("emacs")
         ret = 0
