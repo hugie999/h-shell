@@ -240,11 +240,15 @@ def loadprefs():
         preffile.close()
         
         theme = int(preflist[0])
-        prefs.qclear = bool(preflist[1])
-        prefs.drawhead = bool(preflist[2])
-        prefs.centertitle = bool(preflist[3])
-        prefs.showpathintitle = bool(preflist[4])
+        prefs.qclear = (str(preflist[1]) == 1)
+        prefs.drawhead = (str(preflist[2]) == 1)
+        prefs.centertitle = (str(preflist[3]) == 1)
+        prefs.showpathintitle = (str(preflist[4]) == 1)
         logs.log(1,str(preflist))
+        for i in preflist:
+            logs.log(0,str(int(i) == 1))
+        
+        
     except:
         print("error while loading prefs :(")
         print("try 'dev prefreload'")
@@ -277,7 +281,7 @@ def prnthead():
                 printappname(titletemp,THEMES[theme],TOPBAR[theme],prefs.centertitle)
             prompt = "{}:".format(strcd)
     else:
-        prompt = "[{}/{}/{}]|{}|: ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
+        prompt = "[{}/{}/{}] | {} | : ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
 loadprefs()
 clear()
 prnthead()
@@ -443,9 +447,9 @@ while True:
                 printappname("set")
                 try:
                     if input("draw title?         ([Y]/n):").lower() == "n":
-                        (proghome / ".notitle").touch()
+                        prefs.drawhead  = False
                     else:
-                        (proghome / ".notitle").unlink()
+                        prefs.drawhead  = True
                 except FileNotFoundError:
                     pass
                 if input("center title?       (y/[N]):").lower() != "y":
