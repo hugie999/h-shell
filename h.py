@@ -248,7 +248,7 @@ def loadprefs():
     except:
         print("error while loading prefs :(")
         print("try 'dev prefreload'")
-        preflist = [0,0,0,0,0]
+        preflist = [0,0,1,0,1]
         theme = int(preflist[0])
         prefs.qclear = bool(preflist[1])
         prefs.drawhead = bool(preflist[2])
