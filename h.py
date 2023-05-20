@@ -462,7 +462,7 @@ try:
                 if not iswindows:
                     
                     usr = getpass.getuser()
-                    if len(a) != 2:
+                    if len(a) == 1:
                         print("incorect args")
                     elif a[1] == "-l":
                         print("ls "+"/media/"+usr+"/")
@@ -489,12 +489,16 @@ try:
                         else:
                             print("no drive: "+a[1])
                 else:
-                    
-                    if a[1] == "-l":
+                    if len(a) != 2:
+                        pass
+                    elif a[1] == "-l":
                         print("-drives-")
                         for i in range(26):
-                            if Path(LETTERS[i]+":").exists():
-                                print(LETTERS[i]+":")
+                            try:
+                                if Path(LETTERS[i]+":").exists():
+                                    print(LETTERS[i]+":")
+                            except OSError:
+                                print(TOPBAR[theme]+LETTERS[i]+": [NOT WORKING]"+THEMES[theme])
 
                         b =0
                     else:
