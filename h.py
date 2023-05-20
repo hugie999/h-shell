@@ -774,8 +774,10 @@ try:
                 #print(a[:2])
                 if astr[:2] == "./":
                     astr.replace("./",str(cd)+"/")
-                
-                b = os.system(prefs.defaultshell+astr)
+                if not iswindows:
+                    b = os.system(prefs.defaultshell+astr)
+                else:
+                    b = os.system(astr)
         
         if b == 32512:
             printEscape("[1A")
