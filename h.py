@@ -230,20 +230,30 @@ def saveprefs():
     preffile.close()
 def loadprefs():
     global theme
-    preffile = open(str(proghome)+"/.prefs","rt")
-    preflist = []
-    load.makeloader(5,"loading...","done!")
-    for i in preffile.read():
-        load.loadupdate()
-        preflist.append(str(i))
-    preffile.close()
-    
-    theme = int(preflist[0])
-    prefs.qclear = bool(preflist[1])
-    prefs.drawhead = bool(preflist[2])
-    prefs.centertitle = bool(preflist[3])
-    prefs.showpathintitle = bool(preflist[4])
-    logs.log(1,str(preflist))
+    try:
+        preffile = open(str(proghome)+"/.prefs","rt")
+        preflist = []
+        load.makeloader(5,"loading...","done!")
+        for i in preffile.read():
+            load.loadupdate()
+            preflist.append(str(i))
+        preffile.close()
+        
+        theme = int(preflist[0])
+        prefs.qclear = bool(preflist[1])
+        prefs.drawhead = bool(preflist[2])
+        prefs.centertitle = bool(preflist[3])
+        prefs.showpathintitle = bool(preflist[4])
+        logs.log(1,str(preflist))
+    except IndexError or FileNotFoundError:
+        print("error while loading prefs :(")
+        print("try 'dev prefreload'")
+        preflist = [0,0,0,0,0]
+        theme = int(preflist[0])
+        prefs.qclear = bool(preflist[1])
+        prefs.drawhead = bool(preflist[2])
+        prefs.centertitle = bool(preflist[3])
+        prefs.showpathintitle = bool(preflist[4])
 def prnthead():
     global prompt
     strcd = str(cd)
