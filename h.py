@@ -95,7 +95,7 @@ iswindows = False
 isfloppy  = False
 isinserted= True
 ver = "0.1 Beta 2"
-vernum = 2
+vernum = 3
 title = "h shell"
 proghome = Path(__file__).parent
 logs.log(0,"version {}".format(ver))
