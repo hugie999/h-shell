@@ -312,6 +312,22 @@ def doplug(command = ""):
 
 for i in range(hi-2):
         printEscape("[1B")
+#clear screen with background
+clear()
+
+if prefs.drawhead:
+    printEscape("[H")
+    prnthead()
+else:
+    prnthead()
+
+if True:
+    
+    print(THEMES[theme])
+    for i in range(hi-3):
+        for i in range(wi):
+            print(" ",end="")
+#-------------------------------
 try:
     while True:
         if usr == "root":
