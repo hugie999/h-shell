@@ -89,18 +89,18 @@ except Exception as ex:
 #print("\x1b[=1h")
 #printEscape("[?47h")
 #clear()
+theme = 0
 LETTERS = "abcdefghijklmnopqrstuvwxyz"
 iswindows = False
 isfloppy  = False
 isinserted= True
-ver = "0.1 Beta 1"
+ver = "0.1 Beta 2"
 vernum = 2
 title = "h shell"
-theme = 0
 proghome = Path(__file__).parent
 logs.log(0,"version {}".format(ver))
-THEMES = ["\x1b[37;40m","\x1b[37;40m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[30;42m','\x1b[32;40m','\x1b[33;44m','\x1b[39;43m']
-TOPBAR = ["\x1b[30;47m","\x1b[37;40m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[32;40m','\x1b[30;42m','\x1b[34;42m','\x1b[33;49m']
+THEMES = ["\x1b[37;40m","\x1b[37;40m","\x1b[0m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[30;42m','\x1b[32;40m','\x1b[33;44m','\x1b[39;43m']
+TOPBAR = ["\x1b[30;47m","\x1b[37;40m","\x1b[0m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[32;40m','\x1b[30;42m','\x1b[34;42m','\x1b[33;49m']
 #print(os.environ['HOME'])
 if os.name =="nt":
     iswindows = True
@@ -129,7 +129,7 @@ if isfloppy:
 
 prompt = ":"
 title  = "h-shell"
-theme  = 0
+
 
 startcomnum = 0
 startcomdone = False
@@ -169,7 +169,8 @@ class plugins:
     pluginreservednum = []
     plugindata = []
 class prefs:
-    qclear = checkfor(".quickclear")
+    #qclear = checkfor(".quickclear")
+    qclear = False
     drawhead = not checkfor(".notitle")
     centertitle = False
     showpathintitle = True
@@ -212,9 +213,37 @@ if usr == "root":
     isroot = True
 print(usr)
 input("press [enter]")
-clear()
 
-
+def saveprefs():
+    preflist = []
+    preflist.append(theme)
+    preflist.append(int(prefs.qclear))
+    preflist.append(int(prefs.drawhead))
+    preflist.append(int(prefs.centertitle))
+    preflist.append(int(prefs.showpathintitle))
+    logs.log(1,str(preflist))
+    preffile = open(str(proghome)+"/.prefs","wt")
+    load.makeloader(5,"saveing...","done!")
+    for i in preflist:
+        load.loadupdate()
+        preffile.write(str(i))
+    preffile.close()
+def loadprefs():
+    global theme
+    preffile = open(str(proghome)+"/.prefs","rt")
+    preflist = []
+    load.makeloader(5,"loading...","done!")
+    for i in preffile.read():
+        load.loadupdate()
+        preflist.append(str(i))
+    preffile.close()
+    
+    theme = int(preflist[0])
+    prefs.qclear = bool(preflist[1])
+    prefs.drawhead = bool(preflist[2])
+    prefs.centertitle = bool(preflist[3])
+    prefs.showpathintitle = bool(preflist[4])
+    logs.log(1,str(preflist))
 def prnthead():
     global prompt
     strcd = str(cd)
@@ -236,9 +265,11 @@ def prnthead():
                 printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
             else:
                 printappname(titletemp,THEMES[theme],TOPBAR[theme],prefs.centertitle)
-            prompt = "{} {}:".format(THEMES[theme],strcd)
+            prompt = "{}:".format(strcd)
     else:
-        prompt = "\x1b[34;40m[{}/{}/{}]\x1b[0m|\x1b[30;47m{}\x1b[0m|\x1b[37;42m:\x1b[0m ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
+        prompt = "[{}/{}/{}]|{}|: ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
+loadprefs()
+clear()
 prnthead()
 print("Welcome to h-shell")
 print("type 'help' then press [ENTER] for help!")
@@ -285,9 +316,9 @@ try:
         
         if startcomdone:
             if prefs.drawhead and prefs.showpathintitle:
-                a = input("\x1b[5m{}\x1b[25m".format(prompt))
+                a = input("{}{}{}".format(TOPBAR[theme],prompt,THEMES[theme]))
             else:
-                a = input(prompt)
+                a = input(TOPBAR[theme]+prompt+THEMES[theme])
                 
 
         else:
@@ -399,6 +430,7 @@ try:
                     prefs.showpathintitle = True
                 else:
                     prefs.showpathintitle = False
+                saveprefs()
                 b = 0
             elif a[0] == "drv" or a[0] == "drive":
                 if not iswindows:
@@ -453,7 +485,7 @@ try:
                         b = 0
             elif a[0] == "clear":
                 clear()
-                if not prefs.qclear:
+                if True:
                     print(THEMES[theme])
                     for i in range(hi-1):
                         for i in range(wi):
@@ -474,6 +506,7 @@ try:
                 print("\x1B[2A",end="")
                 theme = int(input("new theme: "))
                 print("")
+                saveprefs()
                 b = 0
             elif a[0] == "dev":
                 b = 0
@@ -482,21 +515,29 @@ try:
                 #print(comman)
                 if a[1] == "help":
                     print("{}---dev commands---{}".format(TOPBAR[theme],THEMES[theme]))
-                    print("pwd    : prints 'cd' var")
-                    print("info   : shows info")
-                    print("loglev : [DOES NOT WORK] changes log level")
-                    print("slogs  : saves logs")
-                    print("intsall: [DOES NOT WORK] use webinst")
-                    print("webinst: installs from web")
-                    print("alies  : prints alieases")
-                    print("themes : prints themes [just use theme command]")
+                    print("pwd     : prints 'cd' var")
+                    print("info    : shows info")
+                    print("loglev  : hanges log level")
+                    print("slogs   : saves logs")
+                    print("intsall : [DOES NOT WORK] use webinst")
+                    print("webinst : installs from web")
+                    print("alies   : prints alieases")
+                    print("themes  : prints themes [just use theme command]")
+                if a[1] == "prefreload":
+                    saveprefs()
+                    loadprefs()
                 if a[1] == "pwd":
                     print(cd)
                 if comman == "info":
                     print("h-shell version: {} ({})".format(ver,str(vernum)))
-                    print("plugins: {}".format(len(plugins.plugindata)))
-                    print("program: {}".format(__file__))
-                    print("theme: {}".format(theme))
+                    print("plugins : {}".format(len(plugins.plugindata)))
+                    print("program : {}".format(__file__))
+                    print("theme   : {}".format(theme))
+                    print("user    : "+usr)
+                    if iswindows:
+                        print("os      : Windows")
+                    else:
+                        print("os      : not Windows")
                     pass
                 if comman == "loglev":
                     print("enter level")
@@ -506,7 +547,8 @@ try:
                     print("1: only errors [default]")
                     print("0: nothing")
                     newlev = input(":")
-                    LlevF = open(str(proghome)+".loglev","wt")
+                    logs.log(0,"lev file:"+str(proghome)+"/.loglev")
+                    LlevF = open(str(proghome)+"/.loglev","wt")
                     logs.log(0,"{}".format(str(newlev)))
                     if newlev == "" or not newlev in "1234":
                         newlev = "1"
@@ -739,7 +781,7 @@ try:
             printEscape("[1A")
             printEscape("[2k")
             print(str('"{}" command not found :(').format(astr))
-        if b != 0:
+        if False:#b != 0:
            print("\x1b[30;41m E:{}\x1b[0m".format(b))
         try:
             os.chdir(cd)

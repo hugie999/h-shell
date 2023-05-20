@@ -2,7 +2,7 @@ COMS = ["show"] #commands used
 META = {
     "name": "built in show command",
     "desc": "shows the contents of the specified file",
-    "pluginver": 1,
+    "pluginver": 1.1,
     "ver" : 1
 }# note plugin ver and ver are DIFFRENT ver is for the version of the plugin and plugin ver is what is used in the docom function
 PLUGVER = 1 #this is for compatibility or somthing
@@ -15,7 +15,7 @@ def docom(comfull="",themestr="",cd= Path(__file__)):
     else:
         try:
             file = open(comfull[1])
-            print(themestr[1]+"---"+"contents of " + comfull[1]+"---"+themestr[0])
+            print(str(themestr[1]+"---"+"contents of " + comfull[1]+"---"+themestr[0]).ljust(os.get_terminal_size()[0]))
             hi = os.get_terminal_size()[1]
             #print(comfull)
             a = 0

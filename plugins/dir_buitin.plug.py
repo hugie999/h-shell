@@ -2,13 +2,14 @@ COMS = ["ls","dir"] #commands used
 META = {
     "name": "built in dir and ls command",
     "desc": "shows the directory of the current directory",
-    "pluginver": 1,
+    "pluginver": 2,
     "ver" : 1
-}# note plugin ver and ver are DIFFRENT ver is for the version of the plugin and plugin ver is what is used in the docom function
+}# note pluginver and ver are DIFFRENT pluginver is for the version of the plugin and ver is what is used in the docom function
 PLUGVER = 1 #this is for compatibility or somthing
+
 from pathlib import Path
 import os
-def docom(comfull="",themestr="",cdreal= Path(__file__)):
+def docom(comfull="",themestr=[],cdreal= Path(__file__)):
 
     if len(comfull.split()) > 1:
         #print(comfull)
@@ -17,7 +18,7 @@ def docom(comfull="",themestr="",cdreal= Path(__file__)):
         cd = cdreal
     try:
         hi = os.get_terminal_size()[1]
-        print(themestr[1]+"---"+"listing of " + str(cd)+"---"+themestr[0])
+        print(str(themestr[1]+"---"+"listing of " + str(cd)+"---"+themestr[0]).ljust(os.get_terminal_size()[0]))
         a = 0
         for i in cd.iterdir():
             a += 1
