@@ -328,8 +328,8 @@ if True:
         for i in range(wi):
             print(" ",end="")
 #-------------------------------
-try:
-    while True:
+while True:
+    try:
         if usr == "root":
             isroot = True
         if iswindows:
@@ -529,7 +529,6 @@ try:
                         else:
                             print(a[1]+" is not a drive")
                         b = 0
-                        
             elif a[0] == "clear":
                 clear()
                 if True:
@@ -555,6 +554,12 @@ try:
                 print("")
                 saveprefs()
                 b = 0
+            elif a[0] == "exit" or a[0] == "quit":
+                logs.log(1,"stoped")
+                logs.save()
+                print("\x1b[25m\x1b[0m")
+                print("exited")
+                exit()
             elif a[0] == "dev":
                 b = 0
                 #print(__file__)
@@ -858,9 +863,9 @@ try:
             for i in range(hi-2):
                 printEscape("[1B")
         else:
-            prnthead()
-        
-except KeyboardInterrupt:
-    print("\x1b[25m\x1b[0m")
-    #printEscape("[?47l")
-    print("exited")
+            prnthead()        
+    except KeyboardInterrupt:
+        # print("\x1b[25m\x1b[0m")
+        # print("exited")
+        print("")
+        logs.log(2,"^C pressed please use stop command")

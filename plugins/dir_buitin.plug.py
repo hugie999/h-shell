@@ -2,7 +2,7 @@ COMS = ["ls","dir"] #commands used
 META = {
     "name": "built in dir and ls command",
     "desc": "shows the directory of the current directory",
-    "pluginver": 2,
+    "pluginver": 1.1,
     "ver" : 1
 }# note pluginver and ver are DIFFRENT pluginver is for the version of the plugin and ver is what is used in the docom function
 PLUGVER = 1 #this is for compatibility or somthing
