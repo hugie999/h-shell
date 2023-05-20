@@ -496,23 +496,40 @@ try:
                         for i in range(26):
                             try:
                                 if Path(LETTERS[i]+":").exists():
-                                    print(LETTERS[i]+":")
+                                    if not LETTERS[i] in "abc":
+                                        print(LETTERS[i]+":")
+                                    elif LETTERS[i] == "c":
+                                        print(LETTERS[i]+": [system]")
+                                    elif LETTERS[i] in "ab":
+                                        print(LETTERS[i]+": [floppy]")
                             except OSError:
                                 print(TOPBAR[theme]+LETTERS[i]+": [NOT WORKING]"+THEMES[theme])
 
                         b =0
                     else:
                         if len(a[1]) == 2:
-                            if a[1][1] == ":" and a[1][0].lower() in LETTERS and len(a[1]) == 2 and Path(a[1]).exists():
-                                cd = Path(a[1])
-                            else:
-                                print(a[1]+" is not a drive")
-                        elif a[1][0].lower() in LETTERS and len(a[1]) == 1 and Path(a[1]+":").exists():
-                            cd = Path(a[1]+":")
-                            b = 0
+                            try:
+                                if a[1][1] == ":" and a[1][0].lower() in LETTERS and len(a[1]) == 2 and Path(a[1]).exists():
+                                    cd = Path(a[1])
+                                else:
+                                    print(a[1]+" is not a drive")
+                            except OSError:
+                                print(a[1]+" is either not a drive or needs to be formated")
+                                print("this could be that it is and unformated cd")
+                                print("on windows maybey try 'format "+a[1]+"'")
+                        elif a[1][0].lower() in LETTERS and len(a[1]) == 1:
+                            try:
+                                 if Path(a[1]+":").exists():
+                                    cd = Path(a[1]+":")
+                                    b = 0
+                            except OSError:
+                                print(a[1]+": is either not a drive or needs to be formated")
+                                print("this could be that it is and unformated cd")
+                                print("on windows maybey try 'format "+a[1]+":'")
                         else:
                             print(a[1]+" is not a drive")
                         b = 0
+                        
             elif a[0] == "clear":
                 clear()
                 if True:
