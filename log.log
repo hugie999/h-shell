@@ -3,3 +3,106 @@
 []: l:importing---------- 
 []: l:importing: h-lib 
 []: l:saveing logs 
+[]: v:loglev:4 
+[]: v:1684546489.136578 
+[]: l:importing---------- 
+[]: l:importing: h-lib 
+[]: l:importing: aliases 
+[]: l:importing: installer script 
+[]: l:importing: special commands 
+[]: l:importing: os 
+[]: l:importing: sys 
+[]: l:importing: pathlib 
+[]: l:importing: platform 
+[]: l:importing: SourceFileLoader 
+[]: l:done--------------- 
+[]: v:version 0.1 Beta 2 
+[]: l:running on nt/Windows/10 (py 3.10.0) 
+[]: l:starting dir: I:\h-shell 
+[]: l:note: running on windows 
+[]: v:I:\h-shell/.autoexec 
+[]: v:I:\h-shell/.autoexec 
+[]: v:false 
+[]: v:I:\h-shell/.path 
+[]: v:false 
+[]: v:I:\h-shell/.notitle 
+[]: v:true 
+[]: l:loading plugins!---- 
+[]: v:I:\h-shell\plugins 
+[]: l:I:\h-shell\plugins\clockey.plug.py 
+[]: v:ug.py 
+[]: v:0 
+[]: v:<class 'module'> 
+[]: l:I:\h-shell\plugins\dir_buitin.plug.py 
+[]: v:ug.py 
+[]: v:1 
+[]: v:<class 'module'> 
+[]: l:I:\h-shell\plugins\help.txt 
+[]: v:p.txt 
+[]: l:I:\h-shell\plugins\show_builtin.plug.py 
+[]: v:ug.py 
+[]: v:2 
+[]: v:<class 'module'> 
+[]: l:I:\h-shell\plugins\test.plug.py 
+[]: v:ug.py 
+[]: v:3 
+[]: v:<class 'module'> 
+[]: l:I:\h-shell\plugins\__pycache__ 
+[]: v:che__ 
+[]: l:done!---- 
+[]: l:['7', '1', '1', '1', '1'] 
+[]: v:usr: dev slogs 
+[]: l:saveing logs 
+[]: v:50 
+[]: v:loglev:1 
+[]: v:1684546534.3216877 
+[]: l:importing---------- 
+[]: l:importing: h-lib 
+[]: l:importing: aliases 
+[]: l:importing: installer script 
+[]: l:importing: special commands 
+[]: l:importing: os 
+[]: l:importing: sys 
+[]: l:importing: pathlib 
+[]: l:importing: platform 
+[]: l:importing: SourceFileLoader 
+[]: l:done--------------- 
+[]: v:version 0.1 Beta 2 
+[]: l:running on nt/Windows/10 (py 3.10.0) 
+[]: l:starting dir: I:\h-shell 
+[]: l:note: running on windows 
+[]: v:I:\h-shell/.autoexec 
+[]: v:I:\h-shell/.autoexec 
+[]: v:false 
+[]: v:I:\h-shell/.path 
+[]: v:false 
+[]: v:I:\h-shell/.notitle 
+[]: v:true 
+[]: l:loading plugins!---- 
+[]: v:I:\h-shell\plugins 
+[]: l:I:\h-shell\plugins\clockey.plug.py 
+[]: v:ug.py 
+[]: v:0 
+[]: v:<class 'module'> 
+[]: l:I:\h-shell\plugins\dir_buitin.plug.py 
+[]: v:ug.py 
+[]: v:1 
+[]: v:<class 'module'> 
+[]: l:I:\h-shell\plugins\help.txt 
+[]: v:p.txt 
+[]: l:I:\h-shell\plugins\show_builtin.plug.py 
+[]: v:ug.py 
+[]: v:2 
+[]: v:<class 'module'> 
+[]: l:I:\h-shell\plugins\test.plug.py 
+[]: v:ug.py 
+[]: v:3 
+[]: v:<class 'module'> 
+[]: l:I:\h-shell\plugins\__pycache__ 
+[]: v:che__ 
+[]: l:done!---- 
+[]: l:['7', '1', '1', '1', '1'] 
+[]: v:usr: ldev slogs 
+[]: v:usr: dev slogs 
+[]: l:saveing logs 
+[]: v:51 

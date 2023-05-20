@@ -2,7 +2,7 @@ Llevel = 4
 logs = []
 import time
 from pathlib import Path
-
+import loadicon as load
 def reload():
     Llevelf = open(".loglev")
     Llevel = int(Llevelf.read())
@@ -13,23 +13,23 @@ def log(level=0,tex="None"): #logs the input text | log levels 0 = verbose (non 
         if level == 0:
             if Llevel == 4:
                 print("\x1b[30;47mV:"+text+"\x1b[0m")
-                logs.append("v:"+text)
+            logs.append("v:"+text)
         if level == 1:
             if Llevel == 3 or Llevel == 4:
                 print("\x1b[37;44mL:"+text+"\x1b[0m")
-                logs.append("l:"+text)
+            logs.append("l:"+text)
         if level == 2:
             if Llevel == 2 or Llevel == 3 or Llevel == 4:
                 print("\x1b[30;43mW:"+text+"\x1b[0m")
-                logs.append("w:"+text)
+            logs.append("w:"+text)
         if level == 3:
             if Llevel == 1 or Llevel == 2 or Llevel == 3 or Llevel == 4:
                 print("\x1b[30;41mE:"+text+"\x1b[0m")
-                logs.append("e:"+text)
+            logs.append("e:"+text)
         if level == 3:
             if Llevel != 0:
                 print("\x1b[30;47mI:"+text+"\x1b[0m")
-                logs.append("i:"+text)
+            logs.append("i:"+text)
     except:
         print("\x1b[30;41mE:error printing log :(\x1b[0m")
         logs.append("e:"+"error printing log")
@@ -37,11 +37,13 @@ def log(level=0,tex="None"): #logs the input text | log levels 0 = verbose (non 
 def save():
     log(1,"saveing logs")
     Lfile = open("log.log","a")
+    load.makeloader(len(logs),"saveing...","done!")
     #Lfile.write("-time: "+str(time.time()))
+    log(0,str(len(logs)))
     for i in range(len(logs)):
         #if Llevel >= 2:
         #    print()
-        
+        load.loadupdate()
         Lfile.write("[{}]: {} \n".format("",logs[i]))
     Lfile.close()    
     log(1,"logs saved!")
