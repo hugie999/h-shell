@@ -245,7 +245,7 @@ def loadprefs():
         prefs.centertitle = bool(preflist[3])
         prefs.showpathintitle = bool(preflist[4])
         logs.log(1,str(preflist))
-    except IndexError or FileNotFoundError:
+    except:
         print("error while loading prefs :(")
         print("try 'dev prefreload'")
         preflist = [0,0,0,0,0]
