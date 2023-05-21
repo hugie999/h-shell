@@ -13,8 +13,12 @@ def docom(comfull="",themestr="",cd= Path(__file__)):
     if len(comfull) == 1:
         print(themestr[0]+"please input a file")
     else:
+        filepath = ""
+        for i in range(len(comfull)-2):
+            filepath += comfull[i+1]
+        filepath += comfull[len(comfull)-1]
         try:
-            file = open(comfull[1])
+            file = open(filepath)
             print(str(themestr[1]+"---"+"contents of " + comfull[1]+"---"+themestr[0]).ljust(os.get_terminal_size()[0]))
             hi = os.get_terminal_size()[1]
             #print(comfull)

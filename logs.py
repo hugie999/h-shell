@@ -26,10 +26,6 @@ def log(level=0,tex="None"): #logs the input text | log levels 0 = verbose (non 
             if Llevel == 1 or Llevel == 2 or Llevel == 3 or Llevel == 4:
                 print("\x1b[30;41mE:"+text+"\x1b[0m")
             logs.append("e:"+text)
-        if level == 3:
-            if Llevel != 0:
-                print("\x1b[30;47mI:"+text+"\x1b[0m")
-            logs.append("i:"+text)
     except:
         print("\x1b[30;41mE:error printing log :(\x1b[0m")
         logs.append("e:"+"error printing log")

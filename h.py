@@ -101,6 +101,13 @@ proghome = Path(__file__).parent
 logs.log(0,"version {}".format(ver))
 THEMES = ["\x1b[37;40m","\x1b[37;40m","\x1b[0m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[30;42m','\x1b[32;40m','\x1b[33;44m','\x1b[39;43m']
 TOPBAR = ["\x1b[30;47m","\x1b[37;40m","\x1b[0m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[32;40m','\x1b[30;42m','\x1b[34;42m','\x1b[33;49m']
+
+def gettheme(istopbar= False):
+    if istopbar:
+        return TOPBAR[theme]
+    else:
+        return THEMES[theme]
+
 #print(os.environ['HOME'])
 if os.name =="nt":
     iswindows = True
@@ -175,7 +182,7 @@ class prefs:
     centertitle = False
     showpathintitle = True
     defaultshell = "/bin/bash"
-    
+    showreadmes = False
 #if checkfor(".loadplugs"):
 def pluginreload():
     z = 0
@@ -222,6 +229,7 @@ def saveprefs():
     preflist.append(int(prefs.drawhead))
     preflist.append(int(prefs.centertitle))
     preflist.append(int(prefs.showpathintitle))
+    preflist.append(int(prefs.showreadmes))
     logs.log(1,str(preflist))
     preffile = open(str(proghome)+"/.prefs","wt")
     load.makeloader(5,"saveing...","done!")
@@ -247,6 +255,7 @@ def loadprefs():
         prefs.drawhead = (int(preflist[2]) == 1)
         prefs.centertitle = (int(preflist[3]) == 1)
         prefs.showpathintitle = (int(preflist[4]) == 1)
+        prefs.showreadmes = (int(preflist[5]) == 1)
         logs.log(1,str(preflist))
         for i in preflist:
             logs.log(0,str(int(i) == 1))
@@ -254,13 +263,15 @@ def loadprefs():
         
     except:
         print("error while loading prefs :(")
-        print("try 'dev prefreload'")
+        print("makeing new file")
         preflist = [0,0,1,0,1]
         theme = int(preflist[0])
         prefs.qclear = bool(preflist[1])
         prefs.drawhead = bool(preflist[2])
         prefs.centertitle = bool(preflist[3])
         prefs.showpathintitle = bool(preflist[4])
+        prefs.showreadmes = (False)
+        saveprefs()
 def prnthead():
     global prompt
     strcd = str(cd)
@@ -273,18 +284,19 @@ def prnthead():
             if limbo:
                 strcd += " FS ERROR :("
             if isroot:
-                printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
+                printappname(titletemp+"|RUNING AS ROOT",gettheme(False),gettheme(True))
             else:
-                printappname(titletemp,THEMES[theme],TOPBAR[theme],prefs.centertitle)
+                printappname(titletemp,gettheme(False),gettheme(True),prefs.centertitle)
         else:
             titletemp = title+ " [{}/{}/{}]".format(time.localtime()[0],time.localtime()[1],time.localtime()[2])
             if isroot:
-                printappname(titletemp+"|RUNING AS ROOT",THEMES[theme],TOPBAR[theme])
+                printappname(titletemp+"|RUNING AS ROOT",gettheme(False),gettheme(True))
             else:
-                printappname(titletemp,THEMES[theme],TOPBAR[theme],prefs.centertitle)
+                printappname(titletemp,gettheme(False),gettheme(True),prefs.centertitle)
             prompt = "{}:".format(strcd)
     else:
-        prompt = "[{}/{}/{}] | {} | : ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
+        prompt = "{} | : ".format(strcd)
+        #prompt = "[{}/{}/{}] | {} | : ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
 loadprefs()
 input("press [enter]")
 clear()
@@ -307,14 +319,30 @@ b = 0
 
 loadprefs()
 def doplug(command = ""):
-    
+    logs.log(0,command)
     try:
-        comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
-    except IndexError:
-        print("plugin for commmand: "+command+" not found")
-    plugins.plugindata[comsec].docom(command,[THEMES[theme],TOPBAR[theme]],cd)
-    com = 0
-    b = 0
+        try:
+            comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
+        except IndexError:
+            raise ValueError
+        try:
+            plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
+        except Exception as e:
+            logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
+        com = 0
+        b = 0
+        return True
+    except ValueError:
+        logs.log(2,"no plugin found")
+        return False
+    # logs.log(0,command)
+    # try:
+    #     comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
+    # except IndexError:
+    #     print("plugin for commmand: "+command+" not found")
+    # plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
+    # com = 0
+    # b = 0
 
 
 for i in range(hi-2):
@@ -330,7 +358,7 @@ else:
 
 if True:
     
-    print(THEMES[theme])
+    print(gettheme(False))
     for i in range(hi-3):
         for i in range(wi):
             print(" ",end="")
@@ -343,15 +371,12 @@ while True:
             usr = getpass.getuser()
         #wi = os.get_terminal_size().columns
         #hi = os.get_terminal_size().lines
-        print(THEMES[theme],end="")
+        print(gettheme(False),end="")
         printEscape("[2K")
         #print("\x1b[0x07")
         
         if startcomdone:
-            if prefs.drawhead and prefs.showpathintitle:
-                a = input("{}{}{}".format(TOPBAR[theme],prompt,THEMES[theme]))
-            else:
-                a = input(TOPBAR[theme]+prompt+THEMES[theme])
+            a = input("{}{}{}".format(gettheme(True),prompt,gettheme(False)))
                 
 
         else:
@@ -367,18 +392,19 @@ while True:
         
         print(printcenter(":{}:".format(a),DoAsReturn=True))
         logs.log(0,"usr: "+str(a))
-        try:
-            try:
-                comsec = plugins.pluginreservednum[plugins.pluginreserved.index(a.split()[0])]
-            except IndexError:
-                raise ValueError
-            try:
-                plugins.plugindata[comsec].docom(a,[THEMES[theme],TOPBAR[theme]],cd)
-            except Exception as e:
-                print("plugin error occoured on plugin {} : {}".format(comsec,e))
-            com = 0
-            b = 0
-        except ValueError:
+        if doplug(a):
+            pass
+            # try:
+            #     comsec = plugins.pluginreservednum[plugins.pluginreserved.index(a.split()[0])]
+            # except IndexError:
+            #     raise ValueError
+            # try:
+            #     plugins.plugindata[comsec].docom(a,[gettheme(False),gettheme(True)],cd)
+            # except Exception as e:
+            #     print("plugin error occoured on plugin {} : {}".format(comsec,e))
+            # com = 0
+            # b = 0
+        else:
             #logs.log(0,str(ex))
             #logs.log(0,"command not in plugin!")
             com = spcoms.docom(a)
@@ -419,7 +445,7 @@ while True:
                     pluginreload()
                     b = 0
                 elif a[1] == "list":
-                    print(TOPBAR[theme]+"--plugins--"+THEMES[theme])
+                    print(gettheme(True)+"--plugins--"+gettheme(False))
                     for i in range(len(plugins.plugindata)):
                         print("[{}] ".format(str(i))+plugins.plugindata[i].META["name"])
                     b = 0
@@ -434,7 +460,7 @@ while True:
                         
                         b = 0
                     except ValueError:
-                        print(TOPBAR[theme]+"please refrence plugin by number (from plugman list)"+THEMES[theme])
+                        print(gettheme(True)+"please refrence plugin by number (from plugman list)"+gettheme(False))
                         b = 0
                 elif a[1] == "help":
                     print("--plugman-command--")
@@ -450,22 +476,27 @@ while True:
                 print("draw title        : {}".format(prefs.drawhead))
                 print("center title      : {}".format(prefs.centertitle))
                 print("show path in title: {}".format(prefs.showpathintitle))
+                print("show readme files : {}".format(prefs.showreadmes))
                 printappname("set")
                 try:
-                    if input("draw title?         ([Y]/n):").lower() == "n":
+                    if input("draw title?                      ([Y]/n):").lower() == "n":
                         prefs.drawhead  = False
                     else:
                         prefs.drawhead  = True
                 except FileNotFoundError:
                     pass
-                if input("center title?       (y/[N]):").lower() != "y":
+                if input("center title?                    (y/[N]):").lower() != "y":
                     prefs.centertitle = False
                 else:
                     prefs.centertitle = True
-                if input("show path in title? ([Y]/n):").lower() != "n":
+                if input("show path in title?              ([Y]/n):").lower() != "n":
                     prefs.showpathintitle = True
                 else:
                     prefs.showpathintitle = False
+                if input("show readme files in direcorys?  (y/[N]):").lower() != "y":
+                    prefs.showpathintitle = False
+                else:
+                    prefs.showpathintitle = True
                 saveprefs()
                 b = 0
             elif a[0] == "drv" or a[0] == "drive":
@@ -486,7 +517,7 @@ while True:
                             doplug("ls "+"/mnt/")
                             tmp += 1
                         if tmp == 2:
-                            print(TOPBAR[theme]+"note: media folder will be prioritized over mnt"+THEMES[theme])
+                            print(gettheme(True)+"note: media folder will be prioritized over mnt"+gettheme(False))
                         b = 0
                         
                     else:
@@ -513,7 +544,7 @@ while True:
                                     elif LETTERS[i] in "ab":
                                         print(LETTERS[i]+": [floppy]")
                             except OSError:
-                                print(TOPBAR[theme]+LETTERS[i]+": [NOT WORKING]"+THEMES[theme])
+                                print(gettheme(True)+LETTERS[i]+": [NOT WORKING]"+gettheme(False))
 
                         b =0
                     else:
@@ -542,23 +573,23 @@ while True:
             elif a[0] == "clear":
                 clear()
                 if True:
-                    print(THEMES[theme])
+                    print(gettheme(False))
                     for i in range(hi-1):
                         for i in range(wi):
                             print(" ",end="")
                 #printappname(title + "-:{}".format(cd))
                 b = 0
             elif a[0] == "theme-sel" or a[0] == "theme":
-                printappname("themes",custBannerColour=TOPBAR[theme])
+                printappname("themes",custBannerColour=gettheme(True))
                 print()
                 for i in range(len(THEMES)):
                     print(THEMES[i]+"theme{}\x1b[0m".format(i),end="")
                     print("   ",end="")
                     print(TOPBAR[i]+"title{}\x1b[0m".format(i))
                     print()
-                printappname("",custBannerColour=TOPBAR[theme])
+                printappname("",custBannerColour=gettheme(True))
                 print("")
-                printappname("",custBannerColour=TOPBAR[theme])
+                printappname("",custBannerColour=gettheme(True))
                 print("\x1B[2A",end="")
                 theme = int(input("new theme: "))
                 print("")
@@ -576,7 +607,7 @@ while True:
                 comman = a[1]
                 #print(comman)
                 if a[1] == "help":
-                    print("{}---dev commands---{}".format(TOPBAR[theme],THEMES[theme]))
+                    print("{}---dev commands---{}".format(gettheme(True),gettheme(False)))
                     print("pwd     : prints 'cd' var")
                     print("info    : shows info")
                     print("loglev  : hanges log level")
@@ -636,14 +667,14 @@ while True:
                 if comman == "themes":
                     
                     #print('-----themes----\x1b[0m')
-                    printappname("themes",custBannerColour=TOPBAR[theme])
+                    printappname("themes",custBannerColour=gettheme(True))
                     print()
                     for i in range(len(THEMES)):
                         print(THEMES[i]+"theme{}\x1b[0m".format(i),end="")
                         print("   ",end="")
                         print(TOPBAR[i]+"title{}\x1b[0m".format(i))
                         print()
-                    printappname("",custBannerColour=TOPBAR[theme])
+                    printappname("",custBannerColour=gettheme(True))
             elif a[0] == "sys":
                 d = astr[4:]
                 c = os.system(prefs.defaultshell+d)
@@ -751,10 +782,15 @@ while True:
                     if Path(str(cd)+"/"+str(c)+"/").is_dir():
                         #cd = cd.joinpath
                         cd = cd / a[1]
+                        
+                        for i in cd.iterdir():
+                            if i.name.lower() == "readme.md" or i.name.lower() == "readme.txt":
+                                doplug("show "+str(i))
+                                #logs.log(0,"show "+i.name)
                         b = 0
-                    # else:
-                    #     print("{} dosent exsist".format(str(cd)+"/"+str(c)))
-                    #     b = 1
+                    else:
+                         print("{} dosent exsist".format(str(cd)+"/"+str(c)))
+                         b = 1
             elif a[0] == "s-prefs":
                 save = open(".hprefs","wt")
                 for i in range(len(prefs)):
@@ -837,6 +873,8 @@ while True:
                             logs.log(3,"drive not ready (got PermissionError)")
                             cd = bkcd
                             b = 1
+                        except OSError:
+                            logs.log(3,"drive not ready (got OSError)")
             else:
                 #print(a[:2])
                 if astr[:2] == "./":
