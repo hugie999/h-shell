@@ -171,7 +171,7 @@ class plugins:
 class prefs:
     #qclear = checkfor(".quickclear")
     qclear = False
-    drawhead = not checkfor(".notitle")
+    drawhead = True
     centertitle = False
     showpathintitle = True
     defaultshell = "/bin/bash"
@@ -212,9 +212,10 @@ else:
 if usr == "root":
     isroot = True
 print(usr)
-input("press [enter]")
+
 
 def saveprefs():
+    global prefs
     preflist = []
     preflist.append(theme)
     preflist.append(int(prefs.qclear))
@@ -230,20 +231,22 @@ def saveprefs():
     preffile.close()
 def loadprefs():
     global theme
+    global prefs
     try:
         preffile = open(str(proghome)+"/.prefs","rt")
         preflist = []
         load.makeloader(5,"loading...","done!")
         for i in preffile.read():
-            load.loadupdate()
+            #load.loadupdate()
             preflist.append(str(i))
+            logs.log(0,str(i))
         preffile.close()
         
         theme = int(preflist[0])
-        prefs.qclear = (str(preflist[1]) == 1)
-        prefs.drawhead = (str(preflist[2]) == 1)
-        prefs.centertitle = (str(preflist[3]) == 1)
-        prefs.showpathintitle = (str(preflist[4]) == 1)
+        prefs.qclear = (int(preflist[1]) == 1)
+        prefs.drawhead = (int(preflist[2]) == 1)
+        prefs.centertitle = (int(preflist[3]) == 1)
+        prefs.showpathintitle = (int(preflist[4]) == 1)
         logs.log(1,str(preflist))
         for i in preflist:
             logs.log(0,str(int(i) == 1))
@@ -283,11 +286,11 @@ def prnthead():
     else:
         prompt = "[{}/{}/{}] | {} | : ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
 loadprefs()
+input("press [enter]")
 clear()
 prnthead()
 print("Welcome to h-shell")
 print("type 'help' then press [ENTER] for help!")
-#print("HISS running on: "+ sys.platform)
 com = 0
 b = 0
 
@@ -302,7 +305,7 @@ b = 0
 #     logs.log(3,"error getting terminal size")
 #     exit()
 
-
+loadprefs()
 def doplug(command = ""):
     
     try:
@@ -440,6 +443,9 @@ while True:
                     b = 0
                 pass
             elif a[0] == "prefs" or a[0] == "pref":
+                
+                
+                
                 printappname("prefs")
                 print("draw title        : {}".format(prefs.drawhead))
                 print("center title      : {}".format(prefs.centertitle))
@@ -582,6 +588,11 @@ while True:
                 if a[1] == "prefreload":
                     saveprefs()
                     loadprefs()
+                if a[1] == "prefs":
+                    print(prefs.drawhead)
+                    print(prefs.centertitle)
+                    
+                    print(prefs.showpathintitle)
                 if a[1] == "pwd":
                     print(cd)
                 if comman == "info":
