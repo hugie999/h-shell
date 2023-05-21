@@ -610,7 +610,7 @@ while True:
                     print("{}---dev commands---{}".format(gettheme(True),gettheme(False)))
                     print("pwd     : prints 'cd' var")
                     print("info    : shows info")
-                    print("loglev  : hanges log level")
+                    print("loglev  : changes log level")
                     print("slogs   : saves logs")
                     print("intsall : [DOES NOT WORK] use webinst")
                     print("webinst : installs from web")
