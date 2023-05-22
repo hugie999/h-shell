@@ -99,9 +99,12 @@ vernum = 3
 title = "h shell"
 proghome = Path(__file__).parent
 logs.log(0,"version {}".format(ver))
-THEMES = ["\x1b[37;40m","\x1b[37;40m","\x1b[0m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[30;42m','\x1b[32;40m','\x1b[33;44m','\x1b[39;43m']
-TOPBAR = ["\x1b[30;47m","\x1b[37;40m","\x1b[0m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[32;40m','\x1b[30;42m','\x1b[34;42m','\x1b[33;49m']
-
+THEMES = ["\x1b[37;40m","\x1b[37;40m","\x1b[0m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[30;42m','\x1b[32;40m','\x1b[33;44m','\x1b[30;43m']
+TOPBAR = ["\x1b[30;47m","\x1b[37;40m","\x1b[0m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[32;40m','\x1b[30;42m','\x1b[34;42m','\x1b[33;40m']
+THEMENAMES = ["dark ","dark","transparant","light ","edgy ","pink ","hac","hacker ","old ","ban"]
+#first theme word
+THEMENAMESTTWO = ["theme","+","","theme","red","theme","ker","inverted","school","ana"]
+#seccound theme word
 def gettheme(istopbar= False):
     if istopbar:
         return TOPBAR[theme]
@@ -583,9 +586,13 @@ while True:
                 printappname("themes",custBannerColour=gettheme(True))
                 print()
                 for i in range(len(THEMES)):
-                    print(THEMES[i]+"theme{}\x1b[0m".format(i),end="")
-                    print("   ",end="")
-                    print(TOPBAR[i]+"title{}\x1b[0m".format(i))
+                    if theme == i:
+                        print("\x1b[0m""[*]",end="")
+                    else:
+                        print("\x1b[0m"+"[{}]".format(i),end="")
+                    print(THEMES[i]+"{}{}{}".format(THEMENAMES[i],TOPBAR[i],THEMENAMESTTWO[i])+"\x1b[0m",end="")
+                    #print("   ",end="")
+                    #print(TOPBAR[i]+"\x1b[0m")
                     print()
                 printappname("",custBannerColour=gettheme(True))
                 print("")
@@ -920,5 +927,5 @@ while True:
     except KeyboardInterrupt:
         # print("\x1b[25m\x1b[0m")
         # print("exited")
-        print("")
+        #print("")
         logs.log(2,"^C pressed please use stop command")
