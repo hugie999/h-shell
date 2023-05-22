@@ -16,12 +16,14 @@ plugman [help, list, etc] > plugin manager
 
 
 
-HELPS = ["general","help","cd","goto","hist","py"]
+HELPS = ["general","help","cd","goto","hist","py","themes"]
 HELPTEX = [
     """--h-shell--
 to type a command input the command and then enter (if a command isnt dound it will try bash)""",
 """--the help command--
-the help command will pull from either the in built help or the 'man' command""",
+the help command shows built in shell commands
+can also display more info
+use 'help list' to see commands that have more info""",
 """--cd command--
 changes to the specified directory
 use: cd [new folder]""",
@@ -36,7 +38,12 @@ redoes a command in the history
 use: @hist[number] (eg: @hist0 plays first item in history)""","""
 --py command--
 not to be confused with \x1B[1mpython\x1B[22m or \x1B[1mpython3\x1B[22m
-runs a python command with the context of the program"""]
+runs a python command with the context of the program""","""\x1b[0m---themes---
+themes can be changed useing the 'theme' command
+each theme is displayed useing its name showing the two colours
+example: '\x1b[37;40mtest \x1b[30;47mtheme\x1b[0m'
+with  '\x1b[37;40mtest\x1b[0m'  showing the \x1b[1mforeground\x1b[0m colour
+and   '\x1b[30;47mtheme\x1b[0m' showing the \x1b[1mbackground\x1b[0m colour"""]
 def docom(a):
     ret = 1
     #print(a[:

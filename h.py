@@ -584,7 +584,7 @@ while True:
                 b = 0
             elif a[0] == "theme-sel" or a[0] == "theme":
                 printappname("themes",custBannerColour=gettheme(True))
-                print()
+                #print()
                 for i in range(len(THEMES)):
                     if theme == i:
                         print("\x1b[0m""[*]",end="")
