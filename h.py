@@ -132,11 +132,6 @@ hist = []
 prompt = ":"
 if iswindows:
     logs.log(1,"note: running on windows")
-if isfloppy:
-    print("you may eject teh disk now")
-
-
-
 prompt = ":"
 title  = "h-shell"
 
@@ -178,6 +173,7 @@ class plugins:
     pluginreserved = []
     pluginreservednum = []
     plugindata = []
+    plugintypes = []
 class prefs:
     #qclear = checkfor(".quickclear")
     qclear = False
@@ -195,6 +191,7 @@ def pluginreload():
     plugins.pluginreserved = []
     plugins.pluginreservednum = []
     plugins.plugindata = []
+    plugins.plugintypes = []
     logs.log(1,"loading plugins!----")
     load.makeloader(0,"loading plugins","done!",True)
     logs.log(0,str(proghome/"plugins"))
@@ -207,10 +204,20 @@ def pluginreload():
             logs.log(0,z)
             logs.log(0,type(plugins.plugindata[z]))
             for i in range(len(plugins.plugindata[z].COMS)):
-                plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
-                plugins.pluginreservednum.append(z)
-            
+                
+                try:
+                    plugins.plugintypes.append(plugins.plugindata[z].META.type)
+                    plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
+                    plugins.pluginreservednum.append(z)
+                except AttributeError:
+                    logs.log(2,"no plugin type [{}]".format(str(z)))
+                    plugins.plugintypes.append(0)
+                    plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
+                    plugins.pluginreservednum.append(z)
+                
+                
             z += 1
+    logs.log(0,(plugins.plugintypes))
     logs.log(1,"done!----")
     load.loadcomplete()
 #input()
@@ -233,12 +240,24 @@ def saveprefs():
     preflist.append(int(prefs.centertitle))
     preflist.append(int(prefs.showpathintitle))
     preflist.append(int(prefs.showreadmes))
+    
+    
+    
+    
     logs.log(1,str(preflist))
     preffile = open(str(proghome)+"/.prefs","wt")
     load.makeloader(5,"saveing...","done!")
     for i in preflist:
         load.loadupdate()
         preffile.write(str(i))
+    
+    logs.log(0,"theme "+str(preflist[0]))
+    logs.log(0,"qclear "+str(preflist[1]))
+    logs.log(0,"deawhead "+str(preflist[2]))
+    logs.log(0,"centertitle "+str(preflist[3]))
+    logs.log(0,"showpathintitle "+str(preflist[4]))
+    logs.log(0,"shworeadmes "+str(preflist[1]))
+    
     preffile.close()
 def loadprefs():
     global theme
@@ -254,11 +273,17 @@ def loadprefs():
         preffile.close()
         
         theme = int(preflist[0])
+        logs.log(0,"theme "+str(preflist[0]))
         prefs.qclear = (int(preflist[1]) == 1)
+        logs.log(0,"qclear "+str(preflist[1]))
         prefs.drawhead = (int(preflist[2]) == 1)
+        logs.log(0,"deawhead "+str(preflist[2]))
         prefs.centertitle = (int(preflist[3]) == 1)
+        logs.log(0,"centertitle "+str(preflist[3]))
         prefs.showpathintitle = (int(preflist[4]) == 1)
+        logs.log(0,"showpathintitle "+str(preflist[4]))
         prefs.showreadmes = (int(preflist[5]) == 1)
+        logs.log(0,"shworeadmes "+str(preflist[1]))
         logs.log(1,str(preflist))
         for i in preflist:
             logs.log(0,str(int(i) == 1))
@@ -301,6 +326,7 @@ def prnthead():
         prompt = "{} | : ".format(strcd)
         #prompt = "[{}/{}/{}] | {} | : ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
 loadprefs()
+
 input("press [enter]")
 clear()
 prnthead()
@@ -323,6 +349,15 @@ b = 0
 loadprefs()
 def doplug(command = ""):
     logs.log(0,command)
+    
+    # try:
+    #     for i in range(len(plugins.plugindata)):
+    #         if plugins.plugintypes[i] == 1:
+    #             plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
+    # except Exception as e:
+    #     logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
+    #     input("press -[enter]-")
+    
     try:
         try:
             comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
@@ -455,9 +490,10 @@ while True:
                 elif a[1] == "show":
                     try:
                         pluginnumber = int(a[2])
-                        print("name: {}".format(plugins.plugindata[pluginnumber].META["name"]))
-                        print("version: {}".format(plugins.plugindata[pluginnumber].META["pluginver"]))
+                        print("name    : {}".format(plugins.plugindata[pluginnumber].META["name"]))
+                        print("version : {}".format(plugins.plugindata[pluginnumber].META["pluginver"]))
                         print("commands: "+str(plugins.pluginreserved[pluginnumber]))
+                        print("type    : "+str(plugins.plugintypes[pluginnumber]))
                         print("--description--")
                         print(plugins.plugindata[pluginnumber].META["desc"])
                         
@@ -472,34 +508,34 @@ while True:
                     b = 0
                 pass
             elif a[0] == "prefs" or a[0] == "pref":
-                
-                
-                
                 printappname("prefs")
                 print("draw title        : {}".format(prefs.drawhead))
                 print("center title      : {}".format(prefs.centertitle))
                 print("show path in title: {}".format(prefs.showpathintitle))
                 print("show readme files : {}".format(prefs.showreadmes))
                 printappname("set")
-                try:
-                    if input("draw title?                      ([Y]/n):").lower() == "n":
-                        prefs.drawhead  = False
-                    else:
-                        prefs.drawhead  = True
-                except FileNotFoundError:
-                    pass
-                if input("center title?                    (y/[N]):").lower() != "y":
-                    prefs.centertitle = False
+                if input("draw title?                      ([Y]/n):").lower() == "n":
+                    prefs.drawhead  = False
                 else:
+                    prefs.drawhead  = True
+                if input("center title?                    (y/[N]):").lower() == "y":
                     prefs.centertitle = True
-                if input("show path in title?              ([Y]/n):").lower() != "n":
+                else:
+                    prefs.centertitle = False
+                if input("show path in title?              ([Y]/n):").lower() == "n":
                     prefs.showpathintitle = True
                 else:
-                    prefs.showpathintitle = False
+                    prefs.showpathintitle = True
                 if input("show readme files in direcorys?  (y/[N]):").lower() != "y":
-                    prefs.showpathintitle = False
+                    prefs.showreadmes = False
                 else:
-                    prefs.showpathintitle = True
+                    prefs.showreadmes = True
+                logs.log(0,"theme "+str(theme))
+                logs.log(0,"qclear "+str(prefs.qclear))
+                logs.log(0,"deawhead "+str(prefs.drawhead))
+                logs.log(0,"centertitle "+str(prefs.centertitle))
+                logs.log(0,"showpathintitle "+str(prefs.showpathintitle))
+                logs.log(0,"shworeadmes "+str(prefs.showreadmes))
                 saveprefs()
                 b = 0
             elif a[0] == "drv" or a[0] == "drive":
@@ -684,11 +720,14 @@ while True:
                     printappname("",custBannerColour=gettheme(True))
             elif a[0] == "sys":
                 d = astr[4:]
-                c = os.system(prefs.defaultshell+d)
+                if not iswindows:
+                    c = os.system(prefs.defaultshell+d)
+                else:
+                    c = os.system(d)
                 b = 0
                 logs.log(0,"user forced sys command")
                 if c != 0:
-                    logs.log(0,"user forced syscommand")
+                    logs.log(0,"syscom code: "+str(c))
             elif a[0] == "hist":
                 try:
                     if a[1] == "-c":
@@ -714,8 +753,6 @@ while True:
                     for i in range(len(hist)):
                         print(printcenter("[{}] :{}:".format(str(i),hist[i]),DoAsReturn=True))
                     b = 0
-            elif astr == "hist -c":
-                pass
             elif astr == "hist -s":
                 #check = Path(os.environ['HOME']+"/hiss.hist.txt").exists()
                 histfile = open(str(proghome)+"/hiss.hist.txt","at")
@@ -890,7 +927,6 @@ while True:
                     b = os.system(prefs.defaultshell+astr)
                 else:
                     b = os.system(astr)
-        
         if b == 32512:
             printEscape("[1A")
             printEscape("[2k")
