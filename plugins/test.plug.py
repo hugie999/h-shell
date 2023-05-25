@@ -10,9 +10,8 @@ META = {
 #type 0 is the normal one and is only called when a reserved command is used
 #type 1 is called every command and the used command is also run after
 PLUGVER = 1 #this is for compatibility or somthing
-
+import os
 
 
 def docom(comfull,themestr,cd):
-    if os.name =="nt":
-        pass
+    print("hello world")

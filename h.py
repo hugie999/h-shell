@@ -174,6 +174,7 @@ class plugins:
     pluginreservednum = []
     plugindata = []
     plugintypes = []
+    doeverycommand = []
 class prefs:
     #qclear = checkfor(".quickclear")
     qclear = False
@@ -191,6 +192,7 @@ def pluginreload():
     plugins.pluginreserved = []
     plugins.pluginreservednum = []
     plugins.plugindata = []
+    plugins.doeverycommand = []
     logs.log(1,"loading plugins!----")
     load.makeloader(0,"loading plugins","done!",True)
     logs.log(0,str(proghome/"plugins"))
@@ -202,7 +204,17 @@ def pluginreload():
             plugins.plugindata.append(SourceFileLoader(str(i.name),str(i)).load_module())
             logs.log(0,z)
             logs.log(0,type(plugins.plugindata[z]))
+            
+            try:
+                
+                plugins.doeverycommand.append(plugins.plugindata[z].META["oncommand"])
+            except KeyError as e:
+                logs.log(1,"no plugin type on "+str(z))
+                logs.log(0,e)
+                plugins.doeverycommand.append(False)
+            
             for i in range(len(plugins.plugindata[z].COMS)):
+                
                 plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
                 plugins.pluginreservednum.append(z)
                 
@@ -349,6 +361,11 @@ def doplug(command = ""):
     #     logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
     #     input("press -[enter]-")
     
+    for i in range(len(plugins.plugindata)):
+        if plugins.doeverycommand[i]:
+            logs.log(1,"did pluginnum "+str(i))
+            plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd)
+    
     try:
         try:
             comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
@@ -484,7 +501,7 @@ while True:
                         print("name    : {}".format(plugins.plugindata[pluginnumber].META["name"]))
                         print("version : {}".format(plugins.plugindata[pluginnumber].META["pluginver"]))
                         print("commands: "+str(plugins.pluginreserved[pluginnumber]))
-                        print("type    : "+str(plugins.plugintypes[pluginnumber]))
+                        print("type    : "+str(plugins.doeverycommand[pluginnumber]))
                         print("--description--")
                         print(plugins.plugindata[pluginnumber].META["desc"])
                         
