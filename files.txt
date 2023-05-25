@@ -7,3 +7,4 @@ hlib.py
 loadicon.py
 plugins/dir_buitin.plug.py
 plugins/show_builtin.plug.py
+plugins/titlechanger_builtin.plug.pys
