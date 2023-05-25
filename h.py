@@ -503,6 +503,8 @@ while True:
                     a = hist[num]
                 hist.pop(num)
                 b = 0
+            elif a[0] == "help":
+                print(spcoms.GHELP)
             elif a[0] == "plugman":
                 if len(a) < 2:
                     print("please input a command")
@@ -672,7 +674,6 @@ while True:
                 print("\x1b[25m\x1b[0m")
                 print("exited")
                 exit()
-            
             elif a[0] == "webupdate":
                 if len(a) > 1:
                     installer.webinst(proghome,version=a[1])
@@ -685,8 +686,7 @@ while True:
                     else:
                         print("stoped")
                 
-                quit()
-            
+                quit()        
             elif a[0] == "dev":
                 b = 0
                 #print(__file__)
