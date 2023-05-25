@@ -175,6 +175,7 @@ class plugins:
     plugindata = []
     plugintypes = []
     doeverycommand = []
+    doafter = []
 class prefs:
     #qclear = checkfor(".quickclear")
     qclear = False
@@ -193,6 +194,7 @@ def pluginreload():
     plugins.pluginreservednum = []
     plugins.plugindata = []
     plugins.doeverycommand = []
+    plugins.doafter = []
     logs.log(1,"loading plugins!----")
     load.makeloader(0,"loading plugins","done!",True)
     logs.log(0,str(proghome/"plugins"))
@@ -206,13 +208,14 @@ def pluginreload():
             logs.log(0,type(plugins.plugindata[z]))
             
             try:
-                
                 plugins.doeverycommand.append(plugins.plugindata[z].META["oncommand"])
+                plugins.doafter.append(plugins.plugindata[z].META["doafter"])
             except KeyError as e:
                 logs.log(1,"no plugin type on "+str(z))
                 logs.log(0,e)
+                plugins.doafter.append(False)
                 plugins.doeverycommand.append(False)
-            
+            logs.log(0,str(plugins.doafter))
             for i in range(len(plugins.plugindata[z].COMS)):
                 
                 plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
@@ -350,9 +353,8 @@ b = 0
 #     exit()
 
 loadprefs()
-def doplug(command = ""):
+def doplug(command = "",isafter=False):
     logs.log(0,command)
-    
     # try:
     #     for i in range(len(plugins.plugindata)):
     #         if plugins.plugintypes[i] == 1:
@@ -360,27 +362,28 @@ def doplug(command = ""):
     # except Exception as e:
     #     logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
     #     input("press -[enter]-")
-    
+    logs.log(0,str(isafter))
     for i in range(len(plugins.plugindata)):
         if plugins.doeverycommand[i]:
-            logs.log(1,"did pluginnum "+str(i))
-            plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd)
-    
-    try:
+            if plugins.doafter[i] == isafter:
+                logs.log(1,"did pluginnum "+str(i))
+                plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd)
+    if not isafter:
         try:
-            comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
-        except IndexError:
-            raise ValueError
-        try:
-            plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
-        except Exception as e:
-            logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
-        com = 0
-        b = 0
-        return True
-    except ValueError:
-        logs.log(2,"no plugin found")
-        return False
+            try:
+                comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
+            except IndexError:
+                raise ValueError
+            try:
+                plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
+            except Exception as e:
+                logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
+            com = 0
+            b = 0
+            return True
+        except ValueError:
+            logs.log(2,"no plugin found")
+            return False
     # logs.log(0,command)
     # try:
     #     comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
@@ -438,18 +441,20 @@ while True:
         
         print(printcenter(":{}:".format(a),DoAsReturn=True))
         logs.log(0,"usr: "+str(a))
-        if doplug(a):
+        a = a.split()
+        if len(a) == 0:
+            a = " "
+        astr = ""
+        for i in range(len(a)):
+            astr += str(a[i]+" ")
+        if len(astr) == 0:
+            astr = " "
+        
+        
+        if doplug(astr,False):
             pass
-            # try:
-            #     comsec = plugins.pluginreservednum[plugins.pluginreserved.index(a.split()[0])]
-            # except IndexError:
-            #     raise ValueError
-            # try:
-            #     plugins.plugindata[comsec].docom(a,[gettheme(False),gettheme(True)],cd)
-            # except Exception as e:
-            #     print("plugin error occoured on plugin {} : {}".format(comsec,e))
-            # com = 0
-            # b = 0
+            com = 0
+            b = 0
         else:
             #logs.log(0,str(ex))
             #logs.log(0,"command not in plugin!")
@@ -461,10 +466,7 @@ while True:
             elif com != 0:
                 b = com
         if com == 1:
-            a = a.split()
-            if len(a) == 0:
-                a = " "
-            astr = ""
+            
             for i in range(len(a)):
                 astr += str(a[i]+" ")
             if a[0] == "@hist":
@@ -677,6 +679,10 @@ while True:
                     print(prefs.showpathintitle)
                 if a[1] == "pwd":
                     print(cd)
+                if comman == "plugs":
+                    print(plugins.plugindata)
+                    print(plugins.pluginreserved)
+                    print(plugins.pluginreservednum)
                 if comman == "info":
                     print("h-shell version: {} ({})".format(ver,str(vernum)))
                     print("plugins : {}".format(len(plugins.plugindata)))
@@ -939,6 +945,11 @@ while True:
             printEscape("[1A")
             printEscape("[2k")
             print(str('"{}" command not found :(').format(astr))
+        
+        
+        doplug(astr,True)
+        
+        
         if False:#b != 0:
            print("\x1b[30;41m E:{}\x1b[0m".format(b))
         try:
