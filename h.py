@@ -405,6 +405,24 @@ if prefs.drawhead:
 else:
     prnthead()
 
+def ask(_question="",default=False):
+    question = _question
+    if default:
+        question += " [Y]/n:"
+    else:
+        question += " y/[N]:"
+    awnser = input(question)
+    if default:
+        if awnser.lower() != "n":
+            return True
+        else:
+            return False
+    else:
+        if awnser.lower() != "y":
+            return False
+        else:
+            return True
+
 if True:
     
     print(gettheme(False))
@@ -654,6 +672,19 @@ while True:
                 print("\x1b[25m\x1b[0m")
                 print("exited")
                 exit()
+            
+            elif a[0] == "webupdate":
+                if len(a) > 1:
+                    installer.webinst(proghome,version=a[1])
+                else:
+                    print("updateing from latest git")
+                    if ask("is that ok?",False):
+                        installer.webinst(proghome)
+                    else:
+                        print("stoped")
+                print("please restart now")
+                quit()
+            
             elif a[0] == "dev":
                 b = 0
                 #print(__file__)
