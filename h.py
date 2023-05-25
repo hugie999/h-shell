@@ -676,13 +676,15 @@ while True:
             elif a[0] == "webupdate":
                 if len(a) > 1:
                     installer.webinst(proghome,version=a[1])
+                    print("please restart now")
                 else:
                     print("updateing from latest git")
                     if ask("is that ok?",False):
                         installer.webinst(proghome)
+                        print("please restart now")
                     else:
                         print("stoped")
-                print("please restart now")
+                
                 quit()
             
             elif a[0] == "dev":

@@ -11,6 +11,7 @@ goto (path)               > goes to the path specified
 py (python command)       > runs the command under python
 pref/prefs                > shows prefrences picker
 plugman [help, list, etc] > plugin manager
+webupdate (version)       > updates h-shell
 ---------------------------------------------------------------------------"""
 
 
