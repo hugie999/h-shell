@@ -191,7 +191,6 @@ def pluginreload():
     plugins.pluginreserved = []
     plugins.pluginreservednum = []
     plugins.plugindata = []
-    plugins.plugintypes = []
     logs.log(1,"loading plugins!----")
     load.makeloader(0,"loading plugins","done!",True)
     logs.log(0,str(proghome/"plugins"))
@@ -204,16 +203,8 @@ def pluginreload():
             logs.log(0,z)
             logs.log(0,type(plugins.plugindata[z]))
             for i in range(len(plugins.plugindata[z].COMS)):
-                
-                try:
-                    plugins.plugintypes.append(plugins.plugindata[z].META.type)
-                    plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
-                    plugins.pluginreservednum.append(z)
-                except AttributeError:
-                    logs.log(2,"no plugin type [{}]".format(str(z)))
-                    plugins.plugintypes.append(0)
-                    plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
-                    plugins.pluginreservednum.append(z)
+                plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
+                plugins.pluginreservednum.append(z)
                 
                 
             z += 1
