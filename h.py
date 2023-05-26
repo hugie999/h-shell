@@ -84,8 +84,8 @@ except Exception as ex:
         except ModuleNotFoundError:
             print("'installer.py' not found")
     exit()
-#print("\x1b[=1h")
 #printEscape("[?47h")
+#print("\x1b[=1h")
 #clear()
 
 class help:
@@ -694,25 +694,31 @@ while True:
                 #printappname(title + "-:{}".format(cd))
                 b = 0
             elif a[0] == "theme-sel" or a[0] == "theme":
-                printappname("themes",custBannerColour=gettheme(True))
+                
                 #print()
-                for i in range(len(THEMES)):
-                    if theme == i:
-                        print("\x1b[0m""[*]",end="")
-                    else:
-                        print("\x1b[0m"+"[{}]".format(i),end="")
-                    print(THEMES[i]+"{}{}{}".format(THEMENAMES[i],TOPBAR[i],THEMENAMESTTWO[i])+"\x1b[0m",end="")
-                    #print("   ",end="")
-                    #print(TOPBAR[i]+"\x1b[0m")
-                    print()
-                printappname("",custBannerColour=gettheme(True))
-                print("")
-                printappname("",custBannerColour=gettheme(True))
-                print("\x1B[2A",end="")
-                theme = int(input("new theme: "))
-                print("")
-                saveprefs()
-                b = 0
+                if len(a) > 1:
+                    try:
+                        theme = int(a[1])
+                    except ValueError:
+                        print("please input a number")
+                else:
+                    printappname("themes",custBannerColour=gettheme(True))
+                    for i in range(len(THEMES)):
+                        if theme == i:
+                            print("\x1b[0m""[*]",end="")
+                        else:
+                            print("\x1b[0m"+"[{}]".format(i),end="")
+                        print(THEMES[i]+"{}{}{}".format(THEMENAMES[i],TOPBAR[i],THEMENAMESTTWO[i])+"\x1b[0m",end="")
+                        #print("   ",end="")
+                        #print(TOPBAR[i]+"\x1b[0m")
+                        print()
+                    printappname("",custBannerColour=gettheme(True))
+                    print("")
+                    printappname("",custBannerColour=gettheme(True))
+                    print("\x1B[2A",end="")
+                    theme = int(input("new theme: "))
+                    print("")
+                    saveprefs()
             elif a[0] == "exit" or a[0] == "quit":
                 logs.log(1,"stoped")
                 logs.save()
