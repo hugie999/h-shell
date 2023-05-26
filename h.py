@@ -68,19 +68,17 @@ except Exception as ex:
     print(ex)
     try:
         logs.save()
-        try:
-            doerror(True,"error importing modules (check log.log)")
-            print(ex)
-        except:
-            print(ex)
-            print("error while importing! (check log.log)")
+        print(ex)
+        print("error while importing! (check log.log)")
             
     except:
         print("an error occoured saveing logs")
         print(logs.logs)
     finally:
         print("trying recovery")
+        print("getting latest from git")
         try:
+            from pathlib import Path
             import installer
             installer.webinst(Path(__file__).parent)
         except ModuleNotFoundError:
