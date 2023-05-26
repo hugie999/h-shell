@@ -18,7 +18,7 @@ def changetitle(newtitle= "h-shell"):
         print('\33]0;{}\a'.format(newtitle), end='', flush=True)#https://stackoverflow.com/questions/65911058/what-is-the-linux-equivalent-of-ctypes-windll-kernel32-setconsoletitlew
 
 def oncommand(comfull,themestr,cd):
-    changetitle("h-shell [{}] [{}]".format(str(cd),comfull))
+    changetitle("h-shell [{}]".format(str(cd)))
     
 
 def docom(comfull,themestr,cd):
