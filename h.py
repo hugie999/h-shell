@@ -522,9 +522,17 @@ while True:
                 elif a[1] == "show":
                     try:
                         pluginnumber = int(a[2])
+                        pluginscomands = []
+                        for i in range(len(plugins.pluginreserved)):
+                            logs.log(0,str(pluginnumber))
+                            logs.log(0,plugins.pluginreservednum[i])
+                            if plugins.pluginreservednum[i] == pluginnumber:
+                                pluginscomands.append(plugins.pluginreserved[i])
+                        if len(pluginscomands) == 1:
+                            pluginscomands = pluginscomands[0]
                         print("name    : {}".format(plugins.plugindata[pluginnumber].META["name"]))
                         print("version : {}".format(plugins.plugindata[pluginnumber].META["pluginver"]))
-                        print("commands: "+str(plugins.pluginreserved[pluginnumber]))
+                        print("commands: "+str(pluginscomands))
                         print("type    : "+str(plugins.doeverycommand[pluginnumber]))
                         print("--description--")
                         print(plugins.plugindata[pluginnumber].META["desc"])
