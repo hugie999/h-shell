@@ -563,7 +563,7 @@ while True:
                 else:
                     prefs.centertitle = False
                 if input("show path in title?              ([Y]/n):").lower() == "n":
-                    prefs.showpathintitle = True
+                    prefs.showpathintitle = False
                 else:
                     prefs.showpathintitle = True
                 if input("show readme files in direcorys?  (y/[N]):").lower() != "y":
