@@ -170,8 +170,8 @@ def gettxtfrom(filename=""):
     except FileNotFoundError:
         #logs.log(0,"false")
         return ""
-startingcoms = gettxtfrom(".autoexec")
-startcomdone = not checkfor(".autoexec")
+startingcoms = ["clear"]
+startcomdone = False
 if checkfor(".path"):
     path = gettxtfrom(".path")
 else:
@@ -404,7 +404,7 @@ def doplug(command = "",isafter=False):
 for i in range(hi-2):
         printEscape("[1B")
 #clear screen with background
-clear()
+#clear()
 
 if prefs.drawhead:
     printEscape("[H")
@@ -430,12 +430,7 @@ def ask(_question="",default=False):
         else:
             return True
 
-if True:
-    
-    print(gettheme(False))
-    for i in range(hi-3):
-        for i in range(wi):
-            print(" ",end="")
+#clear()
 #-------------------------------
 while True:
     try:
