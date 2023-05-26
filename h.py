@@ -522,7 +522,7 @@ while True:
             a = " "
         if doplug(astr):
             pass
-        if True:
+        else:
             
             # for i in range(len(a)):
             #     astr += str(a[i]+" ")
