@@ -576,6 +576,8 @@ while True:
                     except ValueError:
                         print(gettheme(True)+"please refrence plugin by number (from plugman list)"+gettheme(False))
                         b = 0
+                    except IndexError:
+                        print("no plugin for number (is it too high?)")
                 elif a[1] == "help":
                     print("--plugman-command--")
                     print("list - lists installed plugins")
