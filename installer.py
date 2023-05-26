@@ -27,6 +27,8 @@ def webinst(installto,isgit=True,version="main"):
     if filesreq.status_code != 200:
         CODE = filesreq.status_code
         if CODE == 404:
+            
+            print("")
             print("error 404 error")
             print("(did you misspell somthing?)")
         else:
