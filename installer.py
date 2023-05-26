@@ -24,52 +24,60 @@ def webinst(installto,isgit=True,version="main"):
     filenam = files
     #print(files)
     final = []
-    
-    for i in filesreq.iter_lines():
-        
-        #print(i)
-        files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
-        if verbose:
-            print("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
-        final.append(str(i)[2:-1])
-        
-        #print(filenam[i])
-    #print(files)
-    data = []
-    #filenam = []
-    print()
-    if not noloader:
-        load.makeloader(len(files),"getting files","got files!")
-    else:
-        print("getting files")
-    for i in range(len(files)):
-        data.append(requests.get(files[i]).text)
-        if noloader:
-            print(i)
+    if filesreq.status_code != 200:
+        CODE = filesreq.status_code
+        if CODE == 404:
+            print("error 404 error")
+            print("(did you misspell somthing?)")
         else:
-            load.loadupdate()
-        #files.append(i)
-        #filenam.append(files[i])
-        #print(filenam[i])
-        final[i] = (installto / Path(final[i]))
-    #print(final)
-    if not noloader:
-        load.makeloader(len(files),"copying files","copying files")
+            print("got non 200 response code of: "+str(CODE))
+            
     else:
-        print("copying")
-    for i in range(len(files)):
-        #first = data[i]#open(files[i],"rt")
-        to = open(str(final[i]),"wt")
-        #print(str(files[i])+" > "+str(final[i]))
-        to.write(data[i])
-        to.close()
-        if noloader:
-            print(i)
+        for i in filesreq.iter_lines():
+            
+            #print(i)
+            files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
+            if verbose:
+                print("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
+            final.append(str(i)[2:-1])
+            
+            #print(filenam[i])
+        #print(files)
+        data = []
+        #filenam = []
+        print()
+        if not noloader:
+            load.makeloader(len(files),"getting files","got files!")
         else:
-            load.loadupdate()
-        #" ".encode("utf-8")
-        #first.close()
-    postint(installto)
+            print("getting files")
+        for i in range(len(files)):
+            data.append(requests.get(files[i]).text)
+            if noloader:
+                print(i)
+            else:
+                load.loadupdate()
+            #files.append(i)
+            #filenam.append(files[i])
+            #print(filenam[i])
+            final[i] = (installto / Path(final[i]))
+        #print(final)
+        if not noloader:
+            load.makeloader(len(files),"copying files","copying files")
+        else:
+            print("copying")
+        for i in range(len(files)):
+            #first = data[i]#open(files[i],"rt")
+            to = open(str(final[i]),"wt")
+            #print(str(files[i])+" > "+str(final[i]))
+            to.write(data[i])
+            to.close()
+            if noloader:
+                print(i)
+            else:
+                load.loadupdate()
+            #" ".encode("utf-8")
+            #first.close()
+        postint(installto)
 def install(installto,iswin,devmode= False):
     print("installing to: "+str(installto))#,iswin=False)
     a = input("continue?[y]/n:")
