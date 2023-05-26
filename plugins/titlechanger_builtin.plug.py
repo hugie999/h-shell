@@ -1,7 +1,7 @@
 COMS = ["__titlechanger"] #commands used
 META = {
     "name": "title plugin",
-    "desc": "changes the terminal title (curently windows only)",
+    "desc": "changes the terminal title",
     "pluginver": 1,
     "ver" : 1,
     "oncommand" : True,
@@ -10,14 +10,17 @@ META = {
 
 PLUGVER = 1 #this is for compatibility or somthing
 import os
-
+iswin = (os.name =="nt")
 def changetitle(newtitle= "h-shell"):
-    os.system("title "+newtitle)
+    if iswin:
+        os.system("title "+newtitle)
+    else:
+        print('\33]0;{}\a'.format(newtitle), end='', flush=True)#https://stackoverflow.com/questions/65911058/what-is-the-linux-equivalent-of-ctypes-windll-kernel32-setconsoletitlew
 
 def oncommand(comfull,themestr,cd):
-    changetitle("h-shell ["+str(cd)+"]")
+    changetitle("h-shell [{}] [{}]".format(str(cd),comfull))
     
 
 def docom(comfull,themestr,cd):
-    print(themestr[1]+"hello world im a plugin lol")
+    print(themestr[1]+__file__)
     input()
