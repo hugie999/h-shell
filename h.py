@@ -174,6 +174,7 @@ def gettheme(istopbar= False):
 
 #print(os.environ['HOME'])
 if os.name =="nt":
+    os.system("title h-shell")
     iswindows = True
     cd = Path(__file__).parent#("C:/")
     if cd.drive.lower == "a:":
