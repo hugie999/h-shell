@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import loadicon as load
-load.makeloader(5,"importing","importing done")
+load.makeloader(4,"importing","importing done")
 #print("importing [0/8] |")
 #print("\x1b[1A",end="")
 import logs
@@ -14,8 +14,6 @@ try:
         import aliases
         logs.log(1,"importing: installer script")
         import installer
-        logs.log(1,"importing: special commands")
-        import spcoms
         logs.log(1,"importing: os")
         import os
         logs.log(1,"importing: sys")
@@ -30,7 +28,7 @@ try:
         from importlib.machinery import SourceFileLoader
         import time
         import getpass
-        imports = [os,spcoms,sys,aliases]
+        imports = [os,sys,aliases]
         depends = ["bash"] #thease are
         logs.log(1,"done---------------")
     else:
@@ -49,11 +47,6 @@ try:
         # print("importing [3/8] \\")
         load.loadupdate()
         import installer
-        logs.log(1,"importing: special commands")
-        # printEscape("[1A")
-        # print("importing [4/8] |")
-        load.loadupdate()
-        import spcoms
         logs.log(1,"importing: os")
         import os
         logs.log(1,"importing: sys")
@@ -67,7 +60,7 @@ try:
         from importlib.machinery import SourceFileLoader
         import time
         import getpass
-        imports = [os,spcoms,sys,aliases]
+        imports = [os,sys,aliases]
         depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
         logs.log(1,"done---------------")
 except Exception as ex:
@@ -96,6 +89,69 @@ except Exception as ex:
 #print("\x1b[=1h")
 #printEscape("[?47h")
 #clear()
+
+class help:
+    GHELP = """---help--------------------------------------------------------------------
+hist [-c/-s]              > shows history
+drv/drive [-l]            > switches to a mounted drive (yes on windows to)
+theme                     > opens theme switcher
+dev (command)             > dev commands
+clear                     > clears the screen
+cd (directory)            > goes to the specifired dir
+goto (path)               > goes to the path specified
+py (python command)       > runs the command under python
+pref/prefs                > shows prefrences picker
+plugman [help, list, etc] > plugin manager
+webupdate (version)       > updates h-shell
+---------------------------------------------------------------------------"""
+    HELPS = ["general","help","cd","goto","hist","py","themes"]
+    HELPTEX = [
+    """--h-shell--
+to type a command input the command and then enter (if a command isnt dound it will try bash)""",
+"""--the help command--
+the help command shows built in shell commands
+can also display more info
+use 'help list' to see commands that have more info""",
+"""--cd command--
+changes to the specified directory
+use: cd [new folder]""",
+"""--goto command--
+goes to a speified directory as opposed to the cd command that moves within the current directory
+use: goto [directory]""",
+"""--hist command--
+shows command history
+use: hist (options: -c clears history)
+-@hist command-
+redoes a command in the history
+use: @hist[number] (eg: @hist0 plays first item in history)""","""
+--py command--
+not to be confused with \x1B[1mpython\x1B[22m or \x1B[1mpython3\x1B[22m
+runs a python command with the context of the program""","""\x1b[0m---themes---
+themes can be changed useing the 'theme' command
+each theme is displayed useing its name showing the two colours
+example: '\x1b[37;40mtest \x1b[30;47mtheme\x1b[0m'
+with  '\x1b[37;40mtest\x1b[0m'  showing the \x1b[1mforeground\x1b[0m colour
+and   '\x1b[30;47mtheme\x1b[0m' showing the \x1b[1mbackground\x1b[0m colour"""]
+    def gethelp(input=""):
+        helpask = input[5:]
+        if helpask == "":
+            awnser = help.GHELP.splitlines()
+            for i in range(len(help.GHELP.splitlines())):
+                print(awnser[i])
+            
+            
+        elif helpask == "list":
+            for i in range(len(help.HELPS)):
+                print(help.HELPS[i])
+        else:
+            try:
+                awnser = help.HELPS.index(helpask)
+                print(help.HELPTEX[awnser])
+                #print(HELPS.index(b))
+            except ValueError:
+                print('no "{}" found in help docs'.format(helpask))
+        #print(b)
+        ret = 0
 theme = 0
 LETTERS = "abcdefghijklmnopqrstuvwxyz"
 iswindows = False
@@ -242,8 +298,6 @@ else:
 if usr == "root":
     isroot = True
 print(usr)
-
-
 def saveprefs():
     global prefs
     preflist = []
@@ -360,7 +414,7 @@ b = 0
 #     exit()
 
 loadprefs()
-def doplug(command = "",isafter=False):
+def doplug(command = "",isafter=False) -> bool:
     logs.log(0,command)
     # try:
     #     for i in range(len(plugins.plugindata)):
@@ -461,34 +515,17 @@ while True:
         
         print(printcenter(":{}:".format(a),DoAsReturn=True))
         logs.log(0,"usr: "+str(a))
+        astr = a
+        logs.log(0,astr)
         a = a.split()
         if len(a) == 0:
             a = " "
-        astr = ""
-        for i in range(len(a)):
-            astr += str(a[i]+" ")
-        if len(astr) == 0:
-            astr = " "
-        
-        
-        if doplug(astr,False):
+        if doplug(astr):
             pass
-            com = 0
-            b = 0
-        else:
-            #logs.log(0,str(ex))
-            #logs.log(0,"command not in plugin!")
-            com = spcoms.docom(a)
-            if a != "hist" and a != "":
-                hist.append(a)
-            if com == 0:
-                b = 0
-            elif com != 0:
-                b = com
-        if com == 1:
+        if True:
             
-            for i in range(len(a)):
-                astr += str(a[i]+" ")
+            # for i in range(len(a)):
+            #     astr += str(a[i]+" ")
             if a[0] == "@hist":
                 num = ""
                 a[0] = a[0].replace("@hist","")
@@ -506,7 +543,7 @@ while True:
                 hist.pop(num)
                 b = 0
             elif a[0] == "help":
-                print(spcoms.GHELP)
+                help.gethelp(astr)
             elif a[0] == "plugman":
                 if len(a) < 2:
                     print("please input a command")

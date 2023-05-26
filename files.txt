@@ -2,7 +2,6 @@ aliases.py
 h.py
 installer.py
 logs.py
-spcoms.py
 hlib.py
 loadicon.py
 plugins/dir_buitin.plug.py
