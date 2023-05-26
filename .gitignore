@@ -10,3 +10,10 @@ log.log
 log.log
 .notitle
 .autoexec
+plugins/clockey.plug.py
+plugins/fsindex.plug.py
+driveindex.txt
+.prefs
+log.log
+log.log
+log.log

@@ -1,66 +1,9 @@
-[]: v:loglev:4 
-[]: v:1679767187.8896835 
-[]: l:importing---------- 
-[]: l:importing: h-lib 
-[]: l:saveing logs 
-[]: v:loglev:4 
-[]: v:1684546489.136578 
-[]: l:importing---------- 
-[]: l:importing: h-lib 
-[]: l:importing: aliases 
-[]: l:importing: installer script 
-[]: l:importing: special commands 
-[]: l:importing: os 
-[]: l:importing: sys 
-[]: l:importing: pathlib 
-[]: l:importing: platform 
-[]: l:importing: SourceFileLoader 
-[]: l:done--------------- 
-[]: v:version 0.1 Beta 2 
-[]: l:running on nt/Windows/10 (py 3.10.0) 
-[]: l:starting dir: I:\h-shell 
-[]: l:note: running on windows 
-[]: v:I:\h-shell/.autoexec 
-[]: v:I:\h-shell/.autoexec 
-[]: v:false 
-[]: v:I:\h-shell/.path 
-[]: v:false 
-[]: v:I:\h-shell/.notitle 
-[]: v:true 
-[]: l:loading plugins!---- 
-[]: v:I:\h-shell\plugins 
-[]: l:I:\h-shell\plugins\clockey.plug.py 
-[]: v:ug.py 
-[]: v:0 
-[]: v:<class 'module'> 
-[]: l:I:\h-shell\plugins\dir_buitin.plug.py 
-[]: v:ug.py 
-[]: v:1 
-[]: v:<class 'module'> 
-[]: l:I:\h-shell\plugins\help.txt 
-[]: v:p.txt 
-[]: l:I:\h-shell\plugins\show_builtin.plug.py 
-[]: v:ug.py 
-[]: v:2 
-[]: v:<class 'module'> 
-[]: l:I:\h-shell\plugins\test.plug.py 
-[]: v:ug.py 
-[]: v:3 
-[]: v:<class 'module'> 
-[]: l:I:\h-shell\plugins\__pycache__ 
-[]: v:che__ 
-[]: l:done!---- 
-[]: l:['7', '1', '1', '1', '1'] 
-[]: v:usr: dev slogs 
-[]: l:saveing logs 
-[]: v:50 
 []: v:loglev:1 
-[]: v:1684546534.3216877 
+[]: v:1685141748.5219784 
 []: l:importing---------- 
 []: l:importing: h-lib 
 []: l:importing: aliases 
 []: l:importing: installer script 
-[]: l:importing: special commands 
 []: l:importing: os 
 []: l:importing: sys 
 []: l:importing: pathlib 
@@ -71,38 +14,222 @@
 []: l:running on nt/Windows/10 (py 3.10.0) 
 []: l:starting dir: I:\h-shell 
 []: l:note: running on windows 
-[]: v:I:\h-shell/.autoexec 
-[]: v:I:\h-shell/.autoexec 
-[]: v:false 
 []: v:I:\h-shell/.path 
 []: v:false 
-[]: v:I:\h-shell/.notitle 
-[]: v:true 
 []: l:loading plugins!---- 
 []: v:I:\h-shell\plugins 
 []: l:I:\h-shell\plugins\clockey.plug.py 
 []: v:ug.py 
 []: v:0 
 []: v:<class 'module'> 
+[]: l:no plugin type on 0 
+[]: v:'oncommand' 
+[]: v:[False] 
 []: l:I:\h-shell\plugins\dir_buitin.plug.py 
 []: v:ug.py 
 []: v:1 
 []: v:<class 'module'> 
+[]: l:no plugin type on 1 
+[]: v:'oncommand' 
+[]: v:[False, False] 
 []: l:I:\h-shell\plugins\help.txt 
 []: v:p.txt 
+[]: l:I:\h-shell\plugins\log.log 
+[]: v:g.log 
 []: l:I:\h-shell\plugins\show_builtin.plug.py 
 []: v:ug.py 
 []: v:2 
 []: v:<class 'module'> 
+[]: l:no plugin type on 2 
+[]: v:'oncommand' 
+[]: v:[False, False, False] 
 []: l:I:\h-shell\plugins\test.plug.py 
 []: v:ug.py 
 []: v:3 
 []: v:<class 'module'> 
+[]: v:[False, False, False, False] 
+[]: l:I:\h-shell\plugins\titlechanger_builtin.plug.py 
+[]: v:ug.py 
+[]: v:4 
+[]: v:<class 'module'> 
+[]: v:[False, False, False, False, True] 
 []: l:I:\h-shell\plugins\__pycache__ 
 []: v:che__ 
+[]: v:[] 
 []: l:done!---- 
-[]: l:['7', '1', '1', '1', '1'] 
-[]: v:usr: ldev slogs 
-[]: v:usr: dev slogs 
+[]: v:2 
+[]: v:0 
+[]: v:1 
+[]: v:0 
+[]: v:1 
+[]: v:0 
+[]: v:theme 2 
+[]: v:qclear 0 
+[]: v:deawhead 1 
+[]: v:centertitle 0 
+[]: v:showpathintitle 1 
+[]: v:shworeadmes 0 
+[]: l:['2', '0', '1', '0', '1', '0'] 
+[]: v:False 
+[]: v:False 
+[]: v:True 
+[]: v:False 
+[]: v:True 
+[]: v:False 
+[]: v:2 
+[]: v:0 
+[]: v:1 
+[]: v:0 
+[]: v:1 
+[]: v:0 
+[]: v:theme 2 
+[]: v:qclear 0 
+[]: v:deawhead 1 
+[]: v:centertitle 0 
+[]: v:showpathintitle 1 
+[]: v:shworeadmes 0 
+[]: l:['2', '0', '1', '0', '1', '0'] 
+[]: v:False 
+[]: v:False 
+[]: v:True 
+[]: v:False 
+[]: v:True 
+[]: v:False 
+[]: v:usr: clear 
+[]: v:clear 
+[]: v:clear 
+[]: v:False 
+[]: w:no plugin found 
+[]: v:clear 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: theme 
+[]: v:theme 
+[]: v:theme 
+[]: v:False 
+[]: w:no plugin found 
+[]: l:[0, 0, 1, 0, 1, 0] 
+[]: v:theme 0 
+[]: v:qclear 0 
+[]: v:deawhead 1 
+[]: v:centertitle 0 
+[]: v:showpathintitle 1 
+[]: v:shworeadmes 0 
+[]: v:theme 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: py thene - 2 
+[]: v:py thene - 2 
+[]: v:py thene - 2 
+[]: v:False 
+[]: w:no plugin found 
+[]: l:run py command: t 
+[]: v:py thene - 2 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: py thene = 2 
+[]: v:py thene = 2 
+[]: v:py thene = 2 
+[]: v:False 
+[]: w:no plugin found 
+[]: l:run py command: t 
+[]: v:py thene = 2 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: py thene = 3 
+[]: v:py thene = 3 
+[]: v:py thene = 3 
+[]: v:False 
+[]: w:no plugin found 
+[]: l:run py command: t 
+[]: v:py thene = 3 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: py thene =  
+[]: v:py thene =  
+[]: v:py thene =  
+[]: v:False 
+[]: w:no plugin found 
+[]: l:run py command:  
+[]: l:None 
+[]: v:py thene =  
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: 5 
+[]: v:5 
+[]: v:5 
+[]: v:False 
+[]: w:no plugin found 
+[]: v:5 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr:  
+[]: v: 
+[]: v: 
+[]: v:False 
+[]: w:no plugin found 
+[]: v: 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr:  
+[]: v: 
+[]: v: 
+[]: v:False 
+[]: w:no plugin found 
+[]: v: 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: clear  
+[]: v:clear  
+[]: v:clear  
+[]: v:False 
+[]: w:no plugin found 
+[]: v:clear  
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: theme 
+[]: v:theme 
+[]: v:theme 
+[]: v:False 
+[]: w:no plugin found 
+[]: l:[2, 0, 1, 0, 1, 0] 
+[]: v:theme 2 
+[]: v:qclear 0 
+[]: v:deawhead 1 
+[]: v:centertitle 0 
+[]: v:showpathintitle 1 
+[]: v:shworeadmes 0 
+[]: v:theme 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: theme' 
+[]: v:theme' 
+[]: v:theme' 
+[]: v:False 
+[]: w:no plugin found 
+[]: v:theme' 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: theme 
+[]: v:theme 
+[]: v:theme 
+[]: v:False 
+[]: w:no plugin found 
+[]: l:[2, 0, 1, 0, 1, 0] 
+[]: v:theme 2 
+[]: v:qclear 0 
+[]: v:deawhead 1 
+[]: v:centertitle 0 
+[]: v:showpathintitle 1 
+[]: v:shworeadmes 0 
+[]: v:theme 
+[]: v:True 
+[]: l:did pluginnum 4 
+[]: v:usr: quit 
+[]: v:quit 
+[]: v:quit 
+[]: v:False 
+[]: w:no plugin found 
+[]: l:stoped 
 []: l:saveing logs 
-[]: v:51 
+[]: v:234 
