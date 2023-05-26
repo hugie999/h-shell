@@ -85,6 +85,13 @@ except Exception as ex:
     except:
         print("an error occoured saveing logs")
         print(logs.logs)
+    finally:
+        print("trying recovery")
+        try:
+            import installer
+            installer.webinst(Path(__file__).parent)
+        except ModuleNotFoundError:
+            print("'installer.py' not found")
     exit()
 #print("\x1b[=1h")
 #printEscape("[?47h")
