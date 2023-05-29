@@ -232,6 +232,7 @@ if checkfor(".path"):
 else:
     path = []
 class plugins:
+    errorhandle = True
     pluginreserved = []
     pluginreservednum = []
     plugindata = []
@@ -438,6 +439,8 @@ def doplug(command = "",isafter=False) -> bool:
                 plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
             except Exception as e:
                 logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
+                if not plugins.errorhandle:
+                    raise Exception('pluginError')
             com = 0
             b = 0
             return True
@@ -584,6 +587,10 @@ while True:
                     print("list - lists installed plugins")
                     print("show - shows specified plugin")
                     b = 0
+                elif a[1] == "handler":
+                    plugins.errorhandle = (not plugins.errorhandle)
+                    print("error handler: "+str(plugins.errorhandle))
+                    logs.log(1,"plugin error handler: "+str(plugins.errorhandle))
                 pass
             elif a[0] == "prefs" or a[0] == "pref":
                 printappname("prefs")
@@ -1071,3 +1078,4 @@ while True:
         # print("exited")
         #print("")
         logs.log(2,"^C pressed please use stop command")
+
