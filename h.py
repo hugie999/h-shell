@@ -763,6 +763,8 @@ while True:
                     for i in range(hi-1):
                         for i in range(wi):
                             print(" ",end="")
+                    if not prefs.drawhead:
+                        print(" ",end="\n")
                 #printappname(title + "-:{}".format(cd))
                 b = 0
             elif a[0] == "theme-sel" or a[0] == "theme":

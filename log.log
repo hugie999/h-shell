@@ -1,5 +1,5 @@
 []: v:loglev:1 
-[]: v:1685141748.5219784 
+[]: v:1686095755.6430674 
 []: l:importing---------- 
 []: l:importing: h-lib 
 []: l:importing: aliases 
@@ -18,6 +18,8 @@
 []: v:false 
 []: l:loading plugins!---- 
 []: v:I:\h-shell\plugins 
+[]: l:I:\h-shell\plugins\.hmeta 
+[]: v:hmeta 
 []: l:I:\h-shell\plugins\clockey.plug.py 
 []: v:ug.py 
 []: v:0 
@@ -59,39 +61,39 @@
 []: l:done!---- 
 []: v:2 
 []: v:0 
-[]: v:1 
+[]: v:0 
 []: v:0 
 []: v:1 
 []: v:0 
 []: v:theme 2 
 []: v:qclear 0 
-[]: v:deawhead 1 
+[]: v:deawhead 0 
 []: v:centertitle 0 
 []: v:showpathintitle 1 
 []: v:shworeadmes 0 
-[]: l:['2', '0', '1', '0', '1', '0'] 
+[]: l:['2', '0', '0', '0', '1', '0'] 
 []: v:False 
 []: v:False 
-[]: v:True 
+[]: v:False 
 []: v:False 
 []: v:True 
 []: v:False 
 []: v:2 
 []: v:0 
-[]: v:1 
+[]: v:0 
 []: v:0 
 []: v:1 
 []: v:0 
 []: v:theme 2 
 []: v:qclear 0 
-[]: v:deawhead 1 
+[]: v:deawhead 0 
 []: v:centertitle 0 
 []: v:showpathintitle 1 
 []: v:shworeadmes 0 
-[]: l:['2', '0', '1', '0', '1', '0'] 
+[]: l:['2', '0', '0', '0', '1', '0'] 
 []: v:False 
 []: v:False 
-[]: v:True 
+[]: v:False 
 []: v:False 
 []: v:True 
 []: v:False 
@@ -103,128 +105,18 @@
 []: v:clear 
 []: v:True 
 []: l:did pluginnum 4 
-[]: v:usr: theme 
-[]: v:theme 
-[]: v:theme 
+[]: v:.hmeta file found 
+[]: v:['hshell install folder', '1', '1', '1', '1'] 
+[]: v:usr: clear 
+[]: v:clear 
+[]: v:clear 
 []: v:False 
 []: w:no plugin found 
-[]: l:[0, 0, 1, 0, 1, 0] 
-[]: v:theme 0 
-[]: v:qclear 0 
-[]: v:deawhead 1 
-[]: v:centertitle 0 
-[]: v:showpathintitle 1 
-[]: v:shworeadmes 0 
-[]: v:theme 
+[]: v:clear 
 []: v:True 
 []: l:did pluginnum 4 
-[]: v:usr: py thene - 2 
-[]: v:py thene - 2 
-[]: v:py thene - 2 
-[]: v:False 
-[]: w:no plugin found 
-[]: l:run py command: t 
-[]: v:py thene - 2 
-[]: v:True 
-[]: l:did pluginnum 4 
-[]: v:usr: py thene = 2 
-[]: v:py thene = 2 
-[]: v:py thene = 2 
-[]: v:False 
-[]: w:no plugin found 
-[]: l:run py command: t 
-[]: v:py thene = 2 
-[]: v:True 
-[]: l:did pluginnum 4 
-[]: v:usr: py thene = 3 
-[]: v:py thene = 3 
-[]: v:py thene = 3 
-[]: v:False 
-[]: w:no plugin found 
-[]: l:run py command: t 
-[]: v:py thene = 3 
-[]: v:True 
-[]: l:did pluginnum 4 
-[]: v:usr: py thene =  
-[]: v:py thene =  
-[]: v:py thene =  
-[]: v:False 
-[]: w:no plugin found 
-[]: l:run py command:  
-[]: l:None 
-[]: v:py thene =  
-[]: v:True 
-[]: l:did pluginnum 4 
-[]: v:usr: 5 
-[]: v:5 
-[]: v:5 
-[]: v:False 
-[]: w:no plugin found 
-[]: v:5 
-[]: v:True 
-[]: l:did pluginnum 4 
-[]: v:usr:  
-[]: v: 
-[]: v: 
-[]: v:False 
-[]: w:no plugin found 
-[]: v: 
-[]: v:True 
-[]: l:did pluginnum 4 
-[]: v:usr:  
-[]: v: 
-[]: v: 
-[]: v:False 
-[]: w:no plugin found 
-[]: v: 
-[]: v:True 
-[]: l:did pluginnum 4 
-[]: v:usr: clear  
-[]: v:clear  
-[]: v:clear  
-[]: v:False 
-[]: w:no plugin found 
-[]: v:clear  
-[]: v:True 
-[]: l:did pluginnum 4 
-[]: v:usr: theme 
-[]: v:theme 
-[]: v:theme 
-[]: v:False 
-[]: w:no plugin found 
-[]: l:[2, 0, 1, 0, 1, 0] 
-[]: v:theme 2 
-[]: v:qclear 0 
-[]: v:deawhead 1 
-[]: v:centertitle 0 
-[]: v:showpathintitle 1 
-[]: v:shworeadmes 0 
-[]: v:theme 
-[]: v:True 
-[]: l:did pluginnum 4 
-[]: v:usr: theme' 
-[]: v:theme' 
-[]: v:theme' 
-[]: v:False 
-[]: w:no plugin found 
-[]: v:theme' 
-[]: v:True 
-[]: l:did pluginnum 4 
-[]: v:usr: theme 
-[]: v:theme 
-[]: v:theme 
-[]: v:False 
-[]: w:no plugin found 
-[]: l:[2, 0, 1, 0, 1, 0] 
-[]: v:theme 2 
-[]: v:qclear 0 
-[]: v:deawhead 1 
-[]: v:centertitle 0 
-[]: v:showpathintitle 1 
-[]: v:shworeadmes 0 
-[]: v:theme 
-[]: v:True 
-[]: l:did pluginnum 4 
+[]: v:.hmeta file found 
+[]: v:['hshell install folder', '1', '1', '1', '1'] 
 []: v:usr: quit 
 []: v:quit 
 []: v:quit 
@@ -232,4 +124,4 @@
 []: w:no plugin found 
 []: l:stoped 
 []: l:saveing logs 
-[]: v:234 
+[]: v:126 
