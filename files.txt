@@ -3,7 +3,9 @@ h.py
 installer.py
 logs.py
 hlib.py
+.hmeta
 loadicon.py
 plugins/dir_buitin.plug.py
 plugins/show_builtin.plug.py
 plugins/titlechanger_builtin.plug.py
+plugins/.hmeta
