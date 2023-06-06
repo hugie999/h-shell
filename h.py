@@ -991,11 +991,7 @@ while True:
                     b = 0
             elif a[0]=="py":
                 
-                c = ""
-                for i in range(len(a)-3):
-                    c+=astr[i+3]
-                    #print(a[i+3])
-                #sprint(c)
+                c = astr[3:]
                 try:
                     logs.log(1,"run py command: {}".format(c))
 
@@ -1031,10 +1027,8 @@ while True:
                 #print(a[:2])
                 if astr[:2] == "./":
                     astr.replace("./",str(cd)+"/")
-                if not iswindows:
-                    b = os.system(prefs.defaultshell+astr)
-                else:
-                    b = os.system(astr)
+                
+                b = os.system(astr)
         if b == 32512:
             printEscape("[1A")
             printEscape("[2k")
