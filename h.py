@@ -101,6 +101,8 @@ py (python command)       > runs the command under python
 pref/prefs                > shows prefrences picker
 plugman [help, list, etc] > plugin manager
 webupdate (version)       > updates h-shell
+help                      > shows this
+pelp                      > shows plugin help
 ---------------------------------------------------------------------------"""
     HELPS = ["general","help","cd","goto","hist","py","themes"]
     HELPTEX = [
@@ -239,6 +241,9 @@ class plugins:
     plugintypes = []
     doeverycommand = []
     doafter = []
+    helpnames = []
+    helphelps = []
+    helpplugs = []
 class prefs:
     #qclear = checkfor(".quickclear")
     qclear = False
@@ -258,6 +263,9 @@ def pluginreload():
     plugins.plugindata = []
     plugins.doeverycommand = []
     plugins.doafter = []
+    plugins.helphelps = []
+    plugins.helpnames = []
+    plugins.helpplugs = []
     logs.log(1,"loading plugins!----")
     load.makeloader(0,"loading plugins","done!",True)
     logs.log(0,str(proghome/"plugins"))
@@ -279,6 +287,13 @@ def pluginreload():
                 plugins.doafter.append(False)
                 plugins.doeverycommand.append(False)
             logs.log(0,str(plugins.doafter))
+            try:
+                plugins.helphelps.extend(plugins.plugindata[z].HELPDESC)
+                plugins.helpnames.extend(plugins.plugindata[z].HELPCOMS)
+                for i in range(len(plugins.plugindata[z].HELPCOMS)):
+                    plugins.helpplugs.append(plugins.plugindata[z].META["name"])
+            except AttributeError:
+                pass
             for i in range(len(plugins.plugindata[z].COMS)):
                 
                 plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
@@ -546,6 +561,16 @@ while True:
                 b = 0
             elif a[0] == "help":
                 help.gethelp(astr)
+            elif a[0] == "pelp":
+                for i in range(len(plugins.helpnames)):
+                    logs.log(0,plugins.helpplugs)
+                    logs.log(0,plugins.helphelps)
+                    logs.log(0,plugins.helpnames)
+                    print(plugins.helpnames[i],end="")
+                    print(" | ",end="")
+                    print(plugins.helphelps[i],end="")
+                    print(" | ",end="")
+                    print(plugins.helpplugs[i])
             elif a[0] == "plugman":
                 if len(a) < 2:
                     print("please input a command")

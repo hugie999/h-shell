@@ -6,6 +6,8 @@ META = {
     "ver" : 1
 }# note plugin ver and ver are DIFFRENT ver is for the version of the plugin and plugin ver is what is used in the docom function
 PLUGVER = 1 #this is for compatibility or somthing
+HELPCOMS = ["show [file]"]
+HELPDESC = ["shows the contens of a file"]
 from pathlib import Path
 import os
 def docom(comfull="",themestr="",cd= Path(__file__)):

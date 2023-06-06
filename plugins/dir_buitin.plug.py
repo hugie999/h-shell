@@ -6,6 +6,8 @@ META = {
     "ver" : 1
 }# note pluginver and ver are DIFFRENT pluginver is for the version of the plugin and ver is what is used in the docom function
 PLUGVER = 1 #this is for compatibility or somthing
+HELPCOMS = ["ls/dir"]
+HELPDESC = ["shows files in the current directory"]
 #note2 type is the well type of plugin
 #type 0 is the normal one and is only called when a reserved command is used
 #type 1 is called every command and the used command is also run after
