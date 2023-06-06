@@ -476,7 +476,7 @@ def doplug(command = "",isafter=False) -> bool:
             if plugins.doafter[i] == isafter:
                 logs.log(1,"did pluginnum "+str(i))
                 plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd)
-    if fsmeta.canplugs:
+    if not fsmeta.canplugs and fsmeta.active:
         pass
     elif not isafter:
         try:
