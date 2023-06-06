@@ -252,7 +252,34 @@ class prefs:
     showpathintitle = True
     defaultshell = "/bin/bash"
     showreadmes = False
-#if checkfor(".loadplugs"):
+class fsmeta:
+    active = False
+    name = ""
+    nodel = False
+    canplugs = True
+    cansys = True
+    canbuiltin = True
+    def reload():
+        try:
+            f = open(".hmeta")
+            logs.log(0,".hmeta file found")
+            #logs.log(0,f.read().splitlines())
+            ftxt = f.read().splitlines()
+            logs.log(0,str(ftxt))
+            f.close()
+            try:
+                fsmeta.name = ftxt[0]
+                fsmeta.nodel = ftxt[1] == "1"
+                fsmeta.canplugs = ftxt[2] == "1"
+                fsmeta.cansys = ftxt[3] == "1"
+                fsmeta.canbuiltin = "1" == "1"
+                fsmeta.active = True
+            except:
+                raise FileNotFoundError
+            
+        except FileNotFoundError:
+            fsmeta.active = False
+
 def pluginreload():
     z = 0
     # global plugins.pluginreserved
@@ -388,9 +415,14 @@ def prnthead():
     if prefs.drawhead:
         if prefs.showpathintitle:
             if iswindows:
-                titletemp = title + " | "+strcd.replace("\\","[") + " [{}/{}/{}]".format(time.localtime()[0],time.localtime()[1],time.localtime()[2])
+                titletemp = title + " | "+strcd.replace("\\","[")
             else:
-                titletemp = title + " |:"+strcd.replace("/","[") + " [{}/{}/{}]".format(time.localtime()[0],time.localtime()[1],time.localtime()[2])
+                titletemp = title + " |:"+strcd.replace("/","[")
+            
+            
+            if fsmeta.active:
+                titletemp += " | ({})".format(fsmeta.name)
+            titletemp += " [{}/{}/{}]".format(time.localtime()[0],time.localtime()[1],time.localtime()[2])
             if limbo:
                 strcd += " FS ERROR :("
             if isroot:
@@ -444,7 +476,9 @@ def doplug(command = "",isafter=False) -> bool:
             if plugins.doafter[i] == isafter:
                 logs.log(1,"did pluginnum "+str(i))
                 plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd)
-    if not isafter:
+    if fsmeta.canplugs:
+        pass
+    elif not isafter:
         try:
             try:
                 comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
@@ -476,7 +510,6 @@ for i in range(hi-2):
         printEscape("[1B")
 #clear screen with background
 #clear()
-
 if prefs.drawhead:
     printEscape("[H")
     prnthead()
@@ -539,7 +572,11 @@ while True:
             a = " "
         if doplug(astr):
             pass
-        else:
+        elif a[0] == "rm" and fsmeta.nodel:
+            print(gettheme(True),"cannot delete (fsmeta.nodel == true)")
+        elif a == "del"[0] and fsmeta.nodel:
+            print(gettheme(True),"cannot delete (fsmeta.nodel == true)")
+        elif fsmeta.canbuiltin or not fsmeta.active:
             
             # for i in range(len(a)):
             #     astr += str(a[i]+" ")
@@ -791,6 +828,12 @@ while True:
                 if a[1] == "prefreload":
                     saveprefs()
                     loadprefs()
+                if a[1] == "metas":
+                    print(fsmeta.active)
+                    print(fsmeta.canbuiltin)
+                    print(fsmeta.canplugs)
+                    print(fsmeta.cansys)
+                    print(fsmeta.nodel)
                 if a[1] == "prefs":
                     print(prefs.drawhead)
                     print(prefs.centertitle)
@@ -852,15 +895,18 @@ while True:
                         print()
                     printappname("",custBannerColour=gettheme(True))
             elif a[0] == "sys":
-                d = astr[4:]
-                if not iswindows:
-                    c = os.system(prefs.defaultshell+d)
+                if fsmeta.cansys or not fsmeta.active:
+                    d = astr[4:]
+                    if not iswindows:
+                        c = os.system(prefs.defaultshell+d)
+                    else:
+                        c = os.system(d)
+                    b = 0
+                    logs.log(0,"user forced sys command")
+                    if c != 0:
+                        logs.log(0,"syscom code: "+str(c))
                 else:
-                    c = os.system(d)
-                b = 0
-                logs.log(0,"user forced sys command")
-                if c != 0:
-                    logs.log(0,"syscom code: "+str(c))
+                    print(gettheme(True),"cannot use system commands (fsmeta.cansys == false)")
             elif a[0] == "hist":
                 try:
                     if a[1] == "-c":
@@ -1052,8 +1098,10 @@ while True:
                 #print(a[:2])
                 if astr[:2] == "./":
                     astr.replace("./",str(cd)+"/")
-                
-                b = os.system(astr)
+                if fsmeta.cansys or not fsmeta.active: 
+                    b = os.system(astr)
+                else:
+                    print(gettheme(True),"cannot use system commands (fsmeta.cansys == false)")
         if b == 32512:
             printEscape("[1A")
             printEscape("[2k")
@@ -1067,6 +1115,7 @@ while True:
            print("\x1b[30;41m E:{}\x1b[0m".format(b))
         try:
             os.chdir(cd)
+            fsmeta.reload()
             limbo = False
         except NotADirectoryError:
             os.chdir(Path("/"))
