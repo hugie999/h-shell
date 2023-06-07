@@ -438,7 +438,10 @@ def prnthead():
                 printappname(titletemp,gettheme(False),gettheme(True),prefs.centertitle)
             prompt = "{}:".format(strcd)
     else:
-        prompt = "{} | : ".format(strcd)
+        prompt = "{}".format(strcd)
+        if fsmeta.active:
+            prompt += " | ({})".format(fsmeta.name)
+        prompt += " | : ".format(strcd)
         #prompt = "[{}/{}/{}] | {} | : ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
 loadprefs()
 
