@@ -741,7 +741,8 @@ while True:
                         if len(a[1]) == 2:
                             try:
                                 if a[1][1] == ":" and a[1][0].lower() in LETTERS and len(a[1]) == 2 and Path(a[1]).exists():
-                                    cd = Path(a[1])
+                                    os.chdir(a[1])
+                                    cd = Path(os.getcwd())
                                 else:
                                     print(a[1]+" is not a drive")
                             except OSError:
@@ -751,8 +752,8 @@ while True:
                         elif a[1][0].lower() in LETTERS and len(a[1]) == 1:
                             try:
                                  if Path(a[1]+":").exists():
-                                    cd = Path(a[1]+":")
-                                    b = 0
+                                    os.chdir(a[1]+":")
+                                    cd = Path(os.getcwd())
                             except OSError:
                                 print(a[1]+": is either not a drive or needs to be formated")
                                 print("this could be that it is and unformated cd")
