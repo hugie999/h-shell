@@ -806,8 +806,11 @@ while True:
                 exit()
             elif a[0] == "webupdate":
                 if len(a) > 1:
-                    installer.webinst(proghome,version=a[1])
-                    print("please restart now")
+                    try:
+                        installer.webinst(proghome,version=a[1])
+                        print("please restart now")
+                    except FileNotFoundError:
+                        pass
                 else:
                     print("updateing from latest git")
                     if ask("is that ok?",False):

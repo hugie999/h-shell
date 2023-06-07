@@ -11,12 +11,15 @@ try:
     import loadicon as load
 except ModuleNotFoundError: #for if its downloaded from the internet
     noloader = True
-def webinst(installto,isgit=True,version="main"):
+def webinst(installto=Path(),isgit=True,version="main"):
     input("installing to "+str(installto))
     try:
         (installto/"plugins").mkdir()
     except FileExistsError:
         pass
+    if not installto.exists():
+        print("{} does not exsist".format(str(installto)))
+        raise FileNotFoundError
     print("getting files list...")
     print("\x1b[1A",end="")
     filesreq = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/{}/files.txt'.format(version))
