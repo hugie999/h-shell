@@ -14,7 +14,15 @@ HELPDESC = ["shows files in the current directory"]
 from pathlib import Path
 import os
 def docom(comfull="",themestr=[],cdreal= Path(__file__)):
-
+    try:
+        f = open(".hmeta","r")
+        metaname = f.read().splitlines()[0]
+        hasmeta = True
+    except:
+        hasmeta = False
+    
+    
+    
     if len(comfull.split()) > 1:
         #print(comfull)
         cd = Path(comfull.split()[len(comfull.split())-1])
@@ -22,7 +30,10 @@ def docom(comfull="",themestr=[],cdreal= Path(__file__)):
         cd = cdreal
     try:
         hi = os.get_terminal_size()[1]
-        print(str(themestr[1]+"---"+"listing of " + str(cd)+"---"+themestr[0]).ljust(os.get_terminal_size()[0]))
+        if hasmeta:
+            print(str(themestr[1]+"---"+"listing of " + str(metaname)+"---"+themestr[0]).ljust(os.get_terminal_size()[0]))
+        else:
+            print(str(themestr[1]+"---"+"listing of " + str(cd)+"---"+themestr[0]).ljust(os.get_terminal_size()[0]))
         a = 0
         for i in cd.iterdir():
             a += 1
