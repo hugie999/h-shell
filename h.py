@@ -277,7 +277,7 @@ class fsmeta:
             except:
                 raise FileNotFoundError
         except OSError:
-            raise FileNotFoundError
+            fsmeta.active = False
         except FileNotFoundError:
             fsmeta.active = False
 
