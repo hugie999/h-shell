@@ -40,7 +40,8 @@ def docom(comfull="",themestr=[],cdreal= Path(__file__)):
             if i.is_dir():
                 print(themestr[1]+str(i.name) + " -[dir]-"+themestr[0])
             else:
-                print(themestr[0]+str(i.name))
+                if i.name != ".hmeta":
+                    print(themestr[0]+str(i.name))
             
             if a == hi - 1 or a == hi:
                 input(themestr[1]+"--press enter to show more--"+themestr[0])
