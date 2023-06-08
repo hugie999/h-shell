@@ -88,6 +88,8 @@ except Exception as ex:
 #print("\x1b[=1h")
 #clear()
 
+
+
 class help:
     GHELP = """---help--------------------------------------------------------------------
 hist [-c/-s]              > shows history
@@ -184,6 +186,9 @@ if os.name =="nt":
 else:
     cd = proghome
     #cd = Path(os.environ['HOME'])
+haswinapi = False
+
+
 logs.log(1,"running on {}/{}/{} (py {})".format(os.name,platform.system(),platform.release(),platform.python_version()))
 logs.log(1,"starting dir: {}".format(cd))
 isroot = False
@@ -260,6 +265,7 @@ class fsmeta:
     cansys = True
     canbuiltin = True
     def reload():
+        global iswindows
         try:
             f = open(".hmeta")
             logs.log(0,".hmeta file found")
@@ -271,7 +277,7 @@ class fsmeta:
                 fsmeta.name = ftxt[0]
                 fsmeta.nodel = ftxt[1] == "1"
                 fsmeta.canplugs = ftxt[2] == "1"
-                fsmeta.cansys = ftxt[3] == "1"
+                fsmeta.cansys = "1" == "1"
                 fsmeta.canbuiltin = "1" == "1"
                 fsmeta.active = True
             except:
