@@ -1,15 +1,15 @@
 #!/usr/bin/python3
 
 import loadicon as load
-load.makeloader(4,"importing","importing done")
+load.makeloader(3,"importing","importing done")
 #print("importing [0/8] |")
 #print("\x1b[1A",end="")
 import logs
 try:
     if logs.Llevel > 3:
         logs.log(1,"importing----------")
-        logs.log(1,"importing: h-lib")
-        from hlib import *
+        # logs.log(1,"importing: h-lib")
+        # from hlib import *
         logs.log(1,"importing: aliases")
         import aliases
         logs.log(1,"importing: installer script")
@@ -33,10 +33,9 @@ try:
         logs.log(1,"done---------------")
     else:
         logs.log(1,"importing----------")
-        logs.log(1,"importing: h-lib")
-        load.loadupdate()
+        # logs.log(1,"importing: h-lib")
+        # load.loadupdate()
         #print("importing [1/8] /")
-        from hlib import *
         logs.log(1,"importing: aliases")
         #printEscape("[1A")
         #print("importing [2/8] -")
@@ -87,9 +86,65 @@ except Exception as ex:
 #printEscape("[?47h")
 #print("\x1b[=1h")
 #clear()
+#hlib.py functions
+wi = os.get_terminal_size().columns
+hi = os.get_terminal_size().lines
+def clear():
+    print('\x1b[0m')
+    if system == 'Windows':
+        os.system('cls')
+    
+    elif system == "Darwin":
+        os.system("clear && printf '\e[3J'")
+    else:
+        #print('a')
+        #input()
+        os.system('clear')
+        #print('a')
+system = platform.system()
+def printappname(name="", custColour="\x1b[0m", custBannerColour= "\x1b[30;47m",center=False):
+    if not center:
+        appname = custBannerColour
+        appname += '---'
+        appname += name
+        for i in range(wi - len(name) - 3):
+            appname += '-'
+        appname += custColour
+        printcenter(appname)
+        return(appname)
+    else:
+        print(custBannerColour + name.center(wi,"-") + custColour)
+        return custBannerColour + name.center(wi,"-") + custColour
+def printcenter(text = "notext :(", donew = False, DoAsReturn = False):
+    tex = text
+    skipby = 0
+    #for i in range(len(text)):
+    #    if text[i] != '/' and skipby == 0:
+    #        tex += text[i]
+    #    elif skipby > 0:
+    #        skipby -= 1
+    #    else:
+    #        skipby = 6
+    #        #i += 6    
+    TXTLEN = len(tex)
+    if True:
+        space = round(wi/2)
+        space -= round(TXTLEN/2)
+        txt = ""
+        for i in range(space):
+            txt += " "
+        txt += tex
+        if not DoAsReturn:
+            if donew:
+                print(txt, end= '')
+            else:
+                print(txt)
+        else:
+            return(txt)
+def printEscape(a):
+    print("\x1b"+a,end="")
 
-
-
+#-----------------------
 class help:
     GHELP = """---help--------------------------------------------------------------------
 hist [-c/-s]              > shows history
@@ -959,22 +1014,10 @@ while True:
                 histfile.close()
                 b = 0
             elif a[0] == "cd": #warning VARY MESSY DONT TOUCH
+                c = astr[3:]
                 if len(a) == 1:
                     print(cd)
                     b = 0
-                
-                
-                elif "$" in a[1]:
-                    c = a
-                    c = c.replace("cd ","")
-                    #print(c)
-                    newc = spcoms.expaths(c)
-                    if newc == None:
-                        b = 3
-                        logs.log(3,"'{}' dosent exsist".format(c))
-                    else:
-                        cd = Path(newc)
-                        b = 0
                 elif ".." in a[1]:
                     cd = cd.parent
                     # ncd = str(cd)
