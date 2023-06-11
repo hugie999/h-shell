@@ -663,6 +663,9 @@ def ask(_question="",default=False):
         else:
             return True
 
+class usrmodif:#ment to be used by the user for the "py" command or by plugins to store data
+    latestexep = None
+
 #clear()
 #-------------------------------
 while True:
@@ -1203,12 +1206,10 @@ while True:
 
                     c = exec(c)
                     logs.log(1,str(c))
-                except NameError:
-                    b = 10
-                except SyntaxError:
-                    b = 5
-                finally:
-                    b = 0
+                except Exception as e:
+                    print("got error: {}".format(e))
+                    usrmodif.latestexep = e
+                    print("e has been saved to (usrmodif.latestexep)")
             elif len(a[0]) == 2:
                 
                 if a[0][1] == ":":
