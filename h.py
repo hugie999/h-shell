@@ -626,6 +626,8 @@ def ask(_question="",default=False):
 #clear()
 #-------------------------------
 while True:
+    wi = os.get_terminal_size().columns
+    hi = os.get_terminal_size().lines
     try:
         if usr == "root":
             isroot = True
