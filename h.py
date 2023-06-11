@@ -352,6 +352,46 @@ class fsmeta:
         if fsmeta.forceoff:
             fsmeta.active = False
 
+class drvmetas:
+    names = []
+    def getnamefor(drive="c") -> str:
+        return drvmetas.names[LETTERS.find(drive)]
+    
+    def update():
+        drvmetas.names = []
+        for i in LETTERS:
+            try:
+                if i != "c":
+                    f = open(i.upper()+":/.hdrvmeta")
+                    drvmetas.names.append(f.read())
+                    f.close()
+                else:
+                    drvmetas.names.append("system")
+            except FileNotFoundError:
+                drvmetas.names.append("")
+            except OSError:
+                drvmetas.names.append("")
+            except:
+                drvmetas.names.append("ERROR")
+    def create():
+        for i in LETTERS:
+            try:
+                if i != "c":
+                    f = open(i.upper()+":/.hdrvmeta","x")
+                    name = input("name for [{}:] :".format(i))
+                    f.write(name)
+                    f.close()
+            except FileExistsError:
+                pass
+            except FileNotFoundError:
+                pass
+            except OSError:
+                pass
+            except PermissionError:
+                print("permission error on [drv: {}] please re-run as admin to create meta file here")
+        drvmetas.update()
+    #based on the LETTERS var
+
 def pluginreload():
     z = 0
     # global plugins.pluginreserved
@@ -629,6 +669,8 @@ while True:
     wi = os.get_terminal_size().columns
     hi = os.get_terminal_size().lines
     try:
+        
+        drvmetas.update()
         if usr == "root":
             isroot = True
         if iswindows:
@@ -817,14 +859,18 @@ while True:
                         for i in range(26):
                             try:
                                 if Path(LETTERS[i]+":").exists():
-                                    if not LETTERS[i] in "abc":
+                                    if format(drvmetas.getnamefor(LETTERS[i])):
+                                        print(LETTERS[i]+": [{}]".format(drvmetas.getnamefor(LETTERS[i])))
+                                    else:
                                         print(LETTERS[i]+":")
-                                    elif LETTERS[i] == "c":
-                                        print(LETTERS[i]+": [system]")
-                                    elif LETTERS[i] in "ab":
-                                        print(LETTERS[i]+": [floppy]")
+                                    # if not LETTERS[i] in "abc":
+                                    #     print(LETTERS[i]+":")
+                                    # elif LETTERS[i] == "c":
+                                    #     print(LETTERS[i]+": [system]")
+                                    # elif LETTERS[i] in "ab":
+                                    #     print(LETTERS[i]+": [floppy]")
                             except OSError:
-                                print(gettheme(True)+LETTERS[i]+": [NOT WORKING]"+gettheme(False))
+                                print(gettheme(True)+LETTERS[i]+": --[NOT WORKING]--"+gettheme(False))
 
                         b =0
                     else:
