@@ -294,6 +294,7 @@ if checkfor(".path"):
 else:
     path = []
 class plugins:
+    plugret = "" # set by doplug
     errorhandle = True
     pluginreserved = []
     pluginreservednum = []
@@ -312,8 +313,12 @@ class prefs:
     showpathintitle = True
     defaultshell = "/bin/bash"
     showreadmes = False
+    fishstylepaths = False
+    allowpluginspy = True
 class fsmeta:
     active = False
+    forceoff = False
+    noupdate = False
     name = ""
     nodel = False
     canplugs = True
@@ -322,6 +327,9 @@ class fsmeta:
     def reload():
         global iswindows
         try:
+            if fsmeta.noupdate:
+                raise Exception("noupdateNONerror")
+            
             f = open(".hmeta")
             logs.log(0,".hmeta file found")
             #logs.log(0,f.read().splitlines())
@@ -340,6 +348,13 @@ class fsmeta:
         except OSError:
             fsmeta.active = False
         except FileNotFoundError:
+            fsmeta.active = False
+        except Exception as e:
+            if e.args[0] == "noupdateNONerror":
+                fsmeta.active = True
+            else:
+                fsmeta.active = False
+        if fsmeta.forceoff:
             fsmeta.active = False
 
 def pluginreload():
@@ -411,7 +426,7 @@ def saveprefs():
     preflist.append(int(prefs.centertitle))
     preflist.append(int(prefs.showpathintitle))
     preflist.append(int(prefs.showreadmes))
-    
+    preflist.append(int(prefs.fishstylepaths))
     
     
     
@@ -427,8 +442,8 @@ def saveprefs():
     logs.log(0,"deawhead "+str(preflist[2]))
     logs.log(0,"centertitle "+str(preflist[3]))
     logs.log(0,"showpathintitle "+str(preflist[4]))
-    logs.log(0,"shworeadmes "+str(preflist[1]))
-    
+    logs.log(0,"shworeadmes "+str(preflist[5]))
+    logs.log(0,"abbr paths "+str(preflist[6]))
     preffile.close()
 def loadprefs():
     global theme
@@ -454,7 +469,11 @@ def loadprefs():
         prefs.showpathintitle = (int(preflist[4]) == 1)
         logs.log(0,"showpathintitle "+str(preflist[4]))
         prefs.showreadmes = (int(preflist[5]) == 1)
-        logs.log(0,"shworeadmes "+str(preflist[1]))
+        logs.log(0,"shworeadmes "+str(preflist[5]))
+        prefs.fishstylepaths = (int(preflist[6]) == 1)
+        logs.log(0,"abbr paths "+str(preflist[6]))
+        
+        
         logs.log(1,str(preflist))
         for i in preflist:
             logs.log(0,str(int(i) == 1))
@@ -463,17 +482,22 @@ def loadprefs():
     except:
         print("error while loading prefs :(")
         print("makeing new file")
-        preflist = [0,0,1,0,1]
+        preflist = [0,0,1,0,1,0]
         theme = int(preflist[0])
         prefs.qclear = bool(preflist[1])
         prefs.drawhead = bool(preflist[2])
         prefs.centertitle = bool(preflist[3])
         prefs.showpathintitle = bool(preflist[4])
+        prefs.fishstylepaths = False
         prefs.showreadmes = (False)
         saveprefs()
 def prnthead():
+    wi = os.get_terminal_size().columns
+    hi = os.get_terminal_size().lines
     global prompt
-    strcd = str(cd)
+    strcd = ""
+    if not prefs.fishstylepaths:
+        strcd = str(cd)
     if prefs.drawhead:
         if prefs.showpathintitle:
             if iswindows:
@@ -524,7 +548,6 @@ b = 0
 # except:
 #     logs.log(3,"error getting terminal size")
 #     exit()
-
 loadprefs()
 def doplug(command = "",isafter=False) -> bool:
     logs.log(0,command)
@@ -545,12 +568,15 @@ def doplug(command = "",isafter=False) -> bool:
         pass
     elif not isafter:
         try:
+            plugret = ""
             try:
                 comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
             except IndexError:
                 raise ValueError
             try:
-                plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
+                plugret = plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
+                logs.log(1,plugret)
+                plugins.plugret = plugret
             except Exception as e:
                 logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
                 if not plugins.errorhandle:
@@ -636,7 +662,7 @@ while True:
         if len(a) == 0:
             a = " "
         if doplug(astr):
-            pass
+            exec(plugins.plugret)
         elif a[0] == "rm" and fsmeta.nodel:
             print(gettheme(True),"cannot delete (fsmeta.nodel == true)")
         elif a == "del"[0] and fsmeta.nodel:
@@ -726,22 +752,25 @@ while True:
                 print("show path in title: {}".format(prefs.showpathintitle))
                 print("show readme files : {}".format(prefs.showreadmes))
                 printappname("set")
-                if input("draw title?                      ([Y]/n):").lower() == "n":
+                if input("draw title? ([Y]/n):").lower() == "n":
                     prefs.drawhead  = False
                 else:
                     prefs.drawhead  = True
-                if input("center title?                    (y/[N]):").lower() == "y":
+                if input("center title? (y/[N]):").lower() == "y":
                     prefs.centertitle = True
                 else:
                     prefs.centertitle = False
-                if input("show path in title?              ([Y]/n):").lower() == "n":
+                if input("show path in title? ([Y]/n):").lower() == "n":
                     prefs.showpathintitle = False
                 else:
                     prefs.showpathintitle = True
-                if input("show readme files in direcorys?  (y/[N]):").lower() != "y":
+                if input("show readme files in direcorys? (y/[N]):").lower() != "y":
                     prefs.showreadmes = False
                 else:
                     prefs.showreadmes = True
+                # prefs.fishstylepaths = ask("use FISH style paths (abreviate paths)?",False) removed due to me not understanding how to get a list of file parents because im an idiot smh
+                
+                
                 logs.log(0,"theme "+str(theme))
                 logs.log(0,"qclear "+str(prefs.qclear))
                 logs.log(0,"deawhead "+str(prefs.drawhead))
@@ -1014,7 +1043,8 @@ while True:
                 histfile.close()
                 b = 0
             elif a[0] == "cd": #warning VARY MESSY DONT TOUCH
-                c = astr[3:]
+                c = astr[:-3]
+                logs.log(0,c)
                 if len(a) == 1:
                     print(cd)
                     b = 0
@@ -1033,9 +1063,9 @@ while True:
                     b = 0
                 
                 else:
-                    c = ""
-                    for i in range(len(a)-1):
-                        c += a[i+1]
+                    # c = ""
+                    # for i in range(len(astr)-1):
+                    #     c += astr[i+1]
                     
                     
                     #print(cd.is_dir())

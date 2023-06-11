@@ -18,4 +18,5 @@ import os
 
 
 def docom(comfull,themestr,cd):
-    print("hello world")
+    print("hello world!")
+    return 'print("your theme is: {}".format(theme))'

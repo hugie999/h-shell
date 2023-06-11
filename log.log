@@ -1,7 +1,6 @@
-[]: v:loglev:1 
-[]: v:1686095755.6430674 
+[]: v:loglev:4 
+[]: v:1686451930.4101248 
 []: l:importing---------- 
-[]: l:importing: h-lib 
 []: l:importing: aliases 
 []: l:importing: installer script 
 []: l:importing: os 
@@ -38,64 +37,75 @@
 []: v:p.txt 
 []: l:I:\h-shell\plugins\log.log 
 []: v:g.log 
-[]: l:I:\h-shell\plugins\show_builtin.plug.py 
+[]: l:I:\h-shell\plugins\mkmeta_dev.plug.py 
 []: v:ug.py 
 []: v:2 
 []: v:<class 'module'> 
-[]: l:no plugin type on 2 
-[]: v:'oncommand' 
 []: v:[False, False, False] 
-[]: l:I:\h-shell\plugins\test.plug.py 
+[]: l:I:\h-shell\plugins\show_builtin.plug.py 
 []: v:ug.py 
 []: v:3 
 []: v:<class 'module'> 
+[]: l:no plugin type on 3 
+[]: v:'oncommand' 
 []: v:[False, False, False, False] 
-[]: l:I:\h-shell\plugins\titlechanger_builtin.plug.py 
+[]: l:I:\h-shell\plugins\test.plug.py 
 []: v:ug.py 
 []: v:4 
 []: v:<class 'module'> 
-[]: v:[False, False, False, False, True] 
+[]: v:[False, False, False, False, False] 
+[]: l:I:\h-shell\plugins\titlechanger_builtin.plug.py 
+[]: v:ug.py 
+[]: v:5 
+[]: v:<class 'module'> 
+[]: v:[False, False, False, False, False, True] 
 []: l:I:\h-shell\plugins\__pycache__ 
 []: v:che__ 
 []: v:[] 
 []: l:done!---- 
-[]: v:2 
-[]: v:0 
-[]: v:0 
-[]: v:0 
-[]: v:1 
-[]: v:0 
-[]: v:theme 2 
-[]: v:qclear 0 
-[]: v:deawhead 0 
-[]: v:centertitle 0 
-[]: v:showpathintitle 1 
-[]: v:shworeadmes 0 
-[]: l:['2', '0', '0', '0', '1', '0'] 
-[]: v:False 
-[]: v:False 
-[]: v:False 
-[]: v:False 
-[]: v:True 
-[]: v:False 
-[]: v:2 
-[]: v:0 
 []: v:0 
 []: v:0 
 []: v:1 
 []: v:0 
-[]: v:theme 2 
+[]: v:1 
+[]: v:0 
+[]: v:0 
+[]: v:theme 0 
 []: v:qclear 0 
-[]: v:deawhead 0 
+[]: v:deawhead 1 
 []: v:centertitle 0 
 []: v:showpathintitle 1 
 []: v:shworeadmes 0 
-[]: l:['2', '0', '0', '0', '1', '0'] 
-[]: v:False 
-[]: v:False 
+[]: v:abbr paths 0 
+[]: l:['0', '0', '1', '0', '1', '0', '0'] 
 []: v:False 
 []: v:False 
 []: v:True 
+[]: v:False 
+[]: v:True 
+[]: v:False 
+[]: v:False 
+[]: v:0 
+[]: v:0 
+[]: v:1 
+[]: v:0 
+[]: v:1 
+[]: v:0 
+[]: v:0 
+[]: v:theme 0 
+[]: v:qclear 0 
+[]: v:deawhead 1 
+[]: v:centertitle 0 
+[]: v:showpathintitle 1 
+[]: v:shworeadmes 0 
+[]: v:abbr paths 0 
+[]: l:['0', '0', '1', '0', '1', '0', '0'] 
+[]: v:False 
+[]: v:False 
+[]: v:True 
+[]: v:False 
+[]: v:True 
+[]: v:False 
 []: v:False 
 []: v:usr: clear 
 []: v:clear 
@@ -104,19 +114,52 @@
 []: w:no plugin found 
 []: v:clear 
 []: v:True 
-[]: l:did pluginnum 4 
+[]: l:did pluginnum 5 
 []: v:.hmeta file found 
-[]: v:['hshell install folder', '1', '1', '1', '1'] 
-[]: v:usr: clear 
-[]: v:clear 
-[]: v:clear 
+[]: v:['h-shell', '0', '1', '1', '1'] 
+[]: v:usr: test 
+[]: v:test 
+[]: v:test 
+[]: v:False 
+[]: l:print("your theme is: {}".format(theme)) 
+[]: v:test 
+[]: v:True 
+[]: l:did pluginnum 5 
+[]: v:.hmeta file found 
+[]: v:['h-shell', '0', '1', '1', '1'] 
+[]: v:usr: clear  
+[]: v:clear  
+[]: v:clear  
 []: v:False 
 []: w:no plugin found 
-[]: v:clear 
+[]: v:clear  
 []: v:True 
-[]: l:did pluginnum 4 
+[]: l:did pluginnum 5 
 []: v:.hmeta file found 
-[]: v:['hshell install folder', '1', '1', '1', '1'] 
+[]: v:['h-shell', '0', '1', '1', '1'] 
+[]: v:usr: dev loglev\ 
+[]: v:dev loglev\ 
+[]: v:dev loglev\ 
+[]: v:False 
+[]: w:no plugin found 
+[]: v:dev loglev\ 
+[]: v:True 
+[]: l:did pluginnum 5 
+[]: v:.hmeta file found 
+[]: v:['h-shell', '0', '1', '1', '1'] 
+[]: v:usr: dev loglev 
+[]: v:dev loglev 
+[]: v:dev loglev 
+[]: v:False 
+[]: w:no plugin found 
+[]: v:lev file:I:\h-shell/.loglev 
+[]: v:1 
+[]: v:new log level: 1 
+[]: v:dev loglev 
+[]: v:True 
+[]: l:did pluginnum 5 
+[]: v:.hmeta file found 
+[]: v:['h-shell', '0', '1', '1', '1'] 
 []: v:usr: quit 
 []: v:quit 
 []: v:quit 
@@ -124,4 +167,4 @@
 []: w:no plugin found 
 []: l:stoped 
 []: l:saveing logs 
-[]: v:126 
+[]: v:169 
