@@ -1046,7 +1046,7 @@ while True:
                 histfile.close()
                 b = 0
             elif a[0] == "cd": #warning VARY MESSY DONT TOUCH
-                c = astr[:-3]
+                c = astr[3:]
                 logs.log(0,c)
                 if len(a) == 1:
                     print(cd)
