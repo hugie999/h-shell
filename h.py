@@ -314,7 +314,8 @@ class prefs:
     defaultshell = "/bin/bash"
     showreadmes = False
     fishstylepaths = False
-    allowpluginspy = True
+    allowpluginspy = True #do plugin returns
+
 class fsmeta:
     active = False
     forceoff = False
@@ -613,8 +614,8 @@ def doplug(command = "",isafter=False) -> bool:
                 logs.log(1,plugret)
                 if not plugret:
                     plugret = "pass"
-                
-                plugins.plugret = plugret
+                if prefs.allowpluginspy:
+                    plugins.plugret = plugret
             except Exception as e:
                 logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
                 if not plugins.errorhandle:
