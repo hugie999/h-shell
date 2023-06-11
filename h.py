@@ -576,6 +576,9 @@ def doplug(command = "",isafter=False) -> bool:
             try:
                 plugret = plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
                 logs.log(1,plugret)
+                if not plugret:
+                    plugret = "pass"
+                
                 plugins.plugret = plugret
             except Exception as e:
                 logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
