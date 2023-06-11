@@ -3,6 +3,7 @@ logs = []
 import time
 from pathlib import Path
 import loadicon as load
+proghome = Path(__file__).parent
 def reload():
     Llevelf = open(".loglev")
     Llevel = int(Llevelf.read())
@@ -32,7 +33,7 @@ def log(level=0,tex="None"): #logs the input text | log levels 0 = verbose (non 
         #print("error printing log")
 def save():
     log(1,"saveing logs")
-    Lfile = open("log.log","w")
+    Lfile = open(proghome / "logs","w")
     load.makeloader(len(logs),"saveing...","done!")
     #Lfile.write("-time: "+str(time.time()))
     log(0,str(len(logs)))

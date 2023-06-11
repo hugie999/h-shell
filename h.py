@@ -328,7 +328,7 @@ class fsmeta:
         global iswindows
         try:
             if fsmeta.noupdate:
-                raise Exception("noupdateNONerror")
+                return
             
             f = open(".hmeta")
             logs.log(0,".hmeta file found")
@@ -349,11 +349,6 @@ class fsmeta:
             fsmeta.active = False
         except FileNotFoundError:
             fsmeta.active = False
-        except Exception as e:
-            if e.args[0] == "noupdateNONerror":
-                fsmeta.active = True
-            else:
-                fsmeta.active = False
         if fsmeta.forceoff:
             fsmeta.active = False
 
