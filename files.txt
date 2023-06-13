@@ -1,6 +1,7 @@
 h.py
 installer.py
 logs.py
+alias.py
 .hmeta
 loadicon.py
 plugins/dir_buitin.plug.py
