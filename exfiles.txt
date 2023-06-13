@@ -1,0 +1,3 @@
+plugins/ftp.plug.py
+plugins/clockey.plug.py
+plugins/mkmeta_dev.plug.py
