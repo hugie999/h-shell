@@ -15,7 +15,7 @@ def docom(comfull,themestr,cd):
                 print("\a",end="")
             lasth = t.localtime()[3]
             print(themestr[1]+"-----------"+themestr[0])
-            print(themestr[1]+ "{}/{}/{}".format(t.localtime()[3],t.localtime()[4],t.localtime()[5]) +themestr[0])
+            print(themestr[1]+ "{}/{}/{}".format(t.localtime()[3],t.localtime()[4],str(t.localtime()[5]).zfill(2)) +themestr[0])
             print(themestr[1]+"-----------"+themestr[0])
             print("\x1B[3A",end="")
             t.sleep(1)
