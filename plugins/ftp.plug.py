@@ -19,6 +19,7 @@ from ftplib import FTP
 import ftplib
 from pathlib import Path
 from getpass import getpass
+import math
 ftp = FTP()
 hi = 0
 cwd = ""
@@ -31,15 +32,17 @@ def login(address="127.0.0.0",port=21,user="",password=""):
     print("[connecting...]")
     resp = ftp.connect(address,port)
     print(resp)
-    print("[logging in...]")
+    
     if user:
+        print("[logging in...]")
         ftp.login(user,password)
     else:
         try:
+            print("[logging in (as anon)...]")
             ftp.login()
             
         except Exception as e:
-            if e.args[0][:3] == "430":
+            if e.args[0][:3] == "430" or  e.args[0][:3] == "530":
                 print("[please login (no anon user)]")
                 return False
             else:
@@ -61,7 +64,7 @@ def ls():
         print(i)
         # if a % hi == 0 and a != 0:
         #     input("-ENTER-")
-    print("[listing of {}]".format(cwd))
+    print("[...listing...]")
 def lls(path=Path()):
     global hi
     
@@ -83,28 +86,39 @@ def chd(newdir):
 def docom(comfull="",themestr=[],cd=Path()):
     global hi
     global cwd
-    ADDR = input("adress: ")
-    PORT = int(input("port  : "))
+    if len(comfull) > 4:
+        ADDR = comfull.split()[1].split(":")[0]
+        if ":" in comfull:
+            PORT = int(comfull.split(":")[1])
+        else:
+            PORT = 21
+    else:
+        ADDR = input("adress: ")
+        PORT = int(input("port  : "))
     USER = ""
     PASS = ""
-    
+    print("[asumeing port 21]")
     if not login(ADDR,PORT):
         USER = input("username: ")
         PASS = getpass("password: ")
-        login(ADDR,PORT,USER,PASS)
+        if login(ADDR,PORT,USER,PASS):
+            print("[login failed (X2) not logging in]")
     ftp.sendcmd("NOOP")
     print("[welcome: ]"+ftp.welcome)
     while True:
         try:
+            
             hi = os.get_terminal_size().lines
             com = input("FTP@{}>".format(ADDR))
-            if com == "ls":
+            if com == "help":
+                print("help: \nls = listing\nlls = local listing\ncd = change directory\nlcd = change local cd\nbyw/quit = quit ftp\nraw = raw ftp command\npwd = print current location\nopen = open local file\nsel = select remote file\nget = remote -> local download\nsize = size of remote selected file\nclose = close local file\nunsel = unselect file\nrem/del = delete remote file")
+            elif com == "ls":
                 ls()
             elif com == "lls":
                 lls(cd)
             elif com[:2] == "cd":
                 chd(com[3:])
-            elif com[3:] == "lcd":
+            elif com[:3] == "lcd":
                 os.chdir(com[4:])
             elif com == "bye" or com == "quit":
                 close()
@@ -125,14 +139,23 @@ def docom(comfull="",themestr=[],cd=Path()):
                 print("[opened {}]".format(com[4:]))
             elif com[:3] == "sel":
                 file = com[4:]
-                
+                filesize = (ftp.size(file))
                 print("[selected {}]".format(com[4:]))
+            elif com == "size":
+                if filesize > 1000000:
+                    print("[file is {}MB big]".format((math.floor((filesize/1000000)*100))/100))
+                else:
+                    print("[file is {}KB big]".format(math.floor(filesize/10)/100))
             elif com == "get":
                 if file and locfile:
-                    print("[wait...]")
-                    
+                    if filesize > 1000000:
+                        print("[file is {}MB big]".format((math.floor((filesize/1000000)*100))/100))
+                    else:
+                        print("[file is {}KB big]".format(math.floor(filesize/10)/100))
+                    print("[geting...]")
+                    print("[({}) -> ({})]".format(file,locfile.name))
                     content = ftp.retrbinary("RETR {}".format(file),locfile.write)
-                    print("[done!!!]")
+                    print("[done!    ]")
                 else:
                     print("[no file selected or opened]")
             elif com == "close":
