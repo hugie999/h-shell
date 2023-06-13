@@ -21,7 +21,6 @@ def docom(comfull="",themestr="",cd= Path(__file__)):
         if comfull[1] == "-a":
             fullfile = True
             comfull.remove("-a")
-        
         filepath = ""
         for i in range(len(comfull)-2):
             filepath += comfull[i+1]
@@ -36,18 +35,18 @@ def docom(comfull="",themestr="",cd= Path(__file__)):
             #print(comfull)
             a = 0
             if comfull[0] == "show":
-                for i in file.__iter__():
-                        a += 1
-                        #if i.is_dir():
-                            #print(themestr[1]+str(i) + " -[dir]-"+themestr[0])
-                        print(themestr[0]+str(i),end="")
-                        
-                        
-                        if a == hi - 1 or a == hi:
-                            input(themestr[1]+"--press enter to show more--"+themestr[0])
-                            print("\x1B[1A",end="")
-                            print("\x1B[2K",end="")
-                            a = 0
+                print()
+                for i in file.readlines():
+                    a += 1
+                    print(themestr[0]+str(i),end="")
+                    
+                    
+                    if a == hi-2:
+                        a = 0
+                        input(themestr[1]+"--press enter to show more--"+themestr[0])
+                        print("\x1B[1A",end="")
+                        print("\x1B[2K",end="")
+                            
             else:
                 try:
                     tex = str(hex(int.from_bytes(file.read(), byteorder=sys.byteorder)))
