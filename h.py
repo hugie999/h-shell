@@ -1132,6 +1132,8 @@ while True:
                     # else:
                     #    c = "/"+c
                     #print(cd / c)
+                    if Path(str(cd)+"/"+str(c)).is_dir():
+                        pass
                     if Path(str(cd)+"/"+str(c).upper()).is_dir():
                         c = Path(str(c).upper())
                     elif Path(str(cd)+"/"+str(c).title()).is_dir():
@@ -1143,7 +1145,7 @@ while True:
                     #     c = "/"+c
                     if Path(str(cd)+"/"+str(c)+"/").is_dir():
                         #cd = cd.joinpath
-                        cd = cd / a[1]
+                        cd = cd /(c)
                         
                         for i in cd.iterdir():
                             if i.name.lower() == "readme.md" or i.name.lower() == "readme.txt":
