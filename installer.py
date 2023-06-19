@@ -1,6 +1,7 @@
 from pathlib import Path
 noloader = False
 verbose = True
+ADDRESS = "https://raw.githubusercontent.com/hugie999/h-shell/"
 try:
     import requests
 except ModuleNotFoundError as ex:
@@ -11,6 +12,31 @@ try:
     import loadicon as load
 except ModuleNotFoundError: #for if its downloaded from the internet
     noloader = True
+
+def featinst(installto=Path(),ver="main"):
+    featlist = str(requests.get(ADDRESS+ver+"/exfiles.txt").text).splitlines()
+    for i in range(len(featlist)):
+        print("[{}] {}".format(i,featlist[i]))
+    
+    try:
+        num = int(input("select: "))
+    except ValueError:
+        print("bad input")
+        return
+    
+    if num > len(featlist):
+        print("bad number")
+        return
+    else:
+        print("[getting...]")
+        #print("[orig: {}]".format(ADDRESS+ver+featlist[num]))
+        feattext = str(requests.get(ADDRESS+ver+"/"+featlist[num]).text)
+        print("[writing...]")
+        featfile = open(installto/featlist[num],"w")
+        featfile.write(feattext)
+        featfile.close()
+        print("[ finished ]")
+     
 def webinst(installto=Path(),isgit=True,version="main"):
     input("installing to "+str(installto))
     try:
@@ -22,7 +48,7 @@ def webinst(installto=Path(),isgit=True,version="main"):
         raise FileNotFoundError
     print("getting files list...")
     print("\x1b[1A",end="")
-    filesreq = requests.get('https://raw.githubusercontent.com/hugie999/h-shell/{}/files.txt'.format(version))
+    filesreq = requests.get(ADDRESS+"{}/files.txt".format(version))
     files = []
     filenam = files
     #print(files)
