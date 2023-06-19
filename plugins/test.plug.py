@@ -3,12 +3,10 @@ META = {
     "name": "test plugin",
     "desc": "shows a simple hello world message",
     "pluginver": 1,
-    "ver" : 1,
     "type":0,
     "oncommand" : False,
     "doafter" : False
-}# note plugin ver and ver are DIFFRENT ver is for the version of the plugin and plugin ver is what is used in the docom function
-#note2 type is the well type of plugin
+}#note type is the well type of plugin (false = normal, True = do every command (required for doafter))
 #type 0 is the normal one and is only called when a reserved command is used
 #type 1 is called every command and the used command is also run after
 PLUGVER = 1 #this is for compatibility or somthing
