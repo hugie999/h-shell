@@ -67,7 +67,7 @@ def docom(comfull="",themestr=[],cdreal= Path(__file__)):
             print(str(themestr[1]+"---"+"searching for " + searchfor +"---"+themestr[0]).ljust(os.get_terminal_size()[0]))
             a = 0
             for i in cd.iterdir():
-                if searchfor in i.name:
+                if searchfor.lower() in i.name.lower():
                     a += 1
                     if i.is_dir():
                         print(themestr[1]+str(i.name) + " -[dir]-"+themestr[0])
