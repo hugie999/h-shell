@@ -157,7 +157,7 @@ goto (path)               > goes to the path specified
 py (python command)       > runs the command under python
 pref/prefs                > shows prefrences picker
 plugman [help, list, etc] > plugin manager
-webupdate (version)       > updates h-shell
+h-inst [update, feature]  > manage h-shell install
 help                      > shows this
 pelp                      > shows plugin help
 ---------------------------------------------------------------------------"""
@@ -944,22 +944,31 @@ while True:
                 print("\x1b[25m\x1b[0m")
                 print("exited")
                 exit()
-            elif a[0] == "webupdate":
-                if len(a) > 1:
-                    try:
-                        installer.webinst(proghome,version=a[1])
-                        print("please restart now")
-                    except FileNotFoundError:
-                        pass
+            elif a[0] == "h-inst":
+                if len(a) == 1:
+                    print("give argument!")
                 else:
-                    print("updateing from latest git")
-                    if ask("is that ok?",False):
-                        installer.webinst(proghome)
-                        print("please restart now")
+                    if a[1] == "update":
+                        if len(a) > 2:
+                            try:
+                                installer.webinst(proghome,version=a[2])
+                                print("please restart now")
+                                quit()        
+                            except FileNotFoundError:
+                                pass
+                        else:
+                            print("updateing from latest git")
+                            if ask("is that ok?",False):
+                                installer.webinst(proghome)
+                                print("please restart now")
+                                quit()        
+                            else:
+                                print("stoped")
+                    elif a[1] == "feature":
+                        installer.featinst(cd,"main")
                     else:
-                        print("stoped")
+                        print("invalid arg")
                 
-                quit()        
             elif a[0] == "dev":
                 b = 0
                 #print(__file__)
