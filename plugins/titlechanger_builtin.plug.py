@@ -1,4 +1,4 @@
-COMS = ["__titlechanger"] #commands used
+COMS = []#["__titlechanger"] #commands used
 META = {
     "name": "title plugin",
     "desc": "changes the terminal title",
