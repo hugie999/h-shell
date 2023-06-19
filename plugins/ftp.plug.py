@@ -1,9 +1,9 @@
+#v1
 COMS = ["ftp"] #commands used
 META = {
     "name": "ftp.plug.py",
     "desc": "my ATEMPT at makeing an ftp client (test plugin)",
     "pluginver": 1,
-    "ver" : 1,
     "type":0,
     "oncommand" : False,
     "doafter" : False
@@ -11,9 +11,8 @@ META = {
 #note2 type is the well type of plugin
 #type 0 is the normal one and is only called when a reserved command is used
 #type 1 is called every command and the used command is also run after
-PLUGVER = 1 #this is for compatibility or somthing
-HELPCOMS = []
-HELPDESC = []
+HELPCOMS = ["ftp ([remote](:port))"]
+HELPDESC = ["ftp into a remote server or location"]
 import os
 from ftplib import FTP
 import ftplib
@@ -23,7 +22,11 @@ import math
 ftp = FTP()
 hi = 0
 cwd = ""
+listing = []
 
+def checkupdatelist(dir):
+    global cwd
+    global listing
 
 def getcode(ret="000 test"):
     return [int(ret[:3]),ret[4:]]
@@ -53,17 +56,50 @@ def login(address="127.0.0.0",port=21,user="",password=""):
 def close():
     print("[leaveing...]")
     ftp.close()
+
+def search(text=""):
+    global hi
+    global cwd
+    global listing
+    print("[wait...]")
+    if not listing:
+        listing = ftp.nlst()
+    else:
+        print("[useing cached list]")
+    a = 1
+    print("[showing all files with '{}' in them]".format(text))
+    for i in listing:
+        
+        if text.lower() in i.lower():
+            a += 1
+            print(i)
+        try:
+            if a % hi == 0 and a != 0:
+                input("-ENTER-")
+                a += 1
+        except KeyboardInterrupt:
+            print("[stoped eraly]\n")
+            break
+
 def ls():
     print("[wait...]")
     global hi
     global cwd
-    list = ftp.nlst()
+    global listing
+    if not listing:
+        listing = ftp.nlst()
+    else:
+        print("[useing cached list]")
     a = 0
-    for i in list:
+    for i in listing:
         a += 1
         print(i)
-        # if a % hi == 0 and a != 0:
-        #     input("-ENTER-")
+        try:
+            if a % hi == 0 and a != 0:
+                input("-ENTER-")
+        except KeyboardInterrupt:
+            print("[stoped eraly]\n")
+            break
     print("[...listing...]")
 def lls(path=Path()):
     global hi
@@ -76,8 +112,13 @@ def lls(path=Path()):
         # if a % hi == 0 and a != 0:
         #     if input("-ENTER-") == "q":
         #         break
-        
+def updatecwd():
+    global cwd
+    cwd = ftp.pwd()
+
 def chd(newdir):
+    global listing
+    listing = []
     try:
         print("[{}]".format(str(ftp.cwd(ftp.pwd()+"/"+newdir))))
     except ftplib.error_perm as e:
@@ -103,21 +144,28 @@ def docom(comfull="",themestr=[],cd=Path()):
         PASS = getpass("password: ")
         if login(ADDR,PORT,USER,PASS):
             print("[login failed (X2) not logging in]")
-    ftp.sendcmd("NOOP")
-    print("[welcome: ]"+ftp.welcome)
+    print("[{}]".format(ftp.welcome))
+    cwd = ftp.pwd()
+    timedout = False
     while True:
         try:
             
             hi = os.get_terminal_size().lines
-            com = input("FTP@{}>".format(ADDR))
+            if not timedout:
+                com = input("FTP@{}>".format(ADDR))
+            else:
+                timedout = False
             if com == "help":
-                print("help: \nls = listing\nlls = local listing\ncd = change directory\nlcd = change local cd\nbyw/quit = quit ftp\nraw = raw ftp command\npwd = print current location\nopen = open local file\nsel = select remote file\nget = remote -> local download\nsize = size of remote selected file\nclose = close local file\nunsel = unselect file\nrem/del = delete remote file")
+                print("help: \nls = listing\nfind [text] = finds all files containing text\nlls = local listing\ncd [dir] = change directory\nlcd [dir] = change local cd\nbye/quit = quit ftp\nraw [com] = raw ftp command\npwd = print current location\nopen [local] = open local file\nsel [remote] = select remote file\nget = remote -> local download\nsize = size of remote selected file\nclose = close local file\nunsel = unselect file\nrem/del = delete remote file")
             elif com == "ls":
                 ls()
             elif com == "lls":
                 lls(cd)
+            elif com[:4] == "find":
+                search(com[5:])
             elif com[:2] == "cd":
                 chd(com[3:])
+                updatecwd()
             elif com[:3] == "lcd":
                 os.chdir(com[4:])
             elif com == "bye" or com == "quit":
@@ -129,8 +177,9 @@ def docom(comfull="",themestr=[],cd=Path()):
                     print(resp)
                 except Exception as e:
                     print("[got {}/{}]".format(str(e),str(e.args)))
+                updatecwd()
             elif com == "pwd":
-                cwd = ftp.pwd()
+                updatecwd()
                 print(cwd)
             elif com[:4] == "show":
                 pass
@@ -139,7 +188,11 @@ def docom(comfull="",themestr=[],cd=Path()):
                 print("[opened {}]".format(com[4:]))
             elif com[:3] == "sel":
                 file = com[4:]
-                filesize = (ftp.size(file))
+                try:
+                    filesize = (ftp.size(file))
+                except:
+                    filesize = 0
+                    print("[cant get size]")
                 print("[selected {}]".format(com[4:]))
             elif com == "size":
                 if filesize > 1000000:
@@ -174,4 +227,16 @@ def docom(comfull="",themestr=[],cd=Path()):
             else:
                 ftp.sendcmd("NOOP")
         except ftplib.all_errors as e:
-            print("[got bad resp {}]".format(str(e.args[0])))    
+            if str(e.args[0])[:3] == "421":
+                print("[timed out! (reconnecting...)]")
+                login(ADDR,PORT,USER,PASS)
+                try:
+                    print("[{}]".format(ftp.cwd(cwd)))
+                except ftplib.all_errors as e:
+                    print("[error changeing to previos directory]")
+                    updatecwd()
+                    print("[cwd: '/']")
+                else:
+                    timedout = True
+            else:
+                print("[got bad resp {}]".format(str(e.args[0])))
