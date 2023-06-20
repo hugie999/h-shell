@@ -5,6 +5,7 @@ load.makeloader(3,"importing","importing done")
 #print("importing [0/8] |")
 #print("\x1b[1A",end="")
 import logs
+hasinstaller = True
 try:
     if logs.Llevel > 3:
         logs.log(1,"importing----------")
@@ -41,11 +42,17 @@ try:
         #print("importing [2/8] -")
         load.loadupdate()
         import aliases
-        logs.log(1,"importing: installer script")
+        try:
+            logs.log(1,"importing: installer script")
+            import installer
+        except Exception as e:
+            logs.log(1,str(e.args))
+            logs.log(2,"error importing installer (will continue)")
+            hasinstaller = False
         # printEscape("[1A")
         # print("importing [3/8] \\")
         load.loadupdate()
-        import installer
+        
         logs.log(1,"importing: os")
         import os
         logs.log(1,"importing: sys")
@@ -945,8 +952,12 @@ while True:
                 print("exited")
                 exit()
             elif a[0] == "h-inst":
+                
                 if len(a) == 1:
                     print("give argument!")
+                elif not hasinstaller:
+                    print("no installer modual (pls fix)")
+                    logs.log(2,"h-inst needs installer modual")
                 else:
                     if a[1] == "update":
                         if len(a) > 2:
