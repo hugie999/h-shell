@@ -2,6 +2,17 @@ from pathlib import Path
 noloader = False
 verbose = True
 ADDRESS = "https://raw.githubusercontent.com/hugie999/h-shell/"
+
+def inlist(list = ["a","b","c"],string= ""):
+    try:
+        list.index(string)
+    except ValueError:
+        return False
+    else:
+        return True
+
+inlist(["a"],"s")
+
 try:
     import requests
 except ModuleNotFoundError as ex:
@@ -123,29 +134,43 @@ def install(installto,iswin,devmode= False):
             (installto/"plugins").mkdir()
         except FileExistsError:
             pass
-        try:
-            if not doplugs.upper() == "N":
-                (installto/".loadplugs").touch()
-        except FileExistsError:
-            pass
         
         
         print("installing!---------")
+        print("[makeing plugins folder]")
+        try:
+            (installto/"plugins").mkdir()
+        except FileExistsError:
+            pass
         folder =Path(__file__).parent
         print(folder)
         files = []
         names = []
         final = []
+        print("[getting file list]")
         for i in folder.iterdir():
             if devmode:
                 print(str(i)[-3:])
             if not "__pycache__" in str(i) and str(i)[-3:] == ".py":
+                if inlist(["h.py","installer.py","loadicon.py","aliases.py","logs.py"],i.name):
+                    if devmode:
+                        print(str(i))
+                    files.append(i)
+                    names.append(i.name)
+                    final.append(installto / i.name)
+        
+        for i in (folder / "plugins").iterdir():
+            if devmode:
+                print(str(i)[-3:])
+            if not "__pycache__" in str(i) and str(i)[-8:] == ".plug.py":
                 if devmode:
                     print(str(i))
                 files.append(i)
                 names.append(i.name)
-                final.append(installto / i.name)
-        load.makeloader(len(files),"copying","done!")
+                final.append(installto /"plugins"/i.name)
+        print("[copying...]")
+        load.makeloader(len(files)+1,"copying","done!")
+        
         for i in range(len(files)):
             first = open(files[i],"rt")
             to = open(final[i],"wt")
@@ -159,8 +184,13 @@ def install(installto,iswin,devmode= False):
         #    a = open(installto / "run.bat", "wt")
         #    a.write("h.py")
         #    a.close()
-        
+        print("[makeing meta file]\n")
+        metafile = open(installto/".hmeta","w")
+        metafile.write("h-shell\n0\n1\n1\n1")
+        metafile.close()
+        load.loadupdate()
         postint(installto)
+        print("[done!]")
         #a = input("add as 'hiss' to .bashrc (y/[n]):")
         print("run h.py to start!")
         #print("install compleated!")
