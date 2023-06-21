@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import loadicon as load
-load.makeloader(3,"importing","importing done")
+load.makeloader(2,"importing","importing done")
 #print("importing [0/8] |")
 #print("\x1b[1A",end="")
 import logs
@@ -11,8 +11,6 @@ try:
         logs.log(1,"importing----------")
         # logs.log(1,"importing: h-lib")
         # from hlib import *
-        logs.log(1,"importing: aliases")
-        import aliases
         logs.log(1,"importing: installer script")
         import installer
         logs.log(1,"importing: os")
@@ -29,7 +27,7 @@ try:
         from importlib.machinery import SourceFileLoader
         import time
         import getpass
-        imports = [os,sys,aliases]
+        imports = [os,sys]
         depends = ["bash"] #thease are
         logs.log(1,"done---------------")
     else:
@@ -37,11 +35,8 @@ try:
         # logs.log(1,"importing: h-lib")
         # load.loadupdate()
         #print("importing [1/8] /")
-        logs.log(1,"importing: aliases")
         #printEscape("[1A")
         #print("importing [2/8] -")
-        load.loadupdate()
-        import aliases
         try:
             logs.log(1,"importing: installer script")
             import installer
@@ -68,7 +63,7 @@ try:
         from importlib.machinery import SourceFileLoader
         import time
         import getpass
-        imports = [os,sys,aliases]
+        imports = [os,sys]
         depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
         logs.log(1,"done---------------")
 except Exception as ex:
@@ -541,6 +536,7 @@ def prnthead():
     hi = os.get_terminal_size().lines
     global prompt
     strcd = ""
+    prompt = ":"
     if not prefs.fishstylepaths:
         strcd = str(cd)
     if prefs.drawhead:
@@ -705,10 +701,10 @@ while True:
                 startcomdone = True
         
         print("\x1b[25m\x1b[24m",end="")
-        a = aliases.repacecom(a,str(cd))
+        a = a
         printEscape("[1A")
         printEscape("[2K")
-        
+        b = 0
         print(printcenter(":{}:".format(a),DoAsReturn=True))
         logs.log(0,"usr: "+str(a))
         astr = a
@@ -836,7 +832,6 @@ while True:
                 b = 0
             elif a[0] == "drv" or a[0] == "drive":
                 if not iswindows:
-                    
                     usr = getpass.getuser()
                     if len(a) == 1:
                         print("incorect args")
@@ -854,7 +849,6 @@ while True:
                         if tmp == 2:
                             print(gettheme(True)+"note: media folder will be prioritized over mnt"+gettheme(False))
                         b = 0
-                        
                     else:
                         if Path("/media/"+usr+"/"+a[1]).exists() and Path("/media/"+usr+"/"+a[1]).is_dir():
                             cd = Path("/media/"+usr+"/"+a[1])
@@ -959,6 +953,7 @@ while True:
                     print("give argument!")
                 elif not hasinstaller:
                     print("no installer modual (pls fix)")
+                    print("to update or install features download them manually")
                     logs.log(2,"h-inst needs installer modual")
                 else:
                     if a[1] == "update":
@@ -981,7 +976,6 @@ while True:
                         installer.featinst(cd,"main")
                     else:
                         print("invalid arg")
-                
             elif a[0] == "dev":
                 b = 0
                 #print(__file__)
@@ -1052,9 +1046,9 @@ while True:
                     installer.install(cd,iswindows)
                 if comman == "webinst":
                     installer.webinst(cd)
-                if comman == "alies":
-                    print("input: {}".format(aliases.INCOM))
-                    print("output: {}".format(aliases.OUTCOM))
+                # if comman == "alies":
+                #     print("input: {}".format(aliases.INCOM))
+                #     print("output: {}".format(aliases.OUTCOM))
                 if comman == "themes":
                     
                     #print('-----themes----\x1b[0m')
@@ -1070,7 +1064,7 @@ while True:
                 if fsmeta.cansys or not fsmeta.active:
                     d = astr[4:]
                     if not iswindows:
-                        c = os.system(prefs.defaultshell+d)
+                        c = os.system(prefs.defaultshell+" "+d)
                     else:
                         c = os.system(d)
                     b = 0
@@ -1205,7 +1199,7 @@ while True:
                         b = 0
                 elif a[0] == "goto":
                     c = a[1]
-                    c = Path(c)
+                    c = Path(c).expanduser()
                     cstr = str(c)
                     
                     #if cstr[len(cstr)-1] != "/":
@@ -1257,6 +1251,10 @@ while True:
                             logs.log(3,"drive not ready (got OSError)")
             else:
                 #print(a[:2])
+                if astr[9:] == "sudo chsh" or astr[4:] == "chsh":
+                    print("pleases do not use chsh to set h-shell as the default shell")
+                    print("instead add it to your bashrc or bash_profile (or equivelent)")
+                
                 if astr[:2] == "./":
                     astr.replace("./",str(cd)+"/")
                 if fsmeta.cansys or not fsmeta.active: 
