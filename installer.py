@@ -6,8 +6,13 @@ try:
     import requests
 except ModuleNotFoundError as ex:
     print(ex)
-    print("'requests' modual not found (is it installed?)")
-    exit()
+    print("'requests' modual not found (is it installed?)\n")
+    HASWEB = False
+except:
+    print("error while importing 'requests'\n")
+    HASWEB = False
+else:
+    HASWEB = True
 try:
     import loadicon as load
 except ModuleNotFoundError: #for if its downloaded from the internet

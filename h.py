@@ -49,6 +49,8 @@ try:
             logs.log(1,str(e.args))
             logs.log(2,"error importing installer (will continue)")
             hasinstaller = False
+        else:
+            hasinstaller = installer.HASWEB
         # printEscape("[1A")
         # print("importing [3/8] \\")
         load.loadupdate()
