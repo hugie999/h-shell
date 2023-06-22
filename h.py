@@ -25,6 +25,7 @@ try:
         import platform
         logs.log(1,"importing: SourceFileLoader")
         from importlib.machinery import SourceFileLoader
+        import subprocess
         import time
         import getpass
         imports = [os,sys]
@@ -62,6 +63,7 @@ try:
         load.loadupdate()
         from importlib.machinery import SourceFileLoader
         import time
+        import subprocess
         import getpass
         imports = [os,sys]
         depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
@@ -319,6 +321,7 @@ class prefs:
     showreadmes = False
     fishstylepaths = False
     allowpluginspy = True #do plugin returns
+    enablesubprocess = False
 
 class fsmeta:
     active = False
@@ -987,10 +990,13 @@ while True:
                     print("info    : shows info")
                     print("loglev  : changes log level")
                     print("slogs   : saves logs")
-                    print("intsall : [DOES NOT WORK] use webinst")
+                    print("intsall : use webinst")
                     print("webinst : installs from web")
                     print("alies   : prints alieases")
                     print("themes  : prints themes [just use theme command]")
+                if a[1] == "enablesub":
+                    prefs.enablesubprocess = True
+                
                 if a[1] == "prefreload":
                     saveprefs()
                     loadprefs()
@@ -1257,10 +1263,10 @@ while True:
                 
                 if astr[:2] == "./":
                     astr.replace("./",str(cd)+"/")
-                if fsmeta.cansys or not fsmeta.active: 
-                    b = os.system(astr)
-                else:
-                    print(gettheme(True),"cannot use system commands (fsmeta.cansys == false)")
+                
+                
+                b = os.system(astr)
+                
         if b == 32512:
             printEscape("[1A")
             printEscape("[2k")
