@@ -977,7 +977,7 @@ while True:
                             else:
                                 print("stoped")
                     elif a[1] == "feature":
-                        installer.featinst(cd,"main")
+                        installer.featinst(proghome,"main")
                     elif a[1] == "info":
                         print("\x1b[30;42mH{}   \x1b[30;42mH{} | h-shell version: {} ({})".format(gettheme(False),gettheme(False),ver,str(vernum)))
                         print("\x1b[30;42mH{}   \x1b[30;42mH{} | plugins : {}".format(gettheme(False),gettheme(False),len(plugins.plugindata)))
