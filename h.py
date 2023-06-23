@@ -93,8 +93,12 @@ except Exception as ex:
 #print("\x1b[=1h")
 #clear()
 #hlib.py functions
-wi = os.get_terminal_size().columns
-hi = os.get_terminal_size().lines
+try:
+    wi = os.get_terminal_size().columns
+    hi = os.get_terminal_size().lines
+except:
+    wi = 20
+    hi = 20
 def clear():
     print('\x1b[0m')
     if system == 'Windows':
@@ -535,8 +539,12 @@ def loadprefs():
         prefs.showreadmes = (False)
         saveprefs()
 def prnthead():
-    wi = os.get_terminal_size().columns
-    hi = os.get_terminal_size().lines
+    try:
+        wi = os.get_terminal_size().columns
+        hi = os.get_terminal_size().lines
+    except:
+        wi = 20
+        hi = 20
     global prompt
     strcd = ""
     prompt = ":"
@@ -678,8 +686,12 @@ class usrmodif:#ment to be used by the user for the "py" command or by plugins t
 #clear()
 #-------------------------------
 while True:
-    wi = os.get_terminal_size().columns
-    hi = os.get_terminal_size().lines
+    try:
+        wi = os.get_terminal_size().columns
+        hi = os.get_terminal_size().lines
+    except:
+        wi = 20
+        hi = 20
     try:
         
         drvmetas.update()
