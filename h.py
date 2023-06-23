@@ -163,7 +163,7 @@ goto (path)               > goes to the path specified
 py (python command)       > runs the command under python
 pref/prefs                > shows prefrences picker
 plugman [help, list, etc] > plugin manager
-h-inst [update, feature]  > manage h-shell install
+h-inst [help, etc]        > manage h-shell install
 help                      > shows this
 pelp                      > shows plugin help
 ---------------------------------------------------------------------------"""
@@ -954,6 +954,7 @@ while True:
                 
                 if len(a) == 1:
                     print("give argument!")
+                    print("type 'h-inst help' for list of commands")
                 elif not hasinstaller:
                     print("no installer modual (pls fix)")
                     print("to update or install features download them manually")
@@ -977,8 +978,21 @@ while True:
                                 print("stoped")
                     elif a[1] == "feature":
                         installer.featinst(cd,"main")
+                    elif a[1] == "info":
+                        print("\x1b[30;42mH{}   \x1b[30;42mH{} | h-shell version: {} ({})".format(gettheme(False),gettheme(False),ver,str(vernum)))
+                        print("\x1b[30;42mH{}   \x1b[30;42mH{} | plugins : {}".format(gettheme(False),gettheme(False),len(plugins.plugindata)))
+                        print("\x1b[30;42mHHHHH{} | program : {}".format(gettheme(False),__file__))
+                        print("\x1b[30;42mH{}   \x1b[30;42mH{} | theme   : {}".format(gettheme(False),gettheme(False),theme))
+                        print("\x1b[30;42mH{}   \x1b[30;42mH{} | user    : ".format(gettheme(False),gettheme(False))+usr)
+                        if iswindows:
+                            print("      | os      : Windows")
+                        else:
+                            print("      | os      : not Windows")
+                    elif a[1] == "help":
+                        print("-commands-\n   info   \n  feature \n   help   ")
                     else:
                         print("invalid arg")
+                        print("type 'h-inst help' for list of commands")
             elif a[0] == "dev":
                 b = 0
                 #print(__file__)
@@ -1069,10 +1083,14 @@ while True:
             elif a[0] == "sys":
                 if fsmeta.cansys or not fsmeta.active:
                     d = astr[4:]
-                    if not iswindows:
-                        c = os.system(prefs.defaultshell+" "+d)
+                    if prefs.enablesubprocess:
+                        if iswindows:
+                            a.insert(0,"cmd")
+                            a.insert(1,"/C")
+                        b = subprocess.run(a)
+                        logs.log(1,b)
                     else:
-                        c = os.system(d)
+                        b = os.system(astr)
                     b = 0
                     logs.log(0,"user forced sys command")
                     if c != 0:
@@ -1264,8 +1282,14 @@ while True:
                 if astr[:2] == "./":
                     astr.replace("./",str(cd)+"/")
                 
-                
-                b = os.system(astr)
+                if prefs.enablesubprocess:
+                    if iswindows:
+                        a.insert(0,"cmd")
+                        a.insert(1,"/C")
+                    b = subprocess.run(a)
+                    logs.log(1,b)
+                else:
+                    b = os.system(astr)
                 
         if b == 32512:
             printEscape("[1A")
