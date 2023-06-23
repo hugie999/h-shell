@@ -27,10 +27,8 @@ listing = []
 def checkupdatelist(dir):
     global cwd
     global listing
-
 def getcode(ret="000 test"):
     return [int(ret[:3]),ret[4:]]
-
 def login(address="127.0.0.0",port=21,user="",password=""):
     print("[connecting...]")
     resp = ftp.connect(address,port)
@@ -56,7 +54,6 @@ def login(address="127.0.0.0",port=21,user="",password=""):
 def close():
     print("[leaveing...]")
     ftp.close()
-
 def search(text=""):
     global hi
     global cwd
@@ -80,7 +77,6 @@ def search(text=""):
         except KeyboardInterrupt:
             print("[stoped eraly]\n")
             break
-
 def ls():
     print("[wait...]")
     global hi
@@ -115,7 +111,6 @@ def lls(path=Path()):
 def updatecwd():
     global cwd
     cwd = ftp.pwd()
-
 def chd(newdir):
     global listing
     listing = []
@@ -127,6 +122,9 @@ def chd(newdir):
 def docom(comfull="",themestr=[],cd=Path()):
     global hi
     global cwd
+    global listing
+    listing = []
+    cwd = ""
     if len(comfull) > 4:
         ADDR = comfull.split()[1].split(":")[0]
         if ":" in comfull:
