@@ -41,7 +41,7 @@ def featinst(installto=Path(),ver="main"):
     
     for i in range(len(featlist)):
         if not featlist[i][0] == "&":
-            print("[{}] {}".format(i,featlist[i]))
+            print("[{}] {}   ({})".format(i,featnames[i],featlinks[i]))
     
     try:
         num = int(input("select: "))
