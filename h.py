@@ -326,6 +326,7 @@ class prefs:
     fishstylepaths = False
     allowpluginspy = True #do plugin returns
     enablesubprocess = False
+    blinkcur = True
 class fsmeta:
     active = False
     forceoff = False
@@ -546,7 +547,13 @@ def prnthead():
         hi = 20
     global prompt
     strcd = ""
-    prompt = ":"
+    if prefs.blinkcur:
+        prompt = "\x1B[5m"
+    else:
+        prompt = ""
+    prompt += ":"
+    if prefs.blinkcur:
+        prompt += "\x1B[25m"
     if not prefs.fishstylepaths:
         strcd = str(cd)
     if prefs.drawhead:
