@@ -327,6 +327,7 @@ class prefs:
     allowpluginspy = True #do plugin returns
     enablesubprocess = False
     blinkcur = True
+    loadmetas = True
 class fsmeta:
     active = False
     forceoff = False
@@ -363,7 +364,6 @@ class fsmeta:
             fsmeta.active = False
         if fsmeta.forceoff:
             fsmeta.active = False
-
 class drvmetas:
     names = []
     def getnamefor(drive="c") -> str:
@@ -403,6 +403,8 @@ class drvmetas:
                 print("permission error on [drv: {}] please re-run as admin to create meta file here")
         drvmetas.update()
     #based on the LETTERS var
+
+
 
 def pluginreload():
     z = 0
@@ -969,29 +971,35 @@ while True:
                 if len(a) == 1:
                     print("give argument!")
                     print("type 'h-inst help' for list of commands")
-                elif not hasinstaller:
-                    print("no installer modual (pls fix)")
-                    print("to update or install features download them manually")
-                    logs.log(2,"h-inst needs installer modual")
                 else:
                     if a[1] == "update":
-                        if len(a) > 2:
-                            try:
-                                installer.webinst(proghome,version=a[2])
-                                print("please restart now")
-                                quit()        
-                            except FileNotFoundError:
-                                pass
+                        if not hasinstaller:
+                            print("no installer modual")
+                            print("to update or install features download them manually")
+                            logs.log(2,"h-inst needs installer modual")
                         else:
-                            print("updateing from latest git")
-                            if ask("is that ok?",False):
-                                installer.webinst(proghome)
-                                print("please restart now")
-                                quit()        
+                            if len(a) > 2:
+                                try:
+                                    installer.webinst(proghome,version=a[2])
+                                    print("please restart now")
+                                    quit()        
+                                except FileNotFoundError:
+                                    pass
                             else:
-                                print("stoped")
+                                print("updateing from latest git")
+                                if ask("is that ok?",False):
+                                    installer.webinst(proghome)
+                                    print("please restart now")
+                                    quit()        
+                                else:
+                                    print("stoped")
                     elif a[1] == "feature":
-                        installer.featinst(proghome,"main")
+                        if not hasinstaller:
+                            print("no installer modual")
+                            print("to update or install features download them manually")
+                            logs.log(2,"h-inst needs installer modual")
+                        else:
+                            installer.featinst(proghome,"main")
                     elif a[1] == "info":
                         print("\x1b[30;42mH{}   \x1b[30;42mH{} | h-shell version: {} ({})".format(gettheme(False),gettheme(False),ver,str(vernum)))
                         print("\x1b[30;42mH{}   \x1b[30;42mH{} | plugins : {}".format(gettheme(False),gettheme(False),len(plugins.plugindata)))
@@ -1223,18 +1231,8 @@ while True:
                 #    print("not implamented")
                 #    b = 2
                 if "$" in a[1]:
-                    c = a[1]
-                    #c = c.replace("goto ","")
-                    print(c)
-                    #print(c)
-                    newc = spcoms.expaths(c)
-                    #print(newc)
-                    if newc == None:
-                        b = 3
-                        print("Svar: '{}' dosent exsist".format(c))
-                    else:
-                        cd = Path(newc)
-                        b = 0
+                    print("goto '$' functionality has been removed")
+                    logs.log(3,"user attempeted goto '$' function")
                 elif a[0] == "goto":
                     c = a[1]
                     c = Path(c).expanduser()
