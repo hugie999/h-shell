@@ -1225,7 +1225,7 @@ while True:
                     save.write(str(prefs[i])+"\n")
                 b = 0
             elif a[0] == "goto": #warning VARY MESSY DONT TOUCH
-                if not "/" in a[1] and not "\\" in a[1]:
+                if not "/" in a[1] and not "\\" in a[1] and not "~" in a[1]:
                     logs.log(3,"no dir detected")
                     if iswindows:
                         logs.log(3,"goto cant be used to go into a drive letter")
