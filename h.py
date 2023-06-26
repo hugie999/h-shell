@@ -940,6 +940,7 @@ while True:
                 if len(a) > 1:
                     try:
                         theme = int(a[1])
+                        saveprefs()
                     except ValueError:
                         print("please input a number")
                 else:
