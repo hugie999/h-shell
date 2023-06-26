@@ -1001,15 +1001,17 @@ while True:
                         else:
                             installer.featinst(proghome,"main")
                     elif a[1] == "info":
-                        print("\x1b[30;42mH{}   \x1b[30;42mH{} | h-shell version: {} ({})".format(gettheme(False),gettheme(False),ver,str(vernum)))
-                        print("\x1b[30;42mH{}   \x1b[30;42mH{} | plugins : {}".format(gettheme(False),gettheme(False),len(plugins.plugindata)))
-                        print("\x1b[30;42mHHHHH{} | program : {}".format(gettheme(False),__file__))
-                        print("\x1b[30;42mH{}   \x1b[30;42mH{} | theme   : {}".format(gettheme(False),gettheme(False),theme))
-                        print("\x1b[30;42mH{}   \x1b[30;42mH{} | user    : ".format(gettheme(False),gettheme(False))+usr)
+                        print("________{}".format(gettheme()))
+                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} h-shell version: {} ({})".format(gettheme(False),gettheme(False),gettheme(False),ver,str(vernum)))
+                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} plugins : {}".format(gettheme(False),gettheme(False),gettheme(False),len(plugins.plugindata)))
+                        print("\x1b[37;40m \x1b[32;42mHHHHH{} | program : {}".format(gettheme(False),__file__))
+                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} theme   : {}".format(gettheme(False),gettheme(False),gettheme(False),theme))
+                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} user    : ".format(gettheme(False),gettheme(False),gettheme(False))+usr)
                         if iswindows:
-                            print("      | os      : Windows")
+                            print("\x1b[37;40m  {}  \x1b[37;40m  {} | os      : Windows".format(gettheme(False),gettheme(False)))
                         else:
-                            print("      | os      : not Windows")
+                            print("\x1b[37;40m  {}  \x1b[37;40m  {} | os      : not Windows".format(gettheme(False),gettheme(False)))
+                        print()
                     elif a[1] == "help":
                         print("-commands-\n   info   \n  feature \n   help   ")
                     else:
