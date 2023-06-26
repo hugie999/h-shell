@@ -31,8 +31,17 @@ except ModuleNotFoundError: #for if its downloaded from the internet
 
 def featinst(installto=Path(),ver="main"):
     featlist = str(requests.get(ADDRESS+ver+"/exfiles.txt").text).splitlines()
+    featnames = []
+    featlinks = []
+    
+    for i in featlist:
+        featlinks.append(i.split(":")[0])
+    for i in featlist:
+        featnames.append(i.split(":")[1])
+    
     for i in range(len(featlist)):
-        print("[{}] {}".format(i,featlist[i]))
+        if not featlist[i][0] == "&":
+            print("[{}] {}".format(i,featlist[i]))
     
     try:
         num = int(input("select: "))
@@ -46,9 +55,9 @@ def featinst(installto=Path(),ver="main"):
     else:
         print("[getting...]")
         #print("[orig: {}]".format(ADDRESS+ver+featlist[num]))
-        feattext = str(requests.get(ADDRESS+ver+"/"+featlist[num]).text)
+        feattext = str(requests.get(ADDRESS+ver+"/"+featlinks[num]))
         print("[writing...]")
-        featfile = open(installto/featlist[num],"w")
+        featfile = open(installto/featlinks[num],"w")
         featfile.write(feattext)
         featfile.close()
         print("[ finished ]")

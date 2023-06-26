@@ -1,3 +1,4 @@
-plugins/ftp.plug.py
-plugins/clockey.plug.py
-plugins/mkmeta_dev.plug.py
+&if you can see this please update
+plugins/ftp.plug.py:ftp plugin for useing ftp cus i felt like it
+plugins/clockey.plug.py:clock thingy
+plugins/mkmeta_dev.plug.py:make .hmeta files easyer
