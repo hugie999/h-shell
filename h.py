@@ -326,7 +326,6 @@ class prefs:
     fishstylepaths = False
     allowpluginspy = True #do plugin returns
     enablesubprocess = False
-
 class fsmeta:
     active = False
     forceoff = False
@@ -352,7 +351,7 @@ class fsmeta:
                 fsmeta.name = ftxt[0]
                 fsmeta.nodel = ftxt[1] == "1"
                 fsmeta.canplugs = ftxt[2] == "1"
-                fsmeta.cansys = "1" == "1"
+                fsmeta.cansys == True
                 fsmeta.canbuiltin = "1" == "1"
                 fsmeta.active = True
             except:
@@ -729,10 +728,6 @@ while True:
             a = " "
         if doplug(astr):
             exec(plugins.plugret)
-        elif a[0] == "rm" and fsmeta.nodel:
-            print(gettheme(True),"cannot delete (fsmeta.nodel == true)")
-        elif a == "del"[0] and fsmeta.nodel:
-            print(gettheme(True),"cannot delete (fsmeta.nodel == true)")
         elif fsmeta.canbuiltin or not fsmeta.active:
             
             # for i in range(len(a)):
@@ -1030,7 +1025,7 @@ while True:
                     print(fsmeta.active)
                     print(fsmeta.canbuiltin)
                     print(fsmeta.canplugs)
-                    print(fsmeta.cansys)
+                    print(True)
                     print(fsmeta.nodel)
                 if a[1] == "prefs":
                     print(prefs.drawhead)
@@ -1093,7 +1088,7 @@ while True:
                         print()
                     printappname("",custBannerColour=gettheme(True))
             elif a[0] == "sys":
-                if fsmeta.cansys or not fsmeta.active:
+                if True or not fsmeta.active:
                     d = astr[4:]
                     if prefs.enablesubprocess:
                         if iswindows:
@@ -1108,7 +1103,7 @@ while True:
                     if c != 0:
                         logs.log(0,"syscom code: "+str(c))
                 else:
-                    print(gettheme(True),"cannot use system commands (fsmeta.cansys == false)")
+                    print(gettheme(True),"cannot use system commands (True == false)")
             elif a[0] == "hist":
                 try:
                     if a[1] == "-c":
