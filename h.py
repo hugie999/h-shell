@@ -1014,7 +1014,7 @@ while True:
                             print("\x1b[37;40m  {}  \x1b[37;40m  {} | os      : not Windows".format(gettheme(False),gettheme(False)))
                         print()
                     elif a[1] == "help":
-                        print("-commands-\n   info   \n  feature \n   help   ")
+                        print("-commands-\ninfo\nfeature\nhelp\nupdate\n----------")
                     else:
                         print("invalid arg")
                         print("type 'h-inst help' for list of commands")
