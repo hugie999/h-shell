@@ -816,12 +816,12 @@ while True:
                     logs.log(1,"plugin error handler: "+str(plugins.errorhandle))
                 pass
             elif a[0] == "prefs" or a[0] == "pref":
-                printappname("prefs")
+                printappname("prefs",custColour=gettheme(),custBannerColour=gettheme(True))
                 print("draw title        : {}".format(prefs.drawhead))
                 print("center title      : {}".format(prefs.centertitle))
                 print("show path in title: {}".format(prefs.showpathintitle))
                 print("show readme files : {}".format(prefs.showreadmes))
-                printappname("set")
+                printappname("set",custColour=gettheme(),custBannerColour=gettheme(True))
                 if input("draw title? ([Y]/n):").lower() == "n":
                     prefs.drawhead  = False
                 else:
@@ -848,6 +848,8 @@ while True:
                 logs.log(0,"showpathintitle "+str(prefs.showpathintitle))
                 logs.log(0,"shworeadmes "+str(prefs.showreadmes))
                 saveprefs()
+                printEscape("[A")
+                printappname(custColour=gettheme(),custBannerColour=gettheme(True))
                 b = 0
             elif a[0] == "drv" or a[0] == "drive":
                 if not iswindows:
