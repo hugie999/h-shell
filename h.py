@@ -229,11 +229,11 @@ vernum = 3
 title = "h shell"
 proghome = Path(__file__).parent
 logs.log(0,"version {}".format(ver))
-THEMES = ["\x1b[37;40m","\x1b[37;40m","\x1b[0m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[30;42m','\x1b[32;40m','\x1b[33;44m','\x1b[30;43m']
-TOPBAR = ["\x1b[30;47m","\x1b[37;40m","\x1b[0m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[32;40m','\x1b[30;42m','\x1b[34;42m','\x1b[33;40m']
-THEMENAMES = ["dark ","dark","transparant","light ","edgy ","pink ","hac","hacker ","old ","ban"]
+THEMES = ["\x1b[0m","\x1b[37;40m","\x1b[37;40m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[32;40m','\x1b[33;44m','\x1b[30;43m',"\x1b[36;40m"]
+TOPBAR = ["\x1b[0m","\x1b[30;47m","\x1b[37;40m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[30;42m','\x1b[34;42m','\x1b[33;40m',"\x1b[30;46m"]
+THEMENAMES = ["transparant","dark ","dark","light ","edgy ","pink ","hac","old ","ban","ocean "]
 #first theme word
-THEMENAMESTTWO = ["theme","+","","theme","red","theme","ker","inverted","school","ana"]
+THEMENAMESTTWO = ["","theme","+","theme","red","theme","ker","school","ana","blues"]
 #seccound theme word
 def gettheme(istopbar= False):
     if istopbar:
