@@ -15,7 +15,8 @@ HELPDESC = []
 from pathlib import Path
 
 histfile = str(Path("~/.HSHhist").expanduser())
-
+import os
+wi = os.get_terminal_size().columns
 import readline
 try:
     readline.read_history_file(histfile)
@@ -25,4 +26,13 @@ except FileNotFoundError:
 def oncommand(comfull,themestr,cd):
     readline.write_history_file(histfile)
 def docom(comfull,themestr,cd):
-    print("Aaaa")
+    
+    print(themestr[1]+"--history--".center(wi,"-")+themestr[0])
+    f = open(histfile)
+    for i in f.read().split("\n"):
+        if i == "":
+            break
+        print(i.center(wi))
+    f.close()
+    
+    print(themestr[1]+"".center(wi,"-")+themestr[0])

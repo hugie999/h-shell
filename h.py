@@ -156,7 +156,6 @@ def printEscape(a):
 #-----------------------
 class help:
     GHELP = """---help--------------------------------------------------------------------
-hist [-c/-s]              > shows history
 drv/drive [-l]            > switches to a mounted drive (yes on windows to)
 theme                     > opens theme switcher
 dev (command)             > dev commands
@@ -740,23 +739,7 @@ while True:
             
             # for i in range(len(a)):
             #     astr += str(a[i]+" ")
-            if a[0] == "@hist":
-                num = ""
-                a[0] = a[0].replace("@hist","")
-                for i in range(len(a)):
-                    if a[i] not in "1234567890":
-                        print(a[i] not in "1234567890")
-                        break
-                    else:
-                        num += a[i]
-                        #print(num)
-                    #print(hist[int(num)])
-                num = int(num)
-                if len(hist) > num:
-                    a = hist[num]
-                hist.pop(num)
-                b = 0
-            elif a[0] == "help":
+            if a[0] == "help":
                 help.gethelp(astr)
             elif a[0] == "pelp":
                 for i in range(len(plugins.helpnames)):
@@ -1123,41 +1106,6 @@ while True:
                         logs.log(0,"syscom code: "+str(c))
                 else:
                     print(gettheme(True),"cannot use system commands (True == false)")
-            elif a[0] == "hist":
-                try:
-                    if a[1] == "-c":
-                        hist = []
-                        b = 0
-                        logs.log(0,"history cleared")
-                    elif a[1] == "-s":
-                        histfile = open(str(proghome)+"/hiss.hist.txt","at")
-                        histfile.write("------------------\n")
-                        for i in range(len(hist)):
-                            print(i)
-                            
-                            histfile.write(hist[i]+"\n")
-                        histfile.close()
-                        b = 0
-                    else:
-                        print(printcenter("--{}--".format("history"),DoAsReturn=True))
-                        for i in range(len(hist)):
-                            print(printcenter("[{}] :{}:".format(str(i),hist[i]),DoAsReturn=True))
-                        b = 0
-                except IndexError:
-                    print(printcenter("--{}--".format("history"),DoAsReturn=True))
-                    for i in range(len(hist)):
-                        print(printcenter("[{}] :{}:".format(str(i),hist[i]),DoAsReturn=True))
-                    b = 0
-            elif astr == "hist -s":
-                #check = Path(os.environ['HOME']+"/hiss.hist.txt").exists()
-                histfile = open(str(proghome)+"/hiss.hist.txt","at")
-                histfile.write("------------------\n")
-                for i in range(len(hist)):
-                    print(i)
-                    
-                    histfile.write(hist[i]+"\n")
-                histfile.close()
-                b = 0
             elif a[0] == "cd": #warning VARY MESSY DONT TOUCH
                 c = astr[3:]
                 logs.log(0,c)
