@@ -2,3 +2,5 @@
 plugins/ftp.plug.py:ftp plugin for useing ftp cus i felt like it
 plugins/clockey.plug.py:clock thingy
 plugins/mkmeta_dev.plug.py:.hmeta file maker
+plugins/readline.plug.py:allows for line editing and history saveing (it imports readline) [RECCOMENDED]
+&note: please add readline in next release:&

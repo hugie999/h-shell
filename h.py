@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 import loadicon as load
 load.makeloader(2,"importing","importing done")
 #print("importing [0/8] |")
