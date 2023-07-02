@@ -732,7 +732,7 @@ while True:
         logs.log(0,astr)
         a = a.split()
         if len(a) == 0:
-            a = " "
+            a = [" "]
         if doplug(astr):
             exec(plugins.plugret)
         elif fsmeta.canbuiltin or not fsmeta.active:
