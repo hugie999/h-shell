@@ -1238,45 +1238,48 @@ while True:
                     print("e has been saved to (usrmodif.latestexep)")
             
             else:
-                didwindrive = False
-                if len(a[0]) == 2:
-                    if a[0][1] == ":":
-                        if iswindows:
-                            try:
-                                bkcd = cd
-                                
-                                os.chdir(a[0])
-                                cd = Path(os.getcwd())
-                                b = 0
-                            except FileNotFoundError:
-                                logs.log(3,"drive not avalible")
-                                cd = bkcd
-                                b = 1
-                            except PermissionError:
-                                logs.log(3,"drive not ready (got PermissionError)")
-                                cd = bkcd
-                                b = 1
-                            except OSError:
-                                logs.log(3,"drive not ready (got OSError)")
-                            finally:
-                                didwindrive = True
-                #print(a[:2])
-                if astr[9:] == "sudo chsh" or astr[4:] == "chsh":
-                    print("pleases do not use chsh to set h-shell as the default shell")
-                    print("instead add it to your bashrc or bash_profile (or equivelent)")
-                
-                if astr[:2] == "./":
-                    astr.replace("./",str(cd)+"/")
-                if not didwindrive:
-                    if prefs.enablesubprocess:
-                        if iswindows:
-                            a.insert(0,"cmd")
-                            a.insert(1,"/C")
-                        b = subprocess.run(a)
-                        logs.log(1,b)
-                    else:
-                        b = os.system(astr)
-                
+                if len(a[0]) == 0:
+                    printEscape("[1A")
+                else:
+                    didwindrive = False
+                    if len(a[0]) == 2:
+                        if a[0][1] == ":":
+                            if iswindows:
+                                try:
+                                    bkcd = cd
+                                    
+                                    os.chdir(a[0])
+                                    cd = Path(os.getcwd())
+                                    b = 0
+                                except FileNotFoundError:
+                                    logs.log(3,"drive not avalible")
+                                    cd = bkcd
+                                    b = 1
+                                except PermissionError:
+                                    logs.log(3,"drive not ready (got PermissionError)")
+                                    cd = bkcd
+                                    b = 1
+                                except OSError:
+                                    logs.log(3,"drive not ready (got OSError)")
+                                finally:
+                                    didwindrive = True
+                    #print(a[:2])
+                    if astr[9:] == "sudo chsh" or astr[4:] == "chsh":
+                        print("pleases do not use chsh to set h-shell as the default shell")
+                        print("instead add it to your bashrc or bash_profile (or equivelent)")
+                    
+                    if astr[:2] == "./":
+                        astr.replace("./",str(cd)+"/")
+                    if not didwindrive:
+                        if prefs.enablesubprocess:
+                            if iswindows:
+                                a.insert(0,"cmd")
+                                a.insert(1,"/C")
+                            b = subprocess.run(a)
+                            logs.log(1,b)
+                        else:
+                            b = os.system(astr)
+                    
         if b == 32512:
             printEscape("[1A")
             printEscape("[2k")
