@@ -1017,7 +1017,7 @@ while True:
                             print("\x1b[37;40m  {}  \x1b[37;40m  {} | OwOs             : nOwOt WindOwOs".format(gettheme(False),gettheme(False)))
                         print()
                     elif a[1] == "help":
-                        print("-commands-\ninfo\web-plugins\nhelp\nupdate\n----------")
+                        print("-commands-\ninfo\nweb-plugins\nhelp\nupdate\n----------")
                     else:
                         print("invalid arg")
                         print("type 'h-inst help' for list of commands")
