@@ -89,7 +89,7 @@ def webinst(installto=Path(),isgit=True,version="main"):
             
     else:
         for i in filesreq.iter_lines():
-            if "\L" in i and os.name == "nt":
+            if "\\L" in i and os.name == "nt":
                 print("skipping: {}".format(i))
             else:
                 if "\\L" in i:
