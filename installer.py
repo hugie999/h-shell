@@ -129,7 +129,7 @@ def webinst(installto=Path(),isgit=True,version="main"):
                 print("skipping: {}".format(i))
             else:
                 if i.count("|L") > 0:
-                    i.replace("|L","")
+                    i = i.replace("|L","")
                 #print(i)
                 files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
                 if verbose:
