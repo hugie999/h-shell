@@ -88,7 +88,8 @@ def webinst(installto=Path(),isgit=True,version="main"):
             print("got non 200 response code of: "+str(CODE))
             
     else:
-        for i in str(filesreq.iter_lines()):
+        for z in filesreq.iter_lines():
+            i = str(z) # #mood
             if i.count("|L") > 0 and os.name == "nt":
                 print("skipping: {}".format(i))
             else:
