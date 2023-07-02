@@ -88,10 +88,12 @@ def webinst(installto=Path(),isgit=True,version="main"):
             print("got non 200 response code of: "+str(CODE))
             
     else:
-        for i in filesreq.iter_lines():
+        for i in str(filesreq.iter_lines()):
             if "\L" in i and os.name == "nt":
                 print("skipping: {}".format(i))
             else:
+                if "\\L" in i:
+                    i.replace("\\L","")
                 #print(i)
                 files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
                 if verbose:
