@@ -62,7 +62,41 @@ def featinst(installto=Path(),ver="main"):
         featfile.write(feattext)
         featfile.close()
         print("[ finished ]")
-     
+
+def featupda(installto=Path):
+    ver = "main"
+    print("[updateing plugins]")
+    print("[geting list...]")
+    installed = []
+    remotes_old = str(requests.get(ADDRESS+ver+"/exfiles.txt").text).splitlines() #pre-remove comments
+    remotes = []
+    print("[cheking list..]")
+    for i in Path(installto / "plugins").iterdir():
+        installed.append(i)
+    for i in range(len(remotes_old)):
+        if not remotes_old[i][0] == "&":
+            remotes.append(remotes_old[i].split(":")[0])
+    #print(remotes)
+    # print(remotes_old)
+    # print(installed)
+    for i in installed:
+        try:
+            remotes.index("plugins/"+i.name)
+        except:
+            pass
+            #print("<not found: "+i.name)
+        else:
+            print("[getting.......]")
+            # print("<{}>".format(remotes[remotes.index(i.name)]))
+            # print("<{}>".format((installto/remotes[remotes.index(i.name)]).name))
+            #print("[orig: {}]".format(ADDRESS+ver+featlist[num]))
+            feattext = requests.get(ADDRESS+"main"+"/"+remotes[remotes.index("plugins/"+i.name)]).text
+            print("[writing.......]")
+            featfile = open(installto/remotes[remotes.index("plugins/"+i.name)],"w")
+            featfile.write(feattext)
+            featfile.close()
+            print("[ finished     ]")
+
 def webinst(installto=Path(),isgit=True,version="main"):
     input("installing to "+str(installto))
     try:

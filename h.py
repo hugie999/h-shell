@@ -963,25 +963,31 @@ while True:
                             print("to update or install features download them manually")
                             logs.log(2,"h-inst needs installer modual")
                         else:
-                            if len(a) > 2:
-                                try:
-                                    installer.webinst(proghome,version=a[2])
-                                    print("please restart now")
-                                    quit()        
-                                except FileNotFoundError:
-                                    pass
-                            else:
-                                print("updateing from latest git")
-                                if ask("is that ok?",False):
-                                    installer.webinst(proghome)
-                                    print("please restart now")
-                                    quit()        
+                            if a[2] == "self":
+                                if len(a) > 2:
+                                    try:
+                                        installer.webinst(proghome,version=a[2])
+                                        print("please restart now")
+                                        quit()        
+                                    except FileNotFoundError:
+                                        pass
                                 else:
-                                    print("stoped")
-                    elif a[1] == "feature":
+                                    print("updateing from latest git")
+                                    if ask("is that ok?",False):
+                                        installer.webinst(proghome)
+                                        print("please restart now")
+                                        quit()        
+                                    else:
+                                        print("stoped")
+                            elif a[2] == "plugins":
+                                installer.featupda(proghome)
+                            else:
+                                print("error h-inst update needs an input")
+                                print("posible: self, plugins")
+                    elif a[1] == "web-plugins":
                         if not hasinstaller:
                             print("no installer modual")
-                            print("to update or install features download them manually")
+                            print("to update or install plugins download them manually")
                             logs.log(2,"h-inst needs installer modual")
                         else:
                             installer.featinst(proghome,"main")
