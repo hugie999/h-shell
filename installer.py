@@ -89,12 +89,14 @@ def webinst(installto=Path(),isgit=True,version="main"):
             
     else:
         for i in filesreq.iter_lines():
-            
-            #print(i)
-            files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
-            if verbose:
-                print("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
-            final.append(str(i)[2:-1])
+            if "\L" in i and os.name == "nt":
+                print("skipping: {}".format(i))
+            else:
+                #print(i)
+                files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
+                if verbose:
+                    print("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
+                final.append(str(i)[2:-1])
             
             #print(filenam[i])
         #print(files)
