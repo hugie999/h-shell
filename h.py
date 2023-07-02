@@ -997,6 +997,18 @@ while True:
                         else:
                             print("\x1b[37;40m  {}  \x1b[37;40m  {} | os      : not Windows".format(gettheme(False),gettheme(False)))
                         print()
+                    elif a[1] == "infowo":
+                        print("________{}".format(gettheme()))
+                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} h-shell versiOwOn: {} ({})".format(gettheme(False),gettheme(False),gettheme(False),ver,str(vernum)))
+                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} plUwUgins        : {}".format(gettheme(False),gettheme(False),gettheme(False),len(plugins.plugindata)))
+                        print("\x1b[37;40m \x1b[32;42mHHHHH{} | program          : {}".format(gettheme(False),__file__))
+                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} thweme           : {}".format(gettheme(False),gettheme(False),gettheme(False),theme))
+                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} UwUser           : ".format(gettheme(False),gettheme(False),gettheme(False))+usr)
+                        if iswindows:
+                            print("\x1b[37;40m  {}  \x1b[37;40m  {} | OwOs             : WindOwOs".format(gettheme(False),gettheme(False)))
+                        else:
+                            print("\x1b[37;40m  {}  \x1b[37;40m  {} | OwOs             : nOwOt WindOwOs".format(gettheme(False),gettheme(False)))
+                        print()
                     elif a[1] == "help":
                         print("-commands-\ninfo\nfeature\nhelp\nupdate\n----------")
                     else:
