@@ -323,7 +323,7 @@ class prefs:
     showreadmes = False
     fishstylepaths = False
     allowpluginspy = True #do plugin returns
-    enablesubprocess = False
+    enablesubprocess = True
     blinkcur = True
     loadmetas = True
 class fsmeta:
@@ -970,7 +970,6 @@ while True:
                                     quit()        
                                 except FileNotFoundError:
                                     pass
-                                
                             else:
                                 print("updateing from latest git")
                                 if ask("is that ok?",False):
