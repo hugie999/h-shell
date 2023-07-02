@@ -963,7 +963,7 @@ while True:
                             print("to update or install features download them manually")
                             logs.log(2,"h-inst needs installer modual")
                         else:
-                            if len(a>2):
+                            if len(a)>2:
                                 if a[2] == "self":
                                     if len(a) > 3:
                                         try:
