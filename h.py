@@ -970,6 +970,7 @@ while True:
                                     quit()        
                                 except FileNotFoundError:
                                     pass
+                                
                             else:
                                 print("updateing from latest git")
                                 if ask("is that ok?",False):
