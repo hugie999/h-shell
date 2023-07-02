@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 noloader = False
 verbose = True
 ADDRESS = "https://raw.githubusercontent.com/hugie999/h-shell/"
