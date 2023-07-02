@@ -963,11 +963,11 @@ while True:
                             print("to update or install features download them manually")
                             logs.log(2,"h-inst needs installer modual")
                         else:
-                            if len(a>3):
+                            if len(a>2):
                                 if a[2] == "self":
-                                    if len(a) > 2:
+                                    if len(a) > 3:
                                         try:
-                                            installer.webinst(proghome,version=a[2])
+                                            installer.webinst(proghome,version=a[3])
                                             print("please restart now")
                                             quit()        
                                         except FileNotFoundError:
