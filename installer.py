@@ -89,11 +89,11 @@ def webinst(installto=Path(),isgit=True,version="main"):
             
     else:
         for i in str(filesreq.iter_lines()):
-            if i.count("\\L") > 0 and os.name == "nt":
+            if i.count("|L") > 0 and os.name == "nt":
                 print("skipping: {}".format(i))
             else:
-                if i.count("\\L") > 0:
-                    i.replace("\\L","")
+                if i.count("|L") > 0:
+                    i.replace("|L","")
                 #print(i)
                 files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
                 if verbose:

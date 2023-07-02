@@ -8,4 +8,4 @@ plugins/dir_buitin.plug.py
 plugins/show_builtin.plug.py
 plugins/titlechanger_builtin.plug.py
 plugins/.hmeta
-plugins/readline.plug.py \L
+plugins/readline.plug.py |L
