@@ -726,7 +726,8 @@ while True:
         printEscape("[1A")
         printEscape("[2K")
         b = 0
-        print(printcenter(":{}:".format(a),DoAsReturn=True))
+        if len(a) == 0:
+            print(printcenter(":{}:".format(a),DoAsReturn=True))
         logs.log(0,"usr: "+str(a))
         astr = a
         logs.log(0,astr)
@@ -1236,11 +1237,8 @@ while True:
                     print("got error: {}".format(e))
                     usrmodif.latestexep = e
                     print("e has been saved to (usrmodif.latestexep)")
-            
             else:
-                if len(a[0]) == 0:
-                    printEscape("[1A")
-                else:
+                if not len(a[0]) == 0:
                     didwindrive = False
                     if len(a[0]) == 2:
                         if a[0][1] == ":":
@@ -1278,7 +1276,21 @@ while True:
                             b = subprocess.run(a)
                             logs.log(1,b)
                         else:
-                            b = os.system(astr)
+                            try:
+                                b = os.system(astr)
+                            except FileNotFoundError:
+                                logs.log(3,"no command found!")
+                                print("thare isnt a file named: {}".format(astr))
+                            except PermissionError:
+                                logs.log(3,"permission error occoured!")
+                                print("this likely means thare is a command")
+                                print("but it is not executable")
+                                print('try "sudo chmod +x {}"'.format(a[0]))
+                            except Exception as e:
+                                logs.log(3,"got unknown error: {}".format(e))
+                                print("got unknown error please report this!")
+                                
+                            
                     
         if b == 32512:
             printEscape("[1A")
