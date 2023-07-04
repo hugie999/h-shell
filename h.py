@@ -218,7 +218,7 @@ and   '\x1b[30;47mtheme\x1b[0m' showing the \x1b[1mbackground\x1b[0m colour"""]
         #print(b)
         ret = 0
 theme = 0
-LETTERS = "abcdefghijklmnopqrstuvwxyz"
+LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 iswindows = False
 isfloppy  = False
 isinserted= True
@@ -646,7 +646,7 @@ def doplug(command = "",isafter=False) -> bool:
             b = 0
             return True
         except ValueError:
-            logs.log(2,"no plugin found")
+            logs.log(1,"no plugin found")
             return False
     # logs.log(0,command)
     # try:
@@ -869,25 +869,26 @@ while True:
                         print("-drives-")
                         for i in range(26):
                             try:
+                                
                                 if Path(LETTERS[i]+":").exists():
-                                    if format(drvmetas.getnamefor(LETTERS[i])):
-                                        print(LETTERS[i]+": [{}]".format(drvmetas.getnamefor(LETTERS[i])))
+                                    if cd.drive == LETTERS[i]+":":
+                                        if format(drvmetas.getnamefor(LETTERS[i])):
+                                            print("[*]"+LETTERS[i]+": [{}]".format(drvmetas.getnamefor(LETTERS[i])))
+                                        else:
+                                            print("[*]"+LETTERS[i]+":")
                                     else:
-                                        print(LETTERS[i]+":")
-                                    # if not LETTERS[i] in "abc":
-                                    #     print(LETTERS[i]+":")
-                                    # elif LETTERS[i] == "c":
-                                    #     print(LETTERS[i]+": [system]")
-                                    # elif LETTERS[i] in "ab":
-                                    #     print(LETTERS[i]+": [floppy]")
+                                        if format(drvmetas.getnamefor(LETTERS[i])):
+                                            print("[.]"+LETTERS[i]+": [{}]".format(drvmetas.getnamefor(LETTERS[i])))
+                                        else:
+                                            print("[.]"+LETTERS[i]+":")
                             except OSError:
-                                print(gettheme(True)+LETTERS[i]+": --[NOT WORKING]--"+gettheme(False))
+                                print(gettheme(True)+"[X]"+LETTERS[i]+": --[NOT WORKING]--"+gettheme(False))
 
                         b =0
                     else:
                         if len(a[1]) == 2:
                             try:
-                                if a[1][1] == ":" and a[1][0].lower() in LETTERS and len(a[1]) == 2 and Path(a[1]).exists():
+                                if a[1][1] == ":" and a[1][0].upper() in LETTERS and len(a[1]) == 2 and Path(a[1]).exists():
                                     os.chdir(a[1])
                                     cd = Path(os.getcwd())
                                 else:
@@ -896,15 +897,18 @@ while True:
                                 print(a[1]+" is either not a drive or needs to be formated")
                                 print("this could be that it is and unformated cd")
                                 print("on windows maybey try 'format "+a[1]+"'")
-                        elif a[1][0].lower() in LETTERS and len(a[1]) == 1:
+                        elif a[1][0].upper() in LETTERS and len(a[1]) == 1:
                             try:
                                  if Path(a[1]+":").exists():
                                     os.chdir(a[1]+":")
                                     cd = Path(os.getcwd())
-                            except OSError:
+                            except OSError as e:
                                 print(a[1]+": is either not a drive or needs to be formated")
-                                print("this could be that it is and unformated cd")
-                                print("on windows maybey try 'format "+a[1]+":'")
+                                print("this could be that it is an unformated cd")
+                                print("on maybey try 'format "+a[1]+": /Q' (the /Q means quick)")
+                                logs.log(2,"couldent switch to drive debug info: ".format(str(e)))
+                            except SystemExit:
+                                pass
                         else:
                             print(a[1]+" is not a drive")
                         b = 0
