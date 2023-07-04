@@ -19,7 +19,7 @@ def makeloader(max=10,text="load",completetxt= "",unknownamount=False):
     loadtxt = text
     loadframe = 1
     loadcompletetxt = completetxt
-    if unknownamount:
+    if not unknownamount:
         print("{} [0/{}] |".format(text,max))
     else:
         print("{} [0/{}] |".format(text,"?"))

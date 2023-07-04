@@ -726,7 +726,7 @@ while True:
         printEscape("[1A")
         printEscape("[2K")
         b = 0
-        if len(a) == 0:
+        if len(a) != 0:
             print(printcenter(":{}:".format(a),DoAsReturn=True))
         logs.log(0,"usr: "+str(a))
         astr = a
