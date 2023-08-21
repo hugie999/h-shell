@@ -27,8 +27,6 @@ try:
         import subprocess
         import time
         import getpass
-        imports = [os,sys]
-        depends = ["bash"] #thease are
         logs.log(1,"done---------------")
     else:
         logs.log(1,"importing----------")
@@ -64,8 +62,6 @@ try:
         import time
         import subprocess
         import getpass
-        imports = [os,sys]
-        depends = ["yt-dlp","wget","apt-get","apt","winget","brew","bash"]
         logs.log(1,"done---------------")
 except Exception as ex:
     logs.log(4,str(ex))
