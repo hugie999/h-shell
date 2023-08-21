@@ -1277,8 +1277,20 @@ while True:
                             if iswindows:
                                 a.insert(0,"cmd")
                                 a.insert(1,"/C")
-                            b = subprocess.run(a)
-                            logs.log(1,b)
+                            logs.log(1,a)
+                            try:
+                                b = subprocess.run(a)
+                                logs.log(0,f"returned: {b}")
+                            except FileNotFoundError:
+                                logs.log(3,"command not found!")
+                                print(f'\x1b[30;41mno file: "{a[0]}" to execute!\x1b[0m')
+                            except PermissionError as e:
+                                logs.log(3,"programme could not be executed (permission error)!")
+                                print(f'\x1b[30;41mfile: "{a[0]}" is not aloud to execute!\x1b[0m')
+                                print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?\x1b[0m')
+                            except Exception as e:
+                                logs.log(3,"got unknown error: {}".format(e))
+                                print("got unknown error please report this!")
                         else:
                             try:
                                 b = os.system(astr)
