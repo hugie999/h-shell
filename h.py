@@ -6,63 +6,17 @@ load.makeloader(2,"importing","importing done")
 import logs
 hasinstaller = True
 try:
-    if logs.Llevel > 3:
-        logs.log(1,"importing----------")
-        # logs.log(1,"importing: h-lib")
-        # from hlib import *
+    logs.log(1,"importing----------")
+    try:
         logs.log(1,"importing: installer script")
         import installer
-        logs.log(1,"importing: os")
-        import os
-        logs.log(1,"importing: sys")
-        import sys
-        logs.log(1,"importing: pathlib")
-        from pathlib import Path
-        #print("importing: special commands")
-        #import importlib
-        logs.log(1,"importing: platform")
-        import platform
-        logs.log(1,"importing: SourceFileLoader")
-        from importlib.machinery import SourceFileLoader
-        import subprocess
-        import time
-        import getpass
-        logs.log(1,"done---------------")
+    except Exception as e:
+        logs.log(1,str(e.args))
+        logs.log(2,"error importing installer (will continue)")
+        hasinstaller = False
     else:
-        logs.log(1,"importing----------")
-        # logs.log(1,"importing: h-lib")
-        # load.loadupdate()
-        #print("importing [1/8] /")
-        #printEscape("[1A")
-        #print("importing [2/8] -")
-        try:
-            logs.log(1,"importing: installer script")
-            import installer
-        except Exception as e:
-            logs.log(1,str(e.args))
-            logs.log(2,"error importing installer (will continue)")
-            hasinstaller = False
-        else:
-            hasinstaller = installer.HASWEB
-        # printEscape("[1A")
-        # print("importing [3/8] \\")
-        load.loadupdate()
-        
-        logs.log(1,"importing: os")
-        import os
-        logs.log(1,"importing: sys")
-        import sys
-        logs.log(1,"importing: pathlib")
-        from pathlib import Path
-        logs.log(1,"importing: platform")
-        import platform
-        logs.log(1,"importing: SourceFileLoader")
-        load.loadupdate()
-        from importlib.machinery import SourceFileLoader
-        import time
-        import subprocess
-        import getpass
-        logs.log(1,"done---------------")
+        hasinstaller = installer.HASWEB
+    
 except Exception as ex:
     logs.log(4,str(ex))
     print(ex)
@@ -84,10 +38,24 @@ except Exception as ex:
         except ModuleNotFoundError:
             print("'installer.py' not found")
     exit()
-#printEscape("[?47h")
-#print("\x1b[=1h")
-#clear()
-#hlib.py functions
+    
+import os
+import sys
+from pathlib import Path
+import platform
+import textwrap
+from importlib.machinery import SourceFileLoader
+import time
+import subprocess
+import getpass
+try:
+    import psutil
+except:
+    logs.log(2,"no psutil library")
+    print("psutil library not avalible :(")
+    HASPSU = False
+else:
+    HASPSU = True
 try:
     wi = os.get_terminal_size().columns
     hi = os.get_terminal_size().lines
@@ -832,32 +800,61 @@ while True:
                 b = 0
             elif a[0] == "drv" or a[0] == "drive":
                 if not iswindows:
-                    usr = getpass.getuser()
-                    if len(a) == 1:
-                        print("incorect args")
-                    elif a[1] == "-l":
-                        print("ls "+"/media/"+usr+"/")
-                        tmp = 0
-                        if (Path("/media") / Path(usr)).exists():
-                            doplug("ls "+"/media/"+usr)
-                            tmp += 1
+                    if not HASPSU:
+                        print("psutil library not avalible! (is it installed)")
+                    elif len(a) < 2:
+                        pass
+                    else: #chatgtp go BRRRRRRRRRRRRRR
+                        if a[1].lower() == "-l":
+                            d = 0
+                            i = 0
+                            parts = psutil.disk_partitions(all=False)
+                            for partition in parts:
+                                device = partition.device
+                                mountpoint = partition.mountpoint
+                                fstype = partition.fstype
+                                try:
+                                    disk_usage = psutil.disk_usage(mountpoint)
+                                    size = disk_usage.total
+                                except Exception as e:
+                                    size = "N/A"
+                                if size != "N/A":
+                                    for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+                                        if size < 1024:
+                                            size =  f"{size:.2f} {unit}"
+                                            break
+                                        size /= 1024
+
+
+                                try:
+                                    label = partition.opts
+                                except KeyError:
+                                    label = ""
+                                if not "/snap/" in mountpoint:
+                                    print(textwrap.shorten(f"[{str(i).zfill(2)}] {device} -> {mountpoint}",wi,placeholder=str("...")))
+                                    print(f"|--> {size}")
+                                    print(f"|==> {fstype}")
+                                    print("")
+                                    d += 4
+                                    i += 1
+                                    if d >= hi-4:
+                                        input("[MORE]")
+                                        print("\x1B[A1\x1B[2K",end="")
+                                        d=0
                         else:
-                            logs.log(0,"no media folder found! | "+str(Path("/media") / Path(usr)))
-                        if Path("/mnt/").exists():
-                            doplug("ls "+"/mnt/")
-                            tmp += 1
-                        if tmp == 2:
-                            print(gettheme(True)+"note: media folder will be prioritized over mnt"+gettheme(False))
-                        b = 0
-                    else:
-                        if Path("/media/"+usr+"/"+a[1]).exists() and Path("/media/"+usr+"/"+a[1]).is_dir():
-                            cd = Path("/media/"+usr+"/"+a[1])
-                            b = 0
-                        elif Path("/mnt/"+a[1]).exists() and Path("/mnt/"+a[1]).is_dir():
-                            cd = Path("/mnt/"+a[1])
-                            b = 0
-                        else:
-                            print("no drive: "+a[1])
+                            parts = psutil.disk_partitions(all=False)
+                            points = []
+                            for partition in parts:
+                                
+                                if not "/snap/" in partition.mountpoint:
+                                    points.append(partition.mountpoint)
+                                # print(points)
+                            try:
+                                cd = Path(points[int(a[1])])
+                            except ValueError:
+                                print("bad choice! (not an int)")
+                            except IndexError:
+                                print("bad choice! (out of list (use 'drv -l'))")
                 else:
                     if len(a) != 2:
                         pass
@@ -1180,11 +1177,13 @@ while True:
                     if Path(str(cd)+"/"+str(c)+"/").is_dir():
                         #cd = cd.joinpath
                         cd = cd /(c)
-                        
-                        for i in cd.iterdir():
-                            if i.name.lower() == "readme.md" or i.name.lower() == "readme.txt":
-                                doplug("show "+str(i))
-                                #logs.log(0,"show "+i.name)
+                        try:
+                            for i in cd.iterdir():
+                                if i.name.lower() == "readme.md" or i.name.lower() == "readme.txt":
+                                    doplug("show "+str(i))
+                                    #logs.log(0,"show "+i.name)
+                        except PermissionError:
+                            pass
                         b = 0
                     else:
                          print("{} dosent exsist".format(str(cd)+"/"+str(c)))
@@ -1322,6 +1321,18 @@ while True:
         except NotADirectoryError:
             os.chdir(Path("/"))
             limbo = True
+        except PermissionError:
+            logs.log(3,"no perms for new dir")
+            print("no perms for current dir")
+            while True:
+                try:
+                    cd = cd.parent
+                    os.chdir(cd)
+                except PermissionError:
+                    pass
+                else:
+                    break
+            print(f"current dir is now: {cd}")
         if limbo:
             logs.log(3,"dir non exsistant")
             print('\x1b[31;40m',end="")

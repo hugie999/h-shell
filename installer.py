@@ -257,7 +257,10 @@ def postint(installto= Path()):
     #     pass
 if __package__ == None:
     import os
+    if not HASWEB:
+        print("requests module not loaded! (please install it)")
+        quit(1)
     #input("pls run from hiss shell")
     webinst(Path(input("input path to install:")))#,os.name == "nt")#,True)
-    
+    print("remember to install the 'psutil' library (not required)")
     #raise Exception
