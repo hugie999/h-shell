@@ -965,15 +965,17 @@ while True:
                                 if a[2] == "self":
                                     if len(a) > 3:
                                         try:
+                                            if a[3] == "git":
+                                                a[3] = "main"
                                             installer.webinst(proghome,version=a[3])
                                             print("please restart the programme now")
                                             quit()        
                                         except FileNotFoundError:
                                             pass
                                     else:
-                                        print("updateing from latest git")
+                                        print("updateing from latest release (acording to .latestupdate)")
                                         if ask("is that ok?",False):
-                                            installer.webinst(proghome)
+                                            installer.webinst(proghome,version=".._latest")
                                             print("please restart the programme now")
                                             quit()        
                                         else:

@@ -99,6 +99,10 @@ def featupda(installto=Path):
 
 def webinst(installto=Path(),isgit=True,version="main"):
     input("installing to "+str(installto))
+    if version == ".._latest":
+        latest = requests.get(ADDRESS+"/main/.latestupdate").text
+        version = latest
+    
     try:
         (installto/"plugins").mkdir()
     except FileExistsError:
