@@ -966,7 +966,7 @@ while True:
                                     if len(a) > 3:
                                         try:
                                             installer.webinst(proghome,version=a[3])
-                                            print("please restart now")
+                                            print("please restart the programme now")
                                             quit()        
                                         except FileNotFoundError:
                                             pass
@@ -974,7 +974,7 @@ while True:
                                         print("updateing from latest git")
                                         if ask("is that ok?",False):
                                             installer.webinst(proghome)
-                                            print("please restart now")
+                                            print("please restart the programme now")
                                             quit()        
                                         else:
                                             print("stoped")
