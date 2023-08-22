@@ -718,7 +718,9 @@ while True:
             
             # for i in range(len(a)):
             #     astr += str(a[i]+" ")
-            if a[0] == "help":
+            if a[0] == " ":
+                pass
+            elif a[0] == "help":
                 help.gethelp(astr)
             elif a[0] == "pelp":
                 for i in range(len(plugins.helpnames)):
