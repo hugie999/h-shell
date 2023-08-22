@@ -571,8 +571,9 @@ b = 0
 #     logs.log(3,"error getting terminal size")
 #     exit()
 loadprefs()
-def doplug(command = "",isafter=False) -> bool:
+def doplug(command = "",isafter=False,locals={}) -> bool:
     logs.log(0,command)
+    
     # try:
     #     for i in range(len(plugins.plugindata)):
     #         if plugins.plugintypes[i] == 1:
@@ -585,7 +586,11 @@ def doplug(command = "",isafter=False) -> bool:
         if plugins.doeverycommand[i]:
             if plugins.doafter[i] == isafter:
                 logs.log(1,"did pluginnum "+str(i))
-                plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd)
+                logs.log(0,str(plugins.plugindata[i].PLUGVER))
+                if plugins.plugindata[i].PLUGVER == 2:
+                    plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd,globals(),locals())
+                else:
+                    plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd)
     if not fsmeta.canplugs and fsmeta.active:
         pass
     elif not isafter:
@@ -596,7 +601,11 @@ def doplug(command = "",isafter=False) -> bool:
             except IndexError:
                 raise ValueError
             try:
-                plugret = plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
+                logs.log(0,"plugver"+str(plugins.plugindata[comsec].PLUGVER))
+                if plugins.plugindata[comsec].PLUGVER == 2:
+                    plugret = plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd,globals(),locals)
+                else:
+                    plugret = plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
                 logs.log(1,plugret)
                 if not plugret:
                     plugret = "pass"
@@ -698,7 +707,7 @@ while True:
         a = a.split()
         if len(a) == 0:
             a = [" "]
-        if doplug(astr):
+        if doplug(astr,locals=locals()):
             exec(plugins.plugret)
         elif fsmeta.canbuiltin or not fsmeta.active:
             
@@ -1110,15 +1119,40 @@ while True:
                     printappname("",custBannerColour=gettheme(True))
             elif a[0] == "sys":
                 if True or not fsmeta.active:
-                    d = astr[4:]
+                    del a[0]
                     if prefs.enablesubprocess:
                         if iswindows:
                             a.insert(0,"cmd")
                             a.insert(1,"/C")
-                        b = subprocess.run(a)
+                        c = -999
+                        try:
+                            c = os.system("".join(a))
+                        except FileNotFoundError:
+                            logs.log(3,"command not found!")
+                            print(f'\x1b[30;41mno file: "{a[0]}" to execute!\x1b[0m')
+                        except PermissionError as e:
+                            logs.log(3,"programme could not be executed (permission error)!")
+                            print(f'\x1b[30;41mfile: "{a[0]}" is not aloud to execute!\x1b[0m')
+                            print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?\x1b[0m')
+                        except Exception as e:
+                            logs.log(3,"got unknown error: {}".format(e))
+                            print("got unknown error please report this!")
                         logs.log(1,b)
                     else:
-                        b = os.system(astr)
+                        c = -999
+                        try:
+                            c = os.system("".join(a))
+                        except FileNotFoundError:
+                            logs.log(3,"command not found!")
+                            print(f'\x1b[30;41mno file: "{a[0]}" to execute!\x1b[0m')
+                        except PermissionError as e:
+                            logs.log(3,"programme could not be executed (permission error)!")
+                            print(f'\x1b[30;41mfile: "{a[0]}" is not aloud to execute!\x1b[0m')
+                            print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?\x1b[0m')
+                        except Exception as e:
+                            logs.log(3,"got unknown error: {}".format(e))
+                            print("got unknown error please report this!")
+                    
                     b = 0
                     logs.log(0,"user forced sys command")
                     if c != 0:
@@ -1265,7 +1299,7 @@ while True:
                     #print(a[:2])
                     if astr[9:] == "sudo chsh" or astr[4:] == "chsh":
                         print("pleases do not use chsh to set h-shell as the default shell")
-                        print("instead add it to your bashrc or bash_profile (or equivelent)")
+                        print("instead add it to your bashrc, bash_profile or terminal profile (or equivelent)")
                     
                     if astr[:2] == "./":
                         astr.replace("./",str(cd)+"/")
@@ -1311,7 +1345,7 @@ while True:
             print(str('"{}" command not found :(').format(astr))
         
         
-        doplug(astr,True)
+        doplug(astr,True,locals())
         
         
         if False:#b != 0:
