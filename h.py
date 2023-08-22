@@ -231,6 +231,24 @@ if iswindows:
 prompt = ":"
 title  = "h-shell"
 
+def ask(_question="",default=False):
+    question = _question
+    if default:
+        question += " [Y]/n:"
+    else:
+        question += " y/[N]:"
+    awnser = input(question)
+    if default:
+        if awnser.lower() != "n":
+            return True
+        else:
+            return False
+    else:
+        if awnser.lower() != "y":
+            return False
+        else:
+            return True
+
 
 startcomnum = 0
 startcomdone = False
@@ -365,8 +383,11 @@ class drvmetas:
                 print("permission error on [drv: {}] please re-run as admin to create meta file here")
         drvmetas.update()
     #based on the LETTERS var
-
-
+if (not (proghome/"plugins").exists()) or (not (proghome/"plugins").is_dir()):
+        logs.log(2,"no plugins folder detected!")
+        print("no plugins folder!")
+        if ask(f"make one at [{proghome}/plugins/]?"):
+            (proghome/"plugins").mkdir()
 
 def pluginreload():
     
@@ -649,24 +670,6 @@ if prefs.drawhead:
     prnthead()
 else:
     prnthead()
-
-def ask(_question="",default=False):
-    question = _question
-    if default:
-        question += " [Y]/n:"
-    else:
-        question += " y/[N]:"
-    awnser = input(question)
-    if default:
-        if awnser.lower() != "n":
-            return True
-        else:
-            return False
-    else:
-        if awnser.lower() != "y":
-            return False
-        else:
-            return True
 
 class usrmodif:#ment to be used by the user for the "py" command or by plugins to store data
     latestexep = None
