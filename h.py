@@ -37,7 +37,7 @@ except Exception as ex:
             installer.webinst(Path(__file__).parent)
         except ModuleNotFoundError:
             print("'installer.py' not found")
-    exit()
+    quit()
     
 import os
 import sys
@@ -969,7 +969,7 @@ while True:
                 logs.save()
                 print("\x1b[25m\x1b[0m")
                 print("exited")
-                exit()
+                quit()
             elif a[0] == "h-inst":
                 
                 if len(a) == 1:
