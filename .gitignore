@@ -24,3 +24,4 @@ installer_release.py
 *.spec
 build/
 dist/
+build.sh
