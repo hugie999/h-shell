@@ -130,7 +130,7 @@ def webinst(installto=Path(),isgit=True,version="main"):
         for z in filesreq.iter_lines():
             i = str(z) # #mood
             if i.count("|L") > 0 and os.name == "nt":
-                print("skipping: {}".format(i))
+                print("skipping: {}".format(i.replace("|L","")))
             else:
                 if i.count("|L") > 0:
                     i = i.replace("|L","")
