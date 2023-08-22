@@ -40,7 +40,7 @@ except Exception as ex:
     quit()
     
 import os
-import sys
+from sys import exit as quit
 from pathlib import Path
 import platform
 import textwrap
