@@ -369,6 +369,7 @@ class drvmetas:
 
 
 def pluginreload():
+    
     z = 0
     # global plugins.pluginreserved
     # global plugins.pluginreservednum
@@ -392,7 +393,10 @@ def pluginreload():
             plugins.plugindata.append(SourceFileLoader(str(i.name),str(i)).load_module())
             logs.log(0,z)
             logs.log(0,type(plugins.plugindata[z]))
-            
+            try:
+                plugins.plugindata[z].PLUGVER
+            except:
+                plugins.plugindata[z].PLUGVER = 0
             try:
                 plugins.doeverycommand.append(plugins.plugindata[z].META["oncommand"])
                 plugins.doafter.append(plugins.plugindata[z].META["doafter"])
@@ -671,6 +675,7 @@ while True:
     except:
         wi = 20
         hi = 20
+    # <=====>
     try:
         
         drvmetas.update()
@@ -1129,11 +1134,11 @@ while True:
                             c = os.system("".join(a))
                         except FileNotFoundError:
                             logs.log(3,"command not found!")
-                            print(f'\x1b[30;41mno file: "{a[0]}" to execute!\x1b[0m')
+                            print(f'\x1b[30;41mno file: "{a[0]}" to execute!{gettheme()}')
                         except PermissionError as e:
                             logs.log(3,"programme could not be executed (permission error)!")
-                            print(f'\x1b[30;41mfile: "{a[0]}" is not aloud to execute!\x1b[0m')
-                            print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?\x1b[0m')
+                            print(f'\x1b[30;41mfile: "{a[0]}" is not aloud to execute!{gettheme()}')
+                            print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?{gettheme()}')
                         except Exception as e:
                             logs.log(3,"got unknown error: {}".format(e))
                             print("got unknown error please report this!")
@@ -1359,7 +1364,7 @@ while True:
             limbo = True
         except PermissionError:
             logs.log(3,"no perms for new dir")
-            print("no perms for current dir")
+            print(f"{gettheme()}no perms for current dir")
             while True:
                 try:
                     cd = cd.parent
