@@ -21,3 +21,6 @@ log.log
 logs
 log.log
 installer_release.py
+*.spec
+build/
+dist/
