@@ -383,6 +383,11 @@ def pluginreload():
     plugins.helpnames = []
     plugins.helpplugs = []
     logs.log(1,"loading plugins!----")
+    
+    if (not (proghome/"plugins").exists()) or (not (proghome/"plugins").is_dir()):
+        logs.log(2,"plugin loading cancelled! (no ./plugins folder)")
+        return
+    
     load.makeloader(0,"loading plugins","done!",True)
     logs.log(0,str(proghome/"plugins"))
     for i in (proghome/"plugins").iterdir():
