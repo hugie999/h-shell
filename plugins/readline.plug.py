@@ -39,6 +39,7 @@ def docom(comfull,themestr,cd):
     if iswin:
         print("!!!WINDOWS DETECTED!!!")
         print("readline plugin does\nnot work on windows\nplease delete this plugin")
+        print(f'use "del {__file__} to delete"')
         return
     print(themestr[1]+"--history--".center(wi,"-")+themestr[0])
     f = open(histfile)
