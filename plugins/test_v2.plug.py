@@ -15,9 +15,11 @@ HELPDESC = ["prints test message"]
 import os
 
 
-def docom(comfull,themestr,cd,GLOBAL={},LOCAL={}):
+def docom(comfull,themestr,cd,GLOBAL={},LOCAL={}): #note: global and local vars are mutible
     print("hello world!")
     print(PLUGVER)
     print(f"thease are your globals : {GLOBAL}")
     print(f"thease are your locals  : {LOCAL}")
+    GLOBAL["iswindows"] = True
+    LOCAL["title"] = "h"
     return 'print("your theme is: {}".format(theme))'
