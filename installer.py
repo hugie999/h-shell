@@ -263,8 +263,13 @@ if __package__ == None:
     import os
     if not HASWEB:
         print("requests module not loaded! (please install it)")
+        print("pip: python -m pip install requests")
+        print("deb: sudo apt-get install python3-requests")
         quit(1)
     #input("pls run from hiss shell")
     webinst(Path(input("input path to install:")))#,os.name == "nt")#,True)
-    print("remember to install the 'psutil' library (not required)")
+    if os.name != "nt":
+        print("remember to install the 'psutil' library (not required)")
+        print("library required for the 'drv' command")
+    
     #raise Exception
