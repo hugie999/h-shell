@@ -16,6 +16,8 @@ from pathlib import Path
 
 histfile = str(Path("~/.HSHhist").expanduser())
 import os
+curcd = Path()
+curdirls = []
 wi = os.get_terminal_size().columns
 iswin = os.name == "nt"
 if iswin:
@@ -31,9 +33,43 @@ except FileNotFoundError:
     readline.write_history_file(histfile)
 except NameError:
     print("!!!readline not imported (name error)!!!\n")
-def oncommand(comfull,themestr,cd):
+
+def complete(txt,state):
+    # print(f"{txt}, {state}")
+    global curdirls
+    options = []
+    for i in curdirls:
+        if i.startswith(txt):
+            options.append(i)    
+    if state < len(options):
+        return options[state]
+    return None
+    
+readline.set_completer(complete)
+readline.parse_and_bind("tab: complete")
+
+def oncommand(comfull,themestr,cd=Path()):
+    global curcd
+    global curdirls
     if iswin:
         return
+    curcd = cd
+    curdirls = []
+    for i in curcd.iterdir():
+        curdirls.append(i.name)
+    curdirls.append("drv")
+    curdirls.append("theme")
+    curdirls.append("clear")
+    curdirls.append("cd")
+    curdirls.append("goto")
+    curdirls.append("py")
+    curdirls.append("pref")
+    curdirls.append("plugman")
+    curdirls.append("h-inst")
+    curdirls.append("help")
+    curdirls.append("pelp")
+    # print(curdirls)
+    
     readline.write_history_file(histfile)
 def docom(comfull,themestr,cd):
     if iswin:
