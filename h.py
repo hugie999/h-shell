@@ -1055,7 +1055,7 @@ while True:
                             installer.featinst(proghome,"main")
                     elif a[1] == "info":
                         print("________{}".format(gettheme()))
-                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} h-shell version: {} ({})".format(gettheme(False),gettheme(False),gettheme(False),ver,str(vernum)))
+                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} h-shell version: {}".format(gettheme(False),gettheme(False),gettheme(False),ver))
                         print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} plugins : {}".format(gettheme(False),gettheme(False),gettheme(False),len(plugins.plugindata)))
                         print("\x1b[37;40m \x1b[32;42mHHHHH{} | program : {}".format(gettheme(False),__file__))
                         print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} theme   : {}".format(gettheme(False),gettheme(False),gettheme(False),theme))
