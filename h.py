@@ -660,6 +660,43 @@ def doplug(command = "",isafter=False,locals={}) -> bool:
     # com = 0
     # b = 0
 
+def runsubpro(cmd=[],isfallback=False):
+    logs.log(0,"subprocess")
+    logs.log(0,str(len(cmd)))
+    a = []
+    for i in cmd:
+        # logs.log(0,i)
+        a.append(i.replace("./",str(cd)+"/"))
+    logs.log(0,f"new a: {newa}")
+    # a = newa
+    if iswindows:
+        a.insert(0,"cmd")
+        a.insert(1,"/C")
+    logs.log(1,a)
+    try:
+        b = subprocess.run(a)
+        logs.log(0,f"returned: {b.returncode}")
+    except FileNotFoundError:
+        logs.log(3,"command not found!")
+        print(f'\x1b[30;41mno file: "{a[0]}" to execute!\x1b[0m')
+    except PermissionError as e:
+        logs.log(3,"programme could not be executed (permission error)!")
+        print(f'\x1b[30;41mfile: "{a[0]}" is not aloud to execute!\x1b[0m')
+        print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?\x1b[0m')
+    except OSError as e:
+        if isfallback:
+            logs.log(3,"got OSError after attempting retry!")
+            logs.log(1,str(e))
+            print("got OSError (X2) please report!")
+        else:
+            logs.log(2,"got OSError. retrying with 'sh'")
+            if not iswindows:
+                cmd.insert(0,"sh")
+            runsubpro(cmd,True)
+    except Exception as e:
+        logs.log(3,"got unknown error: {}".format(e))
+        logs.log(1,f"{e.__class__}")
+        print("got unknown error please report this!")
 
 for i in range(hi-2):
         printEscape("[1B")
@@ -1136,23 +1173,7 @@ while True:
                 if True or not fsmeta.active:
                     del a[0]
                     if prefs.enablesubprocess:
-                        if iswindows:
-                            a.insert(0,"cmd")
-                            a.insert(1,"/C")
-                        c = -999
-                        try:
-                            c = os.system("".join(a))
-                        except FileNotFoundError:
-                            logs.log(3,"command not found!")
-                            print(f'\x1b[30;41mno file: "{a[0]}" to execute!{gettheme()}')
-                        except PermissionError as e:
-                            logs.log(3,"programme could not be executed (permission error)!")
-                            print(f'\x1b[30;41mfile: "{a[0]}" is not aloud to execute!{gettheme()}')
-                            print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?{gettheme()}')
-                        except Exception as e:
-                            logs.log(3,"got unknown error: {}".format(e))
-                            print("got unknown error please report this!")
-                        logs.log(1,b)
+                        runsubpro(a)
                     else:
                         c = -999
                         try:
@@ -1315,29 +1336,10 @@ while True:
                     if astr[9:] == "sudo chsh" or astr[4:] == "chsh":
                         print("pleases do not use chsh to set h-shell as the default shell")
                         print("instead add it to your bashrc, bash_profile or terminal profile (or equivelent)")
-                    
-                    if astr[:2] == "./":
-                        astr.replace("./",str(cd)+"/")
+                    newa = []
                     if not didwindrive:
                         if prefs.enablesubprocess:
-                            if iswindows:
-                                a.insert(0,"cmd")
-                                a.insert(1,"/C")
-                            logs.log(1,a)
-                            try:
-                                b = subprocess.run(a)
-                                logs.log(0,f"returned: {b.returncode}")
-                            except FileNotFoundError:
-                                logs.log(3,"command not found!")
-                                print(f'\x1b[30;41mno file: "{a[0]}" to execute!\x1b[0m')
-                            except PermissionError as e:
-                                logs.log(3,"programme could not be executed (permission error)!")
-                                print(f'\x1b[30;41mfile: "{a[0]}" is not aloud to execute!\x1b[0m')
-                                print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?\x1b[0m')
-                            except Exception as e:
-                                logs.log(3,"got unknown error: {}".format(e))
-                                logs.log(1,f"{e.__class__}")
-                                print("got unknown error please report this!")
+                            runsubpro(a)
                         else:
                             try:
                                 b = os.system(astr)
