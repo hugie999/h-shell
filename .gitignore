@@ -25,3 +25,4 @@ installer_release.py
 build/
 dist/
 build.sh
+.hvtag

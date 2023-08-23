@@ -188,8 +188,17 @@ isfloppy  = False
 isinserted= True
 ver = "0.1 Beta 3"
 vernum = 4
-title = "h shell"
+vertag = ""
 proghome = Path(__file__).parent
+try:
+    f = open(proghome/".hvtag")
+    vertag = f.read()
+except FileNotFoundError:
+    logs.log(2,"version tag read error (no file)!")
+    logs.log(1,"file '.hvtag' not found")
+logs.log(0,f"verstag {vertag}")
+title = "h shell"
+
 logs.log(0,"version {}".format(ver))
 THEMES = ["\x1b[0m","\x1b[37;40m","\x1b[37;40m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[32;40m','\x1b[33;44m','\x1b[30;43m',"\x1b[36;40m"]
 TOPBAR = ["\x1b[0m","\x1b[30;47m","\x1b[37;40m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[30;42m','\x1b[34;42m','\x1b[33;40m',"\x1b[30;46m"]
@@ -1028,17 +1037,21 @@ while True:
                                         try:
                                             if a[3] == "git":
                                                 a[3] = "main"
-                                            installer.webinst(proghome,version=a[3])
-                                            print("please restart the programme now")
-                                            quit()        
+                                            if installer.webinst(proghome,version=a[3]):
+                                                print("please restart the programme now")
+                                                quit()        
+                                            else:
+                                                print("the install was interupted.")
                                         except FileNotFoundError:
                                             pass
                                     else:
                                         print("updateing from latest release (acording to .latestupdate)")
                                         if ask("is that ok?",False):
-                                            installer.webinst(proghome,version=".._latest")
-                                            print("please restart the programme now")
-                                            quit()        
+                                            if installer.webinst(proghome,version=".._latest",hver=vertag):
+                                                print("please restart the programme now")
+                                                quit()        
+                                            else:
+                                                print("the install was interupted.")
                                         else:
                                             print("stoped")
                                 elif a[2] == "plugins":
@@ -1055,7 +1068,7 @@ while True:
                             installer.featinst(proghome,"main")
                     elif a[1] == "info":
                         print("________{}".format(gettheme()))
-                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} h-shell version: {}".format(gettheme(False),gettheme(False),gettheme(False),ver))
+                        print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} h-shell version: {} (tag: {})".format(gettheme(False),gettheme(False),gettheme(False),ver,vertag))
                         print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} plugins : {}".format(gettheme(False),gettheme(False),gettheme(False),len(plugins.plugindata)))
                         print("\x1b[37;40m \x1b[32;42mHHHHH{} | program : {}".format(gettheme(False),__file__))
                         print("\x1b[37;40m \x1b[32;42mH{}  \x1b[37;40m \x1b[32;42mH{} |{} theme   : {}".format(gettheme(False),gettheme(False),gettheme(False),theme))

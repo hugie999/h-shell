@@ -97,11 +97,18 @@ def featupda(installto=Path):
             featfile.close()
             print("[ finished     ]")
 
-def webinst(installto=Path(),isgit=True,version="main"):
+def webinst(installto=Path(),isgit=True,version="main",hver=".._old"):
     input("installing to "+str(installto))
+    if hver == ".._manualinstall":
+        print("this h-shell install was done without internet")
+        print("skiping version check...")
     if version == ".._latest":
         latest = requests.get(ADDRESS+"/main/.latestupdate").text
         version = latest
+        if version == hver:
+            print("you already have the latest version!")
+            print(f'details: "{hver}" == "{latest} (hver == latest)')
+            return False
     
     try:
         (installto/"plugins").mkdir()
@@ -176,7 +183,8 @@ def webinst(installto=Path(),isgit=True,version="main"):
                 load.loadupdate()
             #" ".encode("utf-8")
             #first.close()
-        postint(installto)
+        postint(installto,version)
+        return True
 def install(installto,iswin,devmode= False):
     print("installing to: "+str(installto))#,iswin=False)
     a = input("continue?[y]/n:")
@@ -242,13 +250,15 @@ def install(installto,iswin,devmode= False):
         metafile.write("h-shell\n0\n1\n1\n1")
         metafile.close()
         load.loadupdate()
-        postint(installto)
+        postint(installto,".._manualinstall")
         print("[done!]")
         #a = input("add as 'hiss' to .bashrc (y/[n]):")
         print("run h.py to start!")
         #print("install compleated!")
-def postint(installto= Path()):
-    pass
+def postint(installto= Path(),ver=""):
+    f = open(installto/".hvtag","w")
+    f.write(ver)
+    f.close()
     # doplugs = input("will you use plugins ([Y]/n):")
     # try:
     #     (installto/"plugins").mkdir()
