@@ -1326,7 +1326,7 @@ while True:
                             logs.log(1,a)
                             try:
                                 b = subprocess.run(a)
-                                logs.log(0,f"returned: {b}")
+                                logs.log(0,f"returned: {b.returncode}")
                             except FileNotFoundError:
                                 logs.log(3,"command not found!")
                                 print(f'\x1b[30;41mno file: "{a[0]}" to execute!\x1b[0m')
@@ -1336,6 +1336,7 @@ while True:
                                 print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?\x1b[0m')
                             except Exception as e:
                                 logs.log(3,"got unknown error: {}".format(e))
+                                logs.log(1,f"{e.__class__}")
                                 print("got unknown error please report this!")
                         else:
                             try:
