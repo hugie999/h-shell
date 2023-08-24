@@ -183,7 +183,9 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old"):
                 load.loadupdate()
             #" ".encode("utf-8")
             #first.close()
-        postint(installto,version)
+        f = open(installto/".hvtag","w")
+        f.write(version)
+        f.close()
         return True
 def install(installto,iswin,devmode= False):
     print("installing to: "+str(installto))#,iswin=False)
@@ -256,9 +258,7 @@ def install(installto,iswin,devmode= False):
         print("run h.py to start!")
         #print("install compleated!")
 def postint(installto= Path(),ver=""):
-    f = open(installto/".hvtag","w")
-    f.write(ver)
-    f.close()
+    pass
     # doplugs = input("will you use plugins ([Y]/n):")
     # try:
     #     (installto/"plugins").mkdir()
