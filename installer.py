@@ -183,6 +183,8 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old"):
                 load.loadupdate()
             #" ".encode("utf-8")
             #first.close()
+        if os.name.lower() != "nt":
+            os.system(f"chmod +x {install}/h.py")
         f = open(installto/".hvtag","w")
         f.write(version)
         f.close()
