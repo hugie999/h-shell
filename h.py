@@ -418,8 +418,11 @@ def pluginreload():
     if (not (proghome/"plugins").exists()) or (not (proghome/"plugins").is_dir()):
         logs.log(2,"plugin loading cancelled! (no ./plugins folder)")
         return
+    amount = 0
+    for i in (proghome/"plugins").iterdir():
+        amount += 1
     
-    load.makeloader(0,"loading plugins","done!",True)
+    load.makeloader(amount,"loading plugins","done!",True)
     logs.log(0,str(proghome/"plugins"))
     for i in (proghome/"plugins").iterdir():
         logs.log(1,i)
