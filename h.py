@@ -793,15 +793,29 @@ while True:
             elif a[0] == "help":
                 help.gethelp(astr)
             elif a[0] == "pelp":
+                
+                lennames = 0
+                lenhelps = 0
+                for i in plugins.helpnames:
+                    if len(i) > lennames:
+                        lennames = len(i)
+                for i in plugins.helphelps:
+                    if len(i) > lenhelps:
+                        lenhelps = len(i)
+                print(gettheme(True)+"".ljust(wi,"-")+gettheme())
                 for i in range(len(plugins.helpnames)):
-                    logs.info(plugins.helpplugs)
-                    logs.info(plugins.helphelps)
-                    logs.info(plugins.helpnames)
-                    print(plugins.helpnames[i],end="")
-                    print(" | ",end="")
-                    print(plugins.helphelps[i],end="")
-                    print(" | ",end="")
-                    print(plugins.helpplugs[i])
+                    # "".ljust()
+                    print(f"{plugins.helpnames[i].ljust(lennames)} | {plugins.helphelps[i].ljust(lenhelps)} | {plugins.helpplugs[i]}")
+                print(gettheme(True)+"".ljust(wi,"-")+gettheme())
+                # for i in range(len(plugins.helpnames)):
+                #     logs.info(plugins.helpplugs)
+                #     logs.info(plugins.helphelps)
+                #     logs.info(plugins.helpnames)
+                #     print(plugins.helpnames[i],end="")
+                #     print(" | ",end="")
+                #     print(plugins.helphelps[i],end="")
+                #     print(" | ",end="")
+                #     print(plugins.helpplugs[i])
             elif a[0] == "plugman":
                 if len(a) < 2:
                     print("please input a command")
