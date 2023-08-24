@@ -3,16 +3,24 @@ import loadicon as load
 load.makeloader(2,"importing","importing done")
 #print("importing [0/8] |")
 #print("\x1b[1A",end="")
-import logs
+# import logs
+import logging
+logging.basicConfig(filename="logs.log",filemode="w",level=logging.FATAL,format='%(name)s - %(levelname)s - %(message)s')
+
+logs = logging.getLogger(__name__)
+a = logging.StreamHandler()
+a.setFormatter(logging.Formatter('%(name)s - %(levelname)s - %(message)s'))
+logs.addHandler(a)
 hasinstaller = True
+# logs.setLevel(logging.ERROR)
 try:
-    logs.log(1,"importing----------")
+    logs.info("importing----------")
     try:
-        logs.log(1,"importing: installer script")
+        logs.info("importing: installer script")
         import installer
     except Exception as e:
-        logs.log(1,str(e.args))
-        logs.log(2,"error importing installer (will continue)")
+        logs.info(str(e.args))
+        logs.warning(2,"error importing installer (will continue)")
         hasinstaller = False
     else:
         hasinstaller = installer.HASWEB
@@ -21,7 +29,7 @@ except Exception as ex:
     logs.log(4,str(ex))
     print(ex)
     try:
-        logs.save()
+        # logs.save()
         print(ex)
         print("error while importing! (check log.log)")
             
@@ -51,7 +59,7 @@ import getpass
 try:
     import psutil
 except:
-    logs.log(2,"no psutil library")
+    logs.warning("no psutil library")
     print("psutil library not avalible :(")
     HASPSU = False
 else:
@@ -194,12 +202,12 @@ try:
     f = open(proghome/".hvtag")
     vertag = f.read()
 except FileNotFoundError:
-    logs.log(2,"version tag read error (no file)!")
-    logs.log(1,"file '.hvtag' not found")
-logs.log(0,f"verstag {vertag}")
+    logs.warning("version tag read error (no file)!")
+    logs.info("file '.hvtag' not found")
+logs.info(f"verstag {vertag}")
 title = "h shell"
 
-logs.log(0,"version {}".format(ver))
+logs.info("version {}".format(ver))
 THEMES = ["\x1b[0m","\x1b[37;40m","\x1b[37;40m","\x1b[30;47m","\x1b[31;40m","\x1b[34;45m",'\x1b[32;40m','\x1b[33;44m','\x1b[30;43m',"\x1b[36;40m"]
 TOPBAR = ["\x1b[0m","\x1b[30;47m","\x1b[37;40m","\x1b[37;40m","\x1b[30;41m","\x1b[30;45m",'\x1b[30;42m','\x1b[34;42m','\x1b[33;40m',"\x1b[30;46m"]
 THEMENAMES = ["transparant","dark ","dark","light ","edgy ","pink ","hac","old ","ban","ocean "]
@@ -225,18 +233,18 @@ else:
 haswinapi = False
 
 
-logs.log(1,"running on {}/{}/{} (py {})".format(os.name,platform.system(),platform.release(),platform.python_version()))
-logs.log(1,"starting dir: {}".format(cd))
+logs.info("running on {}/{}/{} (py {})".format(os.name,platform.system(),platform.release(),platform.python_version()))
+logs.info("starting dir: {}".format(cd))
 isroot = False
 if str(cd) == "/root":
     isroot = True
-    logs.log(2,"running as root")
+    logs.warning("running as root")
 #print("rooted: {}".format(isroot))
 limbo = False
 hist = []
 prompt = ":"
 if iswindows:
-    logs.log(1,"note: running on windows")
+    logs.info("note: running on windows")
 prompt = ":"
 title  = "h-shell"
 
@@ -263,17 +271,17 @@ startcomnum = 0
 startcomdone = False
 
 def checkfor(filename=""):
-    logs.log(0,str(proghome)+"/"+filename)
+    logs.info(str(proghome)+"/"+filename)
     try:
         checkfile = open(str(proghome)+"/"+filename)
         checkfile.close()
-        logs.log(0,"true")
+        logs.info("true")
         return True
     except FileNotFoundError:
-        logs.log(0,"false")
+        logs.info("false")
         return False
 def gettxtfrom(filename=""):
-    logs.log(0,str(proghome)+"/"+filename)
+    logs.info(str(proghome)+"/"+filename)
     try:
         checkfile = open(str(proghome)+"/"+filename)
         a = checkfile.readlines()
@@ -281,10 +289,10 @@ def gettxtfrom(filename=""):
             a[i] = a[i][:-1]
         return a
         checkfile.close()
-        #logs.log(0,"true")
+        #logs.info("true")
         
     except FileNotFoundError:
-        #logs.log(0,"false")
+        #logs.info("false")
         return ""
 startingcoms = ["clear"]
 startcomdone = False
@@ -334,10 +342,10 @@ class fsmeta:
                 return
             
             f = open(".hmeta")
-            logs.log(0,".hmeta file found")
-            #logs.log(0,f.read().splitlines())
+            logs.info(".hmeta file found")
+            #logs.info(f.read().splitlines())
             ftxt = f.read().splitlines()
-            logs.log(0,str(ftxt))
+            logs.info(str(ftxt))
             f.close()
             try:
                 fsmeta.name = ftxt[0]
@@ -394,7 +402,7 @@ class drvmetas:
         drvmetas.update()
     #based on the LETTERS var
 if (not (proghome/"plugins").exists()) or (not (proghome/"plugins").is_dir()):
-        logs.log(2,"no plugins folder detected!")
+        logs.warning("no plugins folder detected!")
         print("no plugins folder!")
         if ask(f"make one at [{proghome}/plugins/]?"):
             (proghome/"plugins").mkdir()
@@ -413,25 +421,25 @@ def pluginreload():
     plugins.helphelps = []
     plugins.helpnames = []
     plugins.helpplugs = []
-    logs.log(1,"loading plugins!----")
+    logs.info("loading plugins!----")
     
     if (not (proghome/"plugins").exists()) or (not (proghome/"plugins").is_dir()):
-        logs.log(2,"plugin loading cancelled! (no ./plugins folder)")
+        logs.warning("plugin loading cancelled! (no ./plugins folder)")
         return
     amount = 0
     for i in (proghome/"plugins").iterdir():
         amount += 1
     
     load.makeloader(amount,"loading plugins","done!",True)
-    logs.log(0,str(proghome/"plugins"))
+    logs.info(str(proghome/"plugins"))
     for i in (proghome/"plugins").iterdir():
-        logs.log(1,i)
-        logs.log(0,str(i)[-5:])
+        logs.info(i)
+        logs.info(str(i)[-5:])
         if str(i)[-8:] == ".plug.py" and not "__pycache__" in str(i):
             load.loadupdate()
             plugins.plugindata.append(SourceFileLoader(str(i.name),str(i)).load_module())
-            logs.log(0,z)
-            logs.log(0,type(plugins.plugindata[z]))
+            logs.info(z)
+            logs.info(type(plugins.plugindata[z]))
             try:
                 plugins.plugindata[z].PLUGVER
             except:
@@ -440,11 +448,11 @@ def pluginreload():
                 plugins.doeverycommand.append(plugins.plugindata[z].META["oncommand"])
                 plugins.doafter.append(plugins.plugindata[z].META["doafter"])
             except KeyError as e:
-                logs.log(1,"no plugin type on "+str(z))
-                logs.log(0,e)
+                logs.info("no plugin type on "+str(z))
+                logs.info(e)
                 plugins.doafter.append(False)
                 plugins.doeverycommand.append(False)
-            logs.log(0,str(plugins.doafter))
+            logs.info(str(plugins.doafter))
             try:
                 plugins.helphelps.extend(plugins.plugindata[z].HELPDESC)
                 plugins.helpnames.extend(plugins.plugindata[z].HELPCOMS)
@@ -459,8 +467,8 @@ def pluginreload():
                 
                 
             z += 1
-    logs.log(0,(plugins.plugintypes))
-    logs.log(1,"done!----")
+    logs.info((plugins.plugintypes))
+    logs.info("done!----")
     load.loadcomplete()
 #input()
 pluginreload()
@@ -484,20 +492,20 @@ def saveprefs():
     
     
     
-    logs.log(1,str(preflist))
+    logs.info(str(preflist))
     preffile = open(str(proghome)+"/.prefs","wt")
     load.makeloader(5,"saveing...","done!")
     for i in preflist:
         load.loadupdate()
         preffile.write(str(i))
     
-    logs.log(0,"theme "+str(preflist[0]))
-    logs.log(0,"qclear "+str(preflist[1]))
-    logs.log(0,"deawhead "+str(preflist[2]))
-    logs.log(0,"centertitle "+str(preflist[3]))
-    logs.log(0,"showpathintitle "+str(preflist[4]))
-    logs.log(0,"shworeadmes "+str(preflist[5]))
-    logs.log(0,"abbr paths "+str(preflist[6]))
+    logs.info("theme "+str(preflist[0]))
+    logs.info("qclear "+str(preflist[1]))
+    logs.info("deawhead "+str(preflist[2]))
+    logs.info("centertitle "+str(preflist[3]))
+    logs.info("showpathintitle "+str(preflist[4]))
+    logs.info("shworeadmes "+str(preflist[5]))
+    logs.info("abbr paths "+str(preflist[6]))
     preffile.close()
 def loadprefs():
     global theme
@@ -509,28 +517,28 @@ def loadprefs():
         for i in preffile.read():
             #load.loadupdate()
             preflist.append(str(i))
-            logs.log(0,str(i))
+            logs.info(str(i))
         preffile.close()
         
         theme = int(preflist[0])
-        logs.log(0,"theme "+str(preflist[0]))
+        logs.info("theme "+str(preflist[0]))
         prefs.qclear = (int(preflist[1]) == 1)
-        logs.log(0,"qclear "+str(preflist[1]))
+        logs.info("qclear "+str(preflist[1]))
         prefs.drawhead = (int(preflist[2]) == 1)
-        logs.log(0,"deawhead "+str(preflist[2]))
+        logs.info("deawhead "+str(preflist[2]))
         prefs.centertitle = (int(preflist[3]) == 1)
-        logs.log(0,"centertitle "+str(preflist[3]))
+        logs.info("centertitle "+str(preflist[3]))
         prefs.showpathintitle = (int(preflist[4]) == 1)
-        logs.log(0,"showpathintitle "+str(preflist[4]))
+        logs.info("showpathintitle "+str(preflist[4]))
         prefs.showreadmes = (int(preflist[5]) == 1)
-        logs.log(0,"shworeadmes "+str(preflist[5]))
+        logs.info("shworeadmes "+str(preflist[5]))
         prefs.fishstylepaths = (int(preflist[6]) == 1)
-        logs.log(0,"abbr paths "+str(preflist[6]))
+        logs.info("abbr paths "+str(preflist[6]))
         
         
-        logs.log(1,str(preflist))
+        logs.info(str(preflist))
         for i in preflist:
-            logs.log(0,str(int(i) == 1))
+            logs.info(str(int(i) == 1))
         
         
     except:
@@ -615,25 +623,25 @@ b = 0
 #         wi = shutil.get_terminal_size().columns
 #         hi = shutil.get_terminal_size().lines
 # except:
-#     logs.log(3,"error getting terminal size")
+#     logs.error("error getting terminal size")
 #     exit()
 loadprefs()
 def doplug(command = "",isafter=False,locals={}) -> bool:
-    logs.log(0,command)
+    logs.info(command)
     
     # try:
     #     for i in range(len(plugins.plugindata)):
     #         if plugins.plugintypes[i] == 1:
     #             plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
     # except Exception as e:
-    #     logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
+    #     logs.error("plugin error occoured on plugin {} : {}".format(comsec,e))
     #     input("press -[enter]-")
-    logs.log(0,str(isafter))
+    logs.info(str(isafter))
     for i in range(len(plugins.plugindata)):
         if plugins.doeverycommand[i]:
             if plugins.doafter[i] == isafter:
-                logs.log(1,"did pluginnum "+str(i))
-                logs.log(0,str(plugins.plugindata[i].PLUGVER))
+                logs.info("did pluginnum "+str(i))
+                logs.info(str(plugins.plugindata[i].PLUGVER))
                 if plugins.plugindata[i].PLUGVER == 2:
                     plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd,globals(),locals())
                 else:
@@ -648,27 +656,27 @@ def doplug(command = "",isafter=False,locals={}) -> bool:
             except IndexError:
                 raise ValueError
             try:
-                logs.log(0,"plugver"+str(plugins.plugindata[comsec].PLUGVER))
+                logs.info("plugver"+str(plugins.plugindata[comsec].PLUGVER))
                 if plugins.plugindata[comsec].PLUGVER == 2:
                     plugret = plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd,globals(),locals)
                 else:
                     plugret = plugins.plugindata[comsec].docom(command,[gettheme(False),gettheme(True)],cd)
-                logs.log(1,plugret)
+                logs.info(plugret)
                 if not plugret:
                     plugret = "pass"
                 if prefs.allowpluginspy:
                     plugins.plugret = plugret
             except Exception as e:
-                logs.log(3,"plugin error occoured on plugin {} : {}".format(comsec,e))
+                logs.error("plugin error occoured on plugin {} : {}".format(comsec,e))
                 if not plugins.errorhandle:
                     raise Exception('pluginError')
             com = 0
             b = 0
             return True
         except ValueError:
-            logs.log(1,"no plugin found")
+            logs.info("no plugin found")
             return False
-    # logs.log(0,command)
+    # logs.info(command)
     # try:
     #     comsec = plugins.pluginreservednum[plugins.pluginreserved.index(command.split()[0])]
     # except IndexError:
@@ -678,41 +686,41 @@ def doplug(command = "",isafter=False,locals={}) -> bool:
     # b = 0
 
 def runsubpro(cmd=[],isfallback=False):
-    logs.log(0,"subprocess")
-    logs.log(0,str(len(cmd)))
+    logs.info("subprocess")
+    logs.info(str(len(cmd)))
     a = []
     for i in cmd:
-        # logs.log(0,i)
+        # logs.info(i)
         a.append(i.replace("./",str(cd)+"/"))
-    logs.log(0,f"new a: {newa}")
+    logs.info(f"new a: {newa}")
     # a = newa
     if iswindows:
         a.insert(0,"cmd")
         a.insert(1,"/C")
-    logs.log(1,a)
+    logs.info(a)
     try:
         b = subprocess.run(a)
-        logs.log(0,f"returned: {b.returncode}")
+        logs.info(f"returned: {b.returncode}")
     except FileNotFoundError:
-        logs.log(3,"command not found!")
+        logs.error("command not found!")
         print(f'\x1b[30;41mno file: "{a[0]}" to execute!\x1b[0m')
     except PermissionError as e:
-        logs.log(3,"programme could not be executed (permission error)!")
+        logs.error("programme could not be executed (permission error)!")
         print(f'\x1b[30;41mfile: "{a[0]}" is not aloud to execute!\x1b[0m')
         print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?\x1b[0m')
     except OSError as e:
         if isfallback:
-            logs.log(3,"got OSError after attempting retry!")
-            logs.log(1,str(e))
+            logs.error("got OSError after attempting retry!")
+            logs.info(str(e))
             print("got OSError (X2) please report!")
         else:
-            logs.log(2,"got OSError. retrying with 'sh'")
+            logs.warning("got OSError. retrying with 'sh'")
             if not iswindows:
                 cmd.insert(0,"sh")
             runsubpro(cmd,True)
     except Exception as e:
-        logs.log(3,"got unknown error: {}".format(e))
-        logs.log(1,f"{e.__class__}")
+        logs.error("got unknown error: {}".format(e))
+        logs.info(f"{e.__class__}")
         print("got unknown error please report this!")
 
 for i in range(hi-2):
@@ -768,9 +776,9 @@ while True:
         b = 0
         if len(a) != 0:
             print(printcenter(":{}:".format(a),DoAsReturn=True))
-        logs.log(0,"usr: "+str(a))
+        logs.info("usr: "+str(a))
         astr = a
-        logs.log(0,astr)
+        logs.info(astr)
         a = a.split()
         if len(a) == 0:
             a = [" "]
@@ -786,9 +794,9 @@ while True:
                 help.gethelp(astr)
             elif a[0] == "pelp":
                 for i in range(len(plugins.helpnames)):
-                    logs.log(0,plugins.helpplugs)
-                    logs.log(0,plugins.helphelps)
-                    logs.log(0,plugins.helpnames)
+                    logs.info(plugins.helpplugs)
+                    logs.info(plugins.helphelps)
+                    logs.info(plugins.helpnames)
                     print(plugins.helpnames[i],end="")
                     print(" | ",end="")
                     print(plugins.helphelps[i],end="")
@@ -811,8 +819,8 @@ while True:
                         pluginnumber = int(a[2])
                         pluginscomands = []
                         for i in range(len(plugins.pluginreserved)):
-                            logs.log(0,str(pluginnumber))
-                            logs.log(0,plugins.pluginreservednum[i])
+                            logs.info(str(pluginnumber))
+                            logs.info(plugins.pluginreservednum[i])
                             if plugins.pluginreservednum[i] == pluginnumber:
                                 pluginscomands.append(plugins.pluginreserved[i])
                         if len(pluginscomands) == 1:
@@ -838,7 +846,7 @@ while True:
                 elif a[1] == "handler":
                     plugins.errorhandle = (not plugins.errorhandle)
                     print("error handler: "+str(plugins.errorhandle))
-                    logs.log(1,"plugin error handler: "+str(plugins.errorhandle))
+                    logs.info("plugin error handler: "+str(plugins.errorhandle))
                 pass
             elif a[0] == "prefs" or a[0] == "pref":
                 printappname("prefs",custColour=gettheme(),custBannerColour=gettheme(True))
@@ -866,12 +874,12 @@ while True:
                 # prefs.fishstylepaths = ask("use FISH style paths (abreviate paths)?",False) removed due to me not understanding how to get a list of file parents because im an idiot smh
                 
                 
-                logs.log(0,"theme "+str(theme))
-                logs.log(0,"qclear "+str(prefs.qclear))
-                logs.log(0,"deawhead "+str(prefs.drawhead))
-                logs.log(0,"centertitle "+str(prefs.centertitle))
-                logs.log(0,"showpathintitle "+str(prefs.showpathintitle))
-                logs.log(0,"shworeadmes "+str(prefs.showreadmes))
+                logs.info("theme "+str(theme))
+                logs.info("qclear "+str(prefs.qclear))
+                logs.info("deawhead "+str(prefs.drawhead))
+                logs.info("centertitle "+str(prefs.centertitle))
+                logs.info("showpathintitle "+str(prefs.showpathintitle))
+                logs.info("shworeadmes "+str(prefs.showreadmes))
                 saveprefs()
                 printEscape("[A")
                 printappname(custColour=gettheme(),custBannerColour=gettheme(True))
@@ -996,7 +1004,7 @@ while True:
                                 print(a[1]+": is either not a drive or needs to be formated")
                                 print("this could be that it is an unformated cd")
                                 print("on maybey try 'format "+a[1]+": /Q' (the /Q means quick)")
-                                logs.log(2,"couldent switch to drive debug info: ".format(str(e)))
+                                logs.warning("couldent switch to drive debug info: ".format(str(e)))
                             except SystemExit:
                                 pass
                         else:
@@ -1041,8 +1049,8 @@ while True:
                     print("")
                     saveprefs()
             elif a[0] == "exit" or a[0] == "quit":
-                logs.log(1,"stoped")
-                logs.save()
+                logs.info("stoped")
+                # logs.save()
                 print("\x1b[25m\x1b[0m")
                 print("exited")
                 quit()
@@ -1056,7 +1064,7 @@ while True:
                         if not hasinstaller:
                             print("no installer modual")
                             print("to update or install features download them manually")
-                            logs.log(2,"h-inst needs installer modual")
+                            logs.warning("h-inst needs installer modual")
                         else:
                             if len(a)>2:
                                 if a[2] == "self":
@@ -1090,7 +1098,7 @@ while True:
                         if not hasinstaller:
                             print("no installer modual")
                             print("to update or install plugins download them manually")
-                            logs.log(2,"h-inst needs installer modual")
+                            logs.warning("h-inst needs installer modual")
                         else:
                             installer.featinst(proghome,"main")
                     elif a[1] == "info":
@@ -1173,24 +1181,26 @@ while True:
                     pass
                 if comman == "loglev":
                     print("enter level")
-                    print("4: everything")
-                    print("3: warnings, errors, and logs")
-                    print("2: warings and errors")
-                    print("1: only errors [default]")
-                    print("0: nothing")
+                    print("0 - ???\n1 - everything\n2 - info,warn,error,fatal\n3 - warn,error,fatal\n4 - error,fatal\n5 - fatal\n6 - none")
                     newlev = input(":")
-                    logs.log(0,"lev file:"+str(proghome)+"/.loglev")
-                    LlevF = open(str(proghome)+"/.loglev","wt")
-                    logs.log(0,"{}".format(str(newlev)))
-                    if newlev == "" or not newlev in "1234":
-                        newlev = "1"
-                    
-                    logs.log(0,"new log level: {}".format(str(newlev)))
-                    LlevF.write(newlev)
-                    LlevF.close()
-                    logs.reload()
+                    # logs.info("lev file:"+str(proghome)+"/.loglev")
+                    # LlevF = open(str(proghome)+"/.loglev","wt")
+                    # logs.info("{}".format(str(newlev)))
+                    # if newlev == "" or not newlev in "1234":
+                    #     newlev = "1"
+                    try:
+                        logs.setLevel(int(newlev)*10)
+                    except ValueError:
+                        logs.info("incorrect value loglevel not changes")
+                    else:
+                        logs.info("new log level: {}".format(str(newlev)))
+                    # LlevF.write(newlev)
+                    # LlevF.close()
+                    # logs.reload()
                 if comman == "slogs":
-                    logs.save()
+                    logs.error("command deprecated! (slogs)")
+                    print("slogs command is deprecated (pls dont use it)")
+                    # logs.save()
                 if comman == "install":
                     installer.install(cd,iswindows)
                 if comman == "webinst":
@@ -1219,25 +1229,25 @@ while True:
                         try:
                             c = os.system("".join(a))
                         except FileNotFoundError:
-                            logs.log(3,"command not found!")
+                            logs.error("command not found!")
                             print(f'\x1b[30;41mno file: "{a[0]}" to execute!\x1b[0m')
                         except PermissionError as e:
-                            logs.log(3,"programme could not be executed (permission error)!")
+                            logs.error("programme could not be executed (permission error)!")
                             print(f'\x1b[30;41mfile: "{a[0]}" is not aloud to execute!\x1b[0m')
                             print(f'\x1b[30;41mmaybey try "chmod +x {a[0]}"?\x1b[0m')
                         except Exception as e:
-                            logs.log(3,"got unknown error: {}".format(e))
+                            logs.error("got unknown error: {}".format(e))
                             print("got unknown error please report this!")
                     
                     b = 0
-                    logs.log(0,"user forced sys command")
+                    logs.info("user forced sys command")
                     if c != 0:
-                        logs.log(0,"syscom code: "+str(c))
+                        logs.info("syscom code: "+str(c))
                 else:
                     print(gettheme(True),"cannot use system commands (True == false)")
             elif a[0] == "cd": #warning VARY MESSY DONT TOUCH
                 c = astr[3:]
-                logs.log(0,c)
+                logs.info(c)
                 if len(a) == 1:
                     print(cd)
                     b = 0
@@ -1293,7 +1303,7 @@ while True:
                             for i in cd.iterdir():
                                 if i.name.lower() == "readme.md" or i.name.lower() == "readme.txt":
                                     doplug("show "+str(i))
-                                    #logs.log(0,"show "+i.name)
+                                    #logs.info("show "+i.name)
                         except PermissionError:
                             pass
                         b = 0
@@ -1309,15 +1319,15 @@ while True:
                 if len(a) <= 1:
                     a.append("")
                 if not "/" in a[1] and not "\\" in a[1] and not "~" in a[1]:
-                    logs.log(3,"no dir detected")
+                    logs.error("no dir detected")
                     if iswindows:
-                        logs.log(3,"goto cant be used to go into a drive letter")
+                        logs.error("goto cant be used to go into a drive letter")
                 #if ".." in a:
                 #    print("not implamented")
                 #    b = 2
                 if "$" in a[1]:
                     print("goto '$' functionality has been removed")
-                    logs.log(3,"user attempeted goto '$' function")
+                    logs.error("user attempeted goto '$' function")
                 elif a[0] == "goto":
                     c = a[1]
                     c = Path(c).expanduser()
@@ -1342,10 +1352,10 @@ while True:
                 
                 c = astr[3:]
                 try:
-                    logs.log(1,"run py command: {}".format(c))
+                    logs.info("run py command: {}".format(c))
 
                     c = exec(c)
-                    logs.log(1,str(c))
+                    logs.info(str(c))
                 except Exception as e:
                     print("got error: {}".format(e))
                     usrmodif.latestexep = e
@@ -1363,15 +1373,15 @@ while True:
                                     cd = Path(os.getcwd())
                                     b = 0
                                 except FileNotFoundError:
-                                    logs.log(3,"drive not avalible")
+                                    logs.error("drive not avalible")
                                     cd = bkcd
                                     b = 1
                                 except PermissionError:
-                                    logs.log(3,"drive not ready (got PermissionError)")
+                                    logs.error("drive not ready (got PermissionError)")
                                     cd = bkcd
                                     b = 1
                                 except OSError:
-                                    logs.log(3,"drive not ready (got OSError)")
+                                    logs.error("drive not ready (got OSError)")
                                 finally:
                                     didwindrive = True
                     #print(a[:2])
@@ -1386,15 +1396,15 @@ while True:
                             try:
                                 b = os.system(astr)
                             except FileNotFoundError:
-                                logs.log(3,"no command found!")
+                                logs.error("no command found!")
                                 print("thare isnt a file named: {}".format(astr))
                             except PermissionError:
-                                logs.log(3,"permission error occoured!")
+                                logs.error("permission error occoured!")
                                 print("this likely means thare is a command")
                                 print("but it is not executable")
                                 print('try "sudo chmod +x {}"'.format(a[0]))
                             except Exception as e:
-                                logs.log(3,"got unknown error: {}".format(e))
+                                logs.error("got unknown error: {}".format(e))
                                 print("got unknown error please report this!")
                                 
                             
@@ -1418,7 +1428,7 @@ while True:
             os.chdir(Path("/"))
             limbo = True
         except PermissionError:
-            logs.log(3,"no perms for new dir")
+            logs.error("no perms for new dir")
             print(f"{gettheme()}no perms for current dir")
             while True:
                 try:
@@ -1430,7 +1440,7 @@ while True:
                     break
             print(f"current dir is now: {cd}")
         if limbo:
-            logs.log(3,"dir non exsistant")
+            logs.error("dir non exsistant")
             print('\x1b[31;40m',end="")
             
             print("ERROR: the directory {} some how does and doesent exsist some commands may not work".format(str(cd)))
@@ -1454,5 +1464,5 @@ while True:
         # print("\x1b[25m\x1b[0m")
         # print("exited")
         #print("")
-        logs.log(2,"^C pressed please use stop command")
+        logs.warning("^C pressed please use stop command")
 
