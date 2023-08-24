@@ -103,7 +103,7 @@ def oncommand(comfull,themestr,cd=Path()):
                 curdirfolds.append(i.name)
             else:
                 curdirfiles.append(i.name)
-        curdirls += ["drv","theme","clear","cd","goto","py","pref","plugman","h-inst","help","pelp","hist"]
+        curdirls += ["drv","theme","clear","cd","goto","py","pref","plugman","h-inst","help","pelp","hist","ls"]
         # print(curdirls)
         readline.write_history_file(histfile)
     except Exception as e:

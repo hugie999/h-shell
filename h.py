@@ -317,6 +317,7 @@ class prefs:
     enablesubprocess = True
     blinkcur = True
     loadmetas = True
+    autotitletxt = True
 class fsmeta:
     active = False
     forceoff = False
@@ -572,12 +573,16 @@ def prnthead():
             titletemp += " [{}/{}/{}]".format(time.localtime()[0],time.localtime()[1],time.localtime()[2])
             if limbo:
                 strcd += " FS ERROR :("
+            if not prefs.autotitletxt: #allow title to only be the title var
+                titletemp = title
             if isroot:
                 printappname(titletemp+"|RUNING AS ROOT",gettheme(False),gettheme(True))
             else:
                 printappname(titletemp,gettheme(False),gettheme(True),prefs.centertitle)
         else:
             titletemp = title+ " [{}/{}/{}]".format(time.localtime()[0],time.localtime()[1],time.localtime()[2])
+            if not prefs.autotitletxt: #allow title to only be the title var
+                titletemp = title
             if isroot:
                 printappname(titletemp+"|RUNING AS ROOT",gettheme(False),gettheme(True))
             else:
@@ -729,7 +734,7 @@ while True:
     except:
         wi = 20
         hi = 20
-    # <=====>
+    # <===><-><===> -< >-
     try:
         
         drvmetas.update()
@@ -900,7 +905,7 @@ while True:
                                     label = partition.opts
                                 except KeyError:
                                     label = ""
-                                if not "/snap/" in mountpoint:
+                                if not "/snap" in mountpoint:
                                     print(textwrap.shorten(f"[{str(i).zfill(2)}] {device} -> {mountpoint}",wi,placeholder=str("...")))
                                     print(f"|--> {size}")
                                     print(f"|==> {fstype}")
