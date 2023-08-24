@@ -51,7 +51,7 @@ def complete(txt="",state=0):
     if len(txt) > 1:
         txtspl = txt.split(" ")
         
-        if txtspl[0] == "cd" or txtspl[0] == "rm" or txtspl[0] == "rmdir":
+        if txtspl[0] == "cd" or txtspl[0] == "rmdir":
             txt = "".join(txtspl[1:])
             for i in curdirfolds:
                 if i.startswith(txt):
@@ -68,7 +68,7 @@ def complete(txt="",state=0):
                 for i in ["info","web-plugins","help","update"]:
                     if i.startswith(txt):
                         options.append("h-inst "+i)
-        elif txtspl[0] == "show" or txtspl[0] == "show_bin":
+        elif txtspl[0] == "show" or txtspl[0] == "show_bin" or txtspl[0] == "rm":
             txt = "".join(txtspl[1:])
             for i in curdirfiles:
                 if i.startswith(txt):
