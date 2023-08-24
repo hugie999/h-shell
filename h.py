@@ -891,15 +891,30 @@ while True:
                                 try:
                                     disk_usage = psutil.disk_usage(mountpoint)
                                     size = disk_usage.total
+                                    used = disk_usage.used
+                                    free = disk_usage.free
                                 except Exception as e:
                                     size = "N/A"
+                                    used = "N/A"
+                                    free = "N/A"
                                 if size != "N/A":
                                     for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
                                         if size < 1024:
                                             size =  f"{size:.2f} {unit}"
                                             break
                                         size /= 1024
-
+                                if free != "N/A":
+                                    for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+                                        if free < 1024:
+                                            free =  f"{free:.2f} {unit}"
+                                            break
+                                        free /= 1024
+                                if used != "N/A":
+                                    for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+                                        if used < 1024:
+                                            used =  f"{used:.2f} {unit}"
+                                            break
+                                        used /= 1024
 
                                 try:
                                     label = partition.opts
@@ -907,8 +922,12 @@ while True:
                                     label = ""
                                 if not "/snap" in mountpoint:
                                     print(textwrap.shorten(f"[{str(i).zfill(2)}] {device} -> {mountpoint}",wi,placeholder=str("...")))
-                                    print(f"|--> {size}")
-                                    print(f"|==> {fstype}")
+                                    if wi <= 70:
+                                        print(f"|-size-> {size} | <U> {used} <F> {free}")
+                                    else:
+                                        print(f"|-size-> {size} | <-Used-> {used} <-Free-> {free}")
+                                    print(f"|==fs==> {fstype}")
+                                    # print(f"|----->> {partition.opts}")
                                     print("")
                                     d += 4
                                     i += 1
