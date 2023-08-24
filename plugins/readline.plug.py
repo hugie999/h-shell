@@ -47,13 +47,15 @@ def complete(txt="",state=0):
     # print(curdirfolds)
     options = []
     # print(txt)
+    
     if len(txt) > 1:
         txtspl = txt.split(" ")
-        if txtspl[0] == "cd":
+        
+        if txtspl[0] == "cd" or txtspl[0] == "rm" or txtspl[0] == "rmdir":
             txt = "".join(txtspl[1:])
             for i in curdirfolds:
                 if i.startswith(txt):
-                    options.append("cd "+i)
+                    options.append(txtspl[0]+" "+i)
         elif txtspl[0] == "h-inst":
             if len(txtspl) > 2:
                 if txtspl[1] == "update":
