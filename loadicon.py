@@ -1,3 +1,4 @@
+import os
 loadmax = 0 #load max
 loadpar = 0 #load part
 loadtxt = "" #load text
@@ -23,7 +24,7 @@ def makeloader(max=10,text="load",completetxt= "",unknownamount=False):
         print("{} [0/{}] |".format(text,max))
     else:
         print("{} [0/{}] |".format(text,"?"))
-def loadupdate():
+def loadupdate(filename=""):
     global loadpar
     global loadmax
     global loadtxt
@@ -31,14 +32,19 @@ def loadupdate():
     global loadcompletetxt
     global isamountknown
     print("\x1b[1A",end="")
-    print("\x1b[0K",end="")
+    print("\x1b[2K",end="")
+    loadname = ""
     if isamountknown:
         if loadpar < loadmax:
-            print("{} [{}/{}] {}".format(loadtxt,loadpar,loadmax,loadframes[loadframe]))
+            loadname += ("{} [{}/{}] {}".format(loadtxt,loadpar,loadmax,loadframes[loadframe]))
         else:
-            print("{} [{}/{}] {}".format(loadcompletetxt,loadmax,loadmax,loadframes[loadframe]))
+            loadname += ("{} [{}/{}] {}".format(loadcompletetxt,loadmax,loadmax,loadframes[loadframe]))
     else:
-        print("{} [{}/{}] {}".format(loadtxt,loadpar,"?",loadframes[loadframe]))
+        loadname += ("{} [{}/{}] {}".format(loadtxt,loadpar,"?",loadframes[loadframe]))
+    if filename != "":
+        if len(loadname + f" | {filename}") <= os.get_terminal_size().columns:
+            loadname += f" | {filename}"
+    print(loadname)
     loadframe += 1
     if loadframe >= loadframemax:
         loadframe = 0

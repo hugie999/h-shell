@@ -97,7 +97,7 @@ def featupda(installto=Path):
             featfile.close()
             print("[ finished     ]")
 
-def webinst(installto=Path(),isgit=True,version="main",hver=".._old"):
+def webinst(installto=Path(),isgit=True,version="main",hver=".._old",fake=False):
     input("installing to "+str(installto))
     if hver == ".._manualinstall":
         print("this h-shell install was done without internet")
@@ -140,7 +140,7 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old"):
                 print("skipping: {}".format(i.replace("|L","")))
             else:
                 if i.count("|L") > 0:
-                    i = i.replace("|L","")
+                    i = i.replace(" |L","")
                 #print(i)
                 files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
                 if verbose:
@@ -161,7 +161,7 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old"):
             if noloader:
                 print(i)
             else:
-                load.loadupdate()
+                load.loadupdate(files[i])
             #files.append(i)
             #filenam.append(files[i])
             #print(filenam[i])
@@ -174,17 +174,16 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old"):
         for i in range(len(files)):
             #first = data[i]#open(files[i],"rt")
             to = open(str(final[i]),"wt")
-            #print(str(files[i])+" > "+str(final[i]))
             to.write(data[i])
             to.close()
             if noloader:
                 print(i)
             else:
-                load.loadupdate()
+                load.loadupdate(final[i])
             #" ".encode("utf-8")
             #first.close()
         # if os.name.lower() != "nt":
-            # os.system(f"chmod +x h.py")
+            # os.syste
         f = open(installto/".hvtag","w")
         f.write(version)
         f.close()
