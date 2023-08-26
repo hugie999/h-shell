@@ -5,12 +5,14 @@ load.makeloader(2,"importing","importing done")
 #print("\x1b[1A",end="")
 # import logs
 import logging
-logging.basicConfig(filename="logs.log",filemode="w",level=logging.FATAL,format='%(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename="logs.log",filemode="w",level=logging.DEBUG,format='%(name)s - %(levelname)s - %(message)s')
 
 logs = logging.getLogger(__name__)
 a = logging.StreamHandler()
 a.setFormatter(logging.Formatter('%(name)s - %(levelname)s - %(message)s'))
-logs.addHandler(a)
+# logs.addHandler(a)
+# a = logging.FileHandler("logs.log","w")
+# logs.addHandler(a)
 hasinstaller = True
 # logs.setLevel(logging.ERROR)
 try:
@@ -54,6 +56,7 @@ import platform
 import textwrap
 from importlib.machinery import SourceFileLoader
 import time
+import sys
 import subprocess
 import getpass
 try:
@@ -685,22 +688,30 @@ def doplug(command = "",isafter=False,locals={}) -> bool:
     # com = 0
     # b = 0
 
-def runsubpro(cmd=[],isfallback=False):
+def runsubpro(cmd=[],isfallback=False,save=False) -> str:
     logs.info("subprocess")
     logs.info(str(len(cmd)))
     a = []
     for i in cmd:
         # logs.info(i)
         a.append(i.replace("./",str(cd)+"/"))
-    logs.info(f"new a: {newa}")
+    # logs.info(f"new a: {newa}")
     # a = newa
     if iswindows:
         a.insert(0,"cmd")
         a.insert(1,"/C")
     logs.info(a)
+    output = ""
+    b = -1
     try:
-        b = subprocess.run(a)
-        logs.info(f"returned: {b.returncode}")
+        
+        if save:
+            b = subprocess.check_output(a).decode()
+            
+            # logs.debug(f"text: {b.replace("\n","\\n")}")
+        else:
+            b = subprocess.run(a)
+            logs.info(f"returned: {b.returncode}")
     except FileNotFoundError:
         logs.error("command not found!")
         print(f'\x1b[30;41mno file: "{a[0]}" to execute!\x1b[0m')
@@ -717,12 +728,13 @@ def runsubpro(cmd=[],isfallback=False):
             logs.warning("got OSError. retrying with 'sh'")
             if not iswindows:
                 cmd.insert(0,"sh")
-            runsubpro(cmd,True)
+            return runsubpro(cmd,True,save=save)
     except Exception as e:
         logs.error("got unknown error: {}".format(e))
         logs.info(f"{e.__class__}")
-        print("got unknown error please report this!")
-
+        logs.info(f"line:{sys.exc_info()[2].tb_lineno}")
+        print("got unFATALknown error please report this!")
+    return b
 for i in range(hi-2):
         printEscape("[1B")
 #clear screen with background
@@ -1219,6 +1231,10 @@ while True:
                     installer.install(cd,iswindows)
                 if comman == "webinst":
                     installer.webinst(cd)
+                if a[1] == "helptst":
+                    if not iswindows:
+                        # subprocess.run(f"sh {}")
+                        print(runsubpro([input()],save=True))
                 # if comman == "alies":
                 #     print("input: {}".format(aliases.INCOM))
                 #     print("output: {}".format(aliases.OUTCOM))
@@ -1405,7 +1421,18 @@ while True:
                     newa = []
                     if not didwindrive:
                         if prefs.enablesubprocess:
-                            runsubpro(a)
+                            
+                            if ("--help" in astr) or (" -h " in astr) or (astr[-2:] == "-h"):
+                                hell = runsubpro(a,save=True)
+                                d = 0
+                                for i in hell.splitlines():
+                                    print(i)
+                                    d+=1
+                                    if d%hi == 0:
+                                        input(f"{gettheme(True)}--more--{gettheme()}")
+                                        d = 0
+                            else:
+                                runsubpro(a)
                         else:
                             try:
                                 b = os.system(astr)
