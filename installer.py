@@ -2,8 +2,25 @@ from pathlib import Path
 import os
 noloader = False
 verbose = True
-ADDRESS = "https://raw.githubusercontent.com/hugie999/h-shell/"
-
+MANUALADRESS = False
+if Path("./.HSHinsecureinst").exists():
+    FORCEHTTP = True 
+else:
+    FORCEHTTP = False #this should only be used on devices with outdated SSL
+if MANUALADRESS:
+    print("\n!!input adress for files!!")
+    tempaddr = input("new adress http(s)://").removeprefix("http://").removeprefix("https://")
+else:
+    if verbose:
+        print("assumeing default\n")
+    tempaddr = "raw.githubusercontent.com/hugie999/h-shell/"
+if verbose:
+    print(f"ADDRESS = {tempaddr}")
+if FORCEHTTP:
+    print("\n!!!FORCEHTTP is enabled!!!\nunless you enabled this yourself please disable it")
+    ADDRESS = f"http://{tempaddr}"
+else:
+    ADDRESS = f"https://{tempaddr}"
 def inlist(list = ["a","b","c"],string= ""):
     try:
         list.index(string)
@@ -142,9 +159,9 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old",fake=False)
                 if i.count("|L") > 0:
                     i = i.replace(" |L","")
                 #print(i)
-                files.append("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
+                files.append("{}{}/".format(ADDRESS,version)+str(i)[2:-1])
                 if verbose:
-                    print("https://raw.githubusercontent.com/hugie999/h-shell/{}/".format(version)+str(i)[2:-1])
+                    print("{}{}/".format(ADDRESS,version)+str(i)[2:-1])
                 final.append(str(i)[2:-1])
             
             #print(filenam[i])
@@ -272,6 +289,8 @@ def postint(installto= Path(),ver=""):
     #     pass
 if __package__ == None:
     import os
+    print(f"installer adress: {ADDRESS}")
+    print("if this seams wrong then redownload the installer!")
     if not HASWEB:
         print("requests module not loaded! (please install it)")
         print("pip: python -m pip install requests")
