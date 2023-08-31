@@ -170,7 +170,7 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old",fake=False)
         #filenam = []
         print()
         if not noloader:
-            load.makeloader(len(files),"getting files","got files!")
+            load.makeloader(len(files),"getting files","got files!   ")
         else:
             print("getting files")
         for i in range(len(files)):
