@@ -439,37 +439,44 @@ def pluginreload():
         logs.info(i)
         logs.info(str(i)[-5:])
         if str(i)[-8:] == ".plug.py" and not "__pycache__" in str(i):
-            load.loadupdate()
-            plugins.plugindata.append(SourceFileLoader(str(i.name),str(i)).load_module())
-            logs.info(z)
-            logs.info(type(plugins.plugindata[z]))
             try:
-                plugins.plugindata[z].PLUGVER
-            except:
-                plugins.plugindata[z].PLUGVER = 0
-            try:
-                plugins.doeverycommand.append(plugins.plugindata[z].META["oncommand"])
-                plugins.doafter.append(plugins.plugindata[z].META["doafter"])
-            except KeyError as e:
-                logs.info("no plugin type on "+str(z))
-                logs.info(e)
-                plugins.doafter.append(False)
-                plugins.doeverycommand.append(False)
-            logs.info(str(plugins.doafter))
-            try:
-                plugins.helphelps.extend(plugins.plugindata[z].HELPDESC)
-                plugins.helpnames.extend(plugins.plugindata[z].HELPCOMS)
-                for i in range(len(plugins.plugindata[z].HELPCOMS)):
-                    plugins.helpplugs.append(plugins.plugindata[z].META["name"])
-            except AttributeError:
-                pass
-            for i in range(len(plugins.plugindata[z].COMS)):
-                
-                plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
-                plugins.pluginreservednum.append(z)
-                
-                
-            z += 1
+                load.loadupdate()
+                plugins.plugindata.append(SourceFileLoader(str(i.name),str(i)).load_module())
+                logs.info(z)
+                logs.info(type(plugins.plugindata[z]))
+                try:
+                    plugins.plugindata[z].PLUGVER
+                except:
+                    plugins.plugindata[z].PLUGVER = 0
+                try:
+                    plugins.doeverycommand.append(plugins.plugindata[z].META["oncommand"])
+                    plugins.doafter.append(plugins.plugindata[z].META["doafter"])
+                except KeyError as e:
+                    logs.info("no plugin type on "+str(z))
+                    logs.info(e)
+                    plugins.doafter.append(False)
+                    plugins.doeverycommand.append(False)
+                logs.info(str(plugins.doafter))
+                try:
+                    plugins.helphelps.extend(plugins.plugindata[z].HELPDESC)
+                    plugins.helpnames.extend(plugins.plugindata[z].HELPCOMS)
+                    for i in range(len(plugins.plugindata[z].HELPCOMS)):
+                        plugins.helpplugs.append(plugins.plugindata[z].META["name"])
+                except AttributeError:
+                    pass
+                for i in range(len(plugins.plugindata[z].COMS)):
+                    
+                    plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
+                    plugins.pluginreservednum.append(z)
+                z += 1
+            except Exception as e:
+                print(f"\n{gettheme(True)}!got error loading plugin {i.name}!{gettheme()}")
+                if e.__traceback__.tb_lineno == 444:
+                    print(f"==info==:\n\t-class:{e.__class__}\n\t-str  :{str(e)}\n\t-help :error importing plugin (line 444 loadmodule)\n\t-file :{i.name}")
+                else:
+                    print(f"==info==:\n\t-class:{e.__class__}\n\t-str  :{str(e)}\n\t-line :{e.__traceback__.tb_lineno}\n\t-file :{i.name}")
+                    print("!please report this!")
+                    input("[ENTER]")
     logs.info((plugins.plugintypes))
     logs.info("done!----")
     load.loadcomplete()
