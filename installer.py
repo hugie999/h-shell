@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 noloader = False
-verbose = True
+verbose = False
 MANUALADRESS = False
 if Path("./.HSHinsecureinst").exists():
     FORCEHTTP = True 
