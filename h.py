@@ -329,6 +329,7 @@ class prefs:
     blinkcur = True
     loadmetas = True
     autotitletxt = True
+    insecurehttp = Path(proghome / ".HSHinsecureinst").exists()
 class fsmeta:
     active = False
     forceoff = False
@@ -471,12 +472,9 @@ def pluginreload():
                 z += 1
             except Exception as e:
                 print(f"\n{gettheme(True)}!got error loading plugin {i.name}!{gettheme()}")
-                if e.__traceback__.tb_lineno == 444:
-                    print(f"==info==:\n\t-class:{e.__class__}\n\t-str  :{str(e)}\n\t-help :error importing plugin (line 444 loadmodule)\n\t-file :{i.name}")
-                else:
-                    print(f"==info==:\n\t-class:{e.__class__}\n\t-str  :{str(e)}\n\t-line :{e.__traceback__.tb_lineno}\n\t-file :{i.name}")
-                    print("!please report this!")
-                    input("[ENTER]")
+                print(f"==info==:\n\t-class:{e.__class__}\n\t-str  :{str(e)}\n\t-line :{e.__traceback__.tb_lineno}\n\t-file :{i.name}")
+                print("!please report this!")
+                input("[ENTER]")
     logs.info((plugins.plugintypes))
     logs.info("done!----")
     load.loadcomplete()
