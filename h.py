@@ -1145,6 +1145,7 @@ while True:
                             print("\x1b[37;40m  {}  \x1b[37;40m  {} | os      : Windows".format(gettheme(False),gettheme(False)))
                         else:
                             print("\x1b[37;40m  {}  \x1b[37;40m  {} | os      : not Windows".format(gettheme(False),gettheme(False)))
+                        print(f"       | py ver  : {sys.version}")
                         print()
                     elif a[1] == "infowo":
                         print("________{}".format(gettheme()))
