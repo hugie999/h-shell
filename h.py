@@ -471,7 +471,10 @@ def pluginreload():
                     plugins.pluginreservednum.append(z)
                 z += 1
             except Exception as e:
-                print(f"\n{gettheme(True)}!got error loading plugin {i.name}!{gettheme()}")
+                try:
+                    print(f"\n{gettheme(True)}!got error loading plugin {i.name}!{gettheme()}")
+                except:
+                    print(f"\n{gettheme(True)}!got error loading plugin [name not loaded]!{gettheme()}")
                 print(f"==info==:\n\t-class:{e.__class__}\n\t-str  :{str(e)}\n\t-line :{e.__traceback__.tb_lineno}\n\t-file :{i.name}")
                 print("!please report this!")
                 input("[ENTER]")
