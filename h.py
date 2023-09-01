@@ -441,7 +441,7 @@ def pluginreload():
         logs.info(str(i)[-5:])
         if str(i)[-8:] == ".plug.py" and not "__pycache__" in str(i):
             try:
-                load.loadupdate()
+                load.loadupdate(i.name)
                 plugins.plugindata.append(SourceFileLoader(str(i.name),str(i)).load_module())
                 logs.info(z)
                 logs.info(type(plugins.plugindata[z]))
