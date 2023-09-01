@@ -48,7 +48,7 @@ except Exception as ex:
         except ModuleNotFoundError:
             print("'installer.py' not found")
     quit()
-    
+import json
 import os
 from sys import exit as quit
 from pathlib import Path
@@ -313,8 +313,13 @@ class plugins:
     doeverycommand = []
     doafter = []
     helpnames = []
+    filenames = []
     helphelps = []
     helpplugs = []
+    plugjson = {"plugs":{}}
+    disabledplugs = []
+    def createplugdict(name) -> dict:
+        return {"name":name,"enabled":True}
 class prefs:
     #qclear = checkfor(".quickclear")
     qclear = False
@@ -412,7 +417,6 @@ if (not (proghome/"plugins").exists()) or (not (proghome/"plugins").is_dir()):
             (proghome/"plugins").mkdir()
 
 def pluginreload():
-    
     z = 0
     # global plugins.pluginreserved
     # global plugins.pluginreservednum
@@ -421,10 +425,22 @@ def pluginreload():
     plugins.pluginreservednum = []
     plugins.plugindata = []
     plugins.doeverycommand = []
+    plugins.filenames = []
     plugins.doafter = []
     plugins.helphelps = []
     plugins.helpnames = []
     plugins.helpplugs = []
+    try:
+        f = open(proghome/"pluginfo.json")
+        plugins.plugjson = json.load(f)
+        f.close()
+    except FileNotFoundError:
+        plugins.plugjson = {"plugs":{}}
+    except json.decoder.JSONDecodeError:
+        print("!!got json decoder error when reading 'pluginfo.json'!!")
+        print(f"\t-try deleteing [{proghome}/pluginfo.json]")
+        quit(0)
+        
     logs.info("loading plugins!----")
     
     if (not (proghome/"plugins").exists()) or (not (proghome/"plugins").is_dir()):
@@ -439,37 +455,48 @@ def pluginreload():
     for i in (proghome/"plugins").iterdir():
         logs.info(i)
         logs.info(str(i)[-5:])
+        
         if str(i)[-8:] == ".plug.py" and not "__pycache__" in str(i):
             try:
                 load.loadupdate(i.name)
-                plugins.plugindata.append(SourceFileLoader(str(i.name),str(i)).load_module())
-                logs.info(z)
-                logs.info(type(plugins.plugindata[z]))
+                plugins.filenames.append(i.name)
                 try:
-                    plugins.plugindata[z].PLUGVER
-                except:
-                    plugins.plugindata[z].PLUGVER = 0
-                try:
-                    plugins.doeverycommand.append(plugins.plugindata[z].META["oncommand"])
-                    plugins.doafter.append(plugins.plugindata[z].META["doafter"])
-                except KeyError as e:
-                    logs.info("no plugin type on "+str(z))
-                    logs.info(e)
-                    plugins.doafter.append(False)
-                    plugins.doeverycommand.append(False)
-                logs.info(str(plugins.doafter))
-                try:
-                    plugins.helphelps.extend(plugins.plugindata[z].HELPDESC)
-                    plugins.helpnames.extend(plugins.plugindata[z].HELPCOMS)
-                    for i in range(len(plugins.plugindata[z].HELPCOMS)):
-                        plugins.helpplugs.append(plugins.plugindata[z].META["name"])
-                except AttributeError:
-                    pass
-                for i in range(len(plugins.plugindata[z].COMS)):
-                    
-                    plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
-                    plugins.pluginreservednum.append(z)
-                z += 1
+                    plugins.plugjson["plugs"][i.name]
+                except KeyError:
+                    plugins.plugjson["plugs"][i.name] = plugins.createplugdict(i.name)
+                    print(f"-created new plugin listing for {i.name}-\n")
+                if plugins.plugjson["plugs"][i.name]["enabled"]:
+                    plugins.plugindata.append(SourceFileLoader(str(i.name),str(i)).load_module())
+                    logs.info(z)
+                    logs.info(type(plugins.plugindata[z]))
+                    try:
+                        plugins.plugindata[z].PLUGVER
+                    except:
+                        plugins.plugindata[z].PLUGVER = 0
+                    try:
+                        plugins.doeverycommand.append(plugins.plugindata[z].META["oncommand"])
+                        plugins.doafter.append(plugins.plugindata[z].META["doafter"])
+                    except KeyError as e:
+                        logs.info("no plugin type on "+str(z))
+                        logs.info(e)
+                        plugins.doafter.append(False)
+                        plugins.doeverycommand.append(False)
+                    logs.info(str(plugins.doafter))
+                    try:
+                        plugins.helphelps.extend(plugins.plugindata[z].HELPDESC)
+                        plugins.helpnames.extend(plugins.plugindata[z].HELPCOMS)
+                        for i in range(len(plugins.plugindata[z].HELPCOMS)):
+                            plugins.helpplugs.append(plugins.plugindata[z].META["name"])
+                    except AttributeError:
+                        pass
+                    for i in range(len(plugins.plugindata[z].COMS)):
+                        
+                        plugins.pluginreserved.append(plugins.plugindata[z].COMS[i])
+                        plugins.pluginreservednum.append(z)
+                    z += 1
+                else:
+                    logs.info(f"skipied plugin {i.name}")
+                    print(f"<plugin {i.name} not loaded>\n")
             except Exception as e:
                 try:
                     print(f"\n{gettheme(True)}!got error loading plugin {i.name}!{gettheme()}")
@@ -479,6 +506,10 @@ def pluginreload():
                 print("!please report this!")
                 input("[ENTER]")
     logs.info((plugins.plugintypes))
+    print("saveing 'pluginfo.json'")
+    f = open(proghome/"pluginfo.json","w")
+    json.dump(plugins.plugjson,f)
+    f.close()
     logs.info("done!----")
     load.loadcomplete()
 #input()
@@ -848,6 +879,23 @@ while True:
                     for i in range(len(plugins.plugindata)):
                         print("[{}] ".format(str(i))+plugins.plugindata[i].META["name"])
                     b = 0
+                elif a[1] == "filelist":
+                    print(gettheme(True)+"--plugins--"+gettheme(False))
+                    for i in range(len(plugins.plugindata)):
+                        print("[{}] ".format(str(i))+plugins.filenames[i])
+                    b = 0
+                elif a[1] == "set":
+                    
+                    try:
+                        choice= plugins.filenames[int(a[2])]
+                    except ValueError:
+                        choice = a[2]
+                    if a[3] == "on":
+                        # for i in range(len(plugins.plugindata)):
+                        plugins.plugjson["plugs"][choice]["enabled"] = True
+                    elif a[3] == "off":
+                        # for i in range(len(plugins.plugindata)):
+                        plugins.plugjson["plugs"][choice]["enabled"] = False
                 elif a[1] == "show":
                     try:
                         pluginnumber = int(a[2])
@@ -881,7 +929,10 @@ while True:
                     plugins.errorhandle = (not plugins.errorhandle)
                     print("error handler: "+str(plugins.errorhandle))
                     logs.info("plugin error handler: "+str(plugins.errorhandle))
-                pass
+                # print("saveing pluginfo")
+                f = open(proghome/"pluginfo.json","w")
+                json.dump(plugins.plugjson,f)
+                f.close()
             elif a[0] == "prefs" or a[0] == "pref":
                 printappname("prefs",custColour=gettheme(),custBannerColour=gettheme(True))
                 print("draw title        : {}".format(prefs.drawhead))
