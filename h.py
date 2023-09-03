@@ -881,7 +881,7 @@ while True:
                     b = 0
                 elif a[1] == "filelist":
                     print(gettheme(True)+"--plugins--"+gettheme(False))
-                    for i in range(len(plugins.plugindata)):
+                    for i in range(len(plugins.filenames)):
                         print("[{}] ".format(str(i))+plugins.filenames[i])
                     b = 0
                 elif a[1] == "set":

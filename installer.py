@@ -28,8 +28,10 @@ def inlist(list = ["a","b","c"],string= ""):
         return False
     else:
         return True
-
-inlist(["a"],"s")
+    
+class options: #ill add more stuff later
+    branch = None
+    
 
 try:
     import requests
@@ -115,7 +117,7 @@ def featupda(installto=Path):
             print("[ finished     ]")
 
 def webinst(installto=Path(),isgit=True,version="main",hver=".._old",fake=False):
-    input("installing to "+str(installto))
+    print("installing to "+str(installto))
     if hver == ".._manualinstall":
         print("this h-shell install was done without internet")
         print("skiping version check...")
@@ -176,7 +178,7 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old",fake=False)
         for i in range(len(files)):
             data.append(requests.get(files[i]).text)
             if noloader:
-                print(i)
+                print(f"{str(i).zfill(2)}/{len(files)}")
             else:
                 load.loadupdate(files[i])
             #files.append(i)
@@ -194,7 +196,7 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old",fake=False)
             to.write(data[i])
             to.close()
             if noloader:
-                print(i)
+                print(f"{str(i).zfill(2)}/{len(files)}")
             else:
                 load.loadupdate(final[i])
             #" ".encode("utf-8")
@@ -287,7 +289,7 @@ def postint(installto= Path(),ver=""):
     #         (installto/".loadplugs").touch()
     # except FileExistsError:
     #     pass
-if __package__ == None:
+if __name__ == "__main__":
     import os
     print(f"installer adress: {ADDRESS}")
     print("if this seams wrong then redownload the installer!")
@@ -297,10 +299,36 @@ if __package__ == None:
         print("deb: sudo apt-get install python3-requests")
         quit(1)
     #input("pls run from hiss shell")
-    webinst(Path(input("input path to install:")))#,os.name == "nt")#,True)
+    print()
+    print("welcome to the installer!") 
+    print("please select what you would like to do...")
+    print(f"[1]:Install to current directory ({os.getcwd()})")
+    print("[2]:manualy specify path")
+    if not options.branch:
+        branch = ".._latest"
+        print(f"[3]:specify branch/tag (cur:{branch})")
+    else:
+        branch = options.branch
+    while True:
+        choice = input(":")
+        try:
+            choice = int(choice)
+            if choice < 1 or choice > 3:
+                raise ValueError
+        except ValueError:
+            print("bad choice")
+            quit(1)
+        if choice == 1:
+            webinst(Path(os.getcwd()),version=branch)
+            break
+        elif choice == 2:
+            webinst(Path(input("input path to install:")),version=branch)#,os.name == "nt")#,True)
+            break
+        elif choice == 3:
+            if not options.branch:
+                branch = input("new branch/tag to install from (ex:beta3, main):")
+                print(f"new branch: '{branch}'")
     if os.name != "nt":
         print("remember to install the 'psutil' library (not required)")
         print("library required for the 'drv' command")
     
-    
-    #raise Exception
