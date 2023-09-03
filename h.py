@@ -204,6 +204,7 @@ proghome = Path(__file__).parent
 try:
     f = open(proghome/".hvtag")
     vertag = f.read()
+    f.close()
 except FileNotFoundError:
     logs.warning("version tag read error (no file)!")
     logs.info("file '.hvtag' not found")
