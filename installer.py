@@ -117,7 +117,7 @@ def featupda(installto=Path):
             print("[ finished     ]")
 
 def webinst(installto=Path(),isgit=True,version="main",hver=".._old",fake=False):
-    input("installing to "+str(installto))
+    print("installing to "+str(installto))
     if hver == ".._manualinstall":
         print("this h-shell install was done without internet")
         print("skiping version check...")
