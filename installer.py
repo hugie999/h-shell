@@ -29,8 +29,6 @@ def inlist(list = ["a","b","c"],string= ""):
     else:
         return True
 
-inlist(["a"],"s")
-
 try:
     import requests
 except ModuleNotFoundError as ex:
