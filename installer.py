@@ -289,7 +289,7 @@ def postint(installto= Path(),ver=""):
     #         (installto/".loadplugs").touch()
     # except FileExistsError:
     #     pass
-if __package__ == None:
+if __name__ == "__main__":
     import os
     print(f"installer adress: {ADDRESS}")
     print("if this seams wrong then redownload the installer!")
