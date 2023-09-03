@@ -28,6 +28,10 @@ def inlist(list = ["a","b","c"],string= ""):
         return False
     else:
         return True
+    
+class options: #ill add more stuff later
+    branch = None
+    
 
 try:
     import requests
