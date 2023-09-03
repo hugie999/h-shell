@@ -178,7 +178,7 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old",fake=False)
         for i in range(len(files)):
             data.append(requests.get(files[i]).text)
             if noloader:
-                print(i)
+                print(f"{str(i).zfill(2)}/{len(files)}")
             else:
                 load.loadupdate(files[i])
             #files.append(i)
@@ -196,7 +196,7 @@ def webinst(installto=Path(),isgit=True,version="main",hver=".._old",fake=False)
             to.write(data[i])
             to.close()
             if noloader:
-                print(i)
+                print(f"{str(i).zfill(2)}/{len(files)}")
             else:
                 load.loadupdate(final[i])
             #" ".encode("utf-8")
