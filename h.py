@@ -686,7 +686,7 @@ def doplug(command = "",isafter=False,locals={}) -> bool:
                 logs.info("did pluginnum "+str(i))
                 logs.info(str(plugins.plugindata[i].PLUGVER))
                 if plugins.plugindata[i].PLUGVER == 2:
-                    plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd,globals(),locals())
+                    plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd,globals(),locals)
                 else:
                     plugins.plugindata[i].oncommand(command,[gettheme(False),gettheme(True)],cd)
     if not fsmeta.canplugs and fsmeta.active:
