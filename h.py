@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-import loadicon as load
-load.makeloader(2,"importing","importing done")
+
 #print("importing [0/8] |")
 #print("\x1b[1A",end="")
 # import logs
@@ -16,6 +15,8 @@ a.setFormatter(logging.Formatter('%(name)s - %(levelname)s - %(message)s'))
 hasinstaller = True
 # logs.setLevel(logging.ERROR)
 try:
+    import loadicon as load
+    load.makeloader(2,"importing","importing done")
     logs.info("importing----------")
     try:
         logs.info("importing: installer script")
@@ -30,23 +31,15 @@ try:
 except Exception as ex:
     logs.log(4,str(ex))
     print(ex)
+    
+    print("trying recovery")
+    print("getting latest from git")
     try:
-        # logs.save()
-        print(ex)
-        print("error while importing! (check log.log)")
-            
-    except:
-        print("an error occoured saveing logs")
-        print(logs.logs)
-    finally:
-        print("trying recovery")
-        print("getting latest from git")
-        try:
-            from pathlib import Path
-            import installer
-            installer.webinst(Path(__file__).parent)
-        except ModuleNotFoundError:
-            print("'installer.py' not found")
+        from pathlib import Path
+        import installer
+        installer.webinst(Path(__file__).parent)
+    except ModuleNotFoundError:
+        print("'installer.py' not found")
     quit()
 import json
 import os
