@@ -809,7 +809,20 @@ class usrmodif:#ment to be used by the user for the "py" command or by plugins t
 
 #clear()
 #-------------------------------
-while True:
+#while True:
+def main():
+    #big globals thingy (replace later)
+    global wi
+    global hi
+    global usr
+    global isroot
+    global iswindows
+    global startcomdone
+    global startcomnum
+    global startingcoms
+    global cd
+    global theme
+    #===start of code===
     try:
         wi = os.get_terminal_size().columns
         hi = os.get_terminal_size().lines
@@ -1587,3 +1600,5 @@ while True:
         #print("")
         logs.warning("^C pressed please use stop command")
 
+while True:
+    main()
