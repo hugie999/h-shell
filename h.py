@@ -1343,6 +1343,7 @@ def main():
                         print()
                     printappname("",custBannerColour=gettheme(True))
             elif a[0] == "sys":
+                c = 0
                 if True or not fsmeta.active:
                     del a[0]
                     if prefs.enablesubprocess:
