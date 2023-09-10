@@ -13,6 +13,9 @@ a.setFormatter(logging.Formatter('%(name)s - %(levelname)s - %(message)s'))
 # a = logging.FileHandler("logs.log","w")
 # logs.addHandler(a)
 hasinstaller = True
+
+
+
 # logs.setLevel(logging.ERROR)
 try:
     import loadicon as load
@@ -46,7 +49,6 @@ import os
 from sys import exit as quit
 from pathlib import Path
 import platform
-import textwrap
 from importlib.machinery import SourceFileLoader
 import time
 import sys
@@ -194,10 +196,42 @@ ver = "0.1 Beta 3"
 vernum = 4
 vertag = ""
 proghome = Path(__file__).parent
+#----------------------
+def checkfor(filename=""):
+    logs.info(str(proghome)+"/"+filename)
+    try:
+        checkfile = open(str(proghome)+"/"+filename)
+        checkfile.close()
+        logs.info("true")
+        return True
+    except FileNotFoundError:
+        logs.info("false")
+        return False
+def doerrorhandler(e=Exception,errvalue="",traceback=Exception.__traceback__):
+    print("!!!got error!!!")
+    print(f"==info==:")
+    print(f"\t-value   :{errvalue}")
+    print(f"\t-error   :{type(e).__name__}")
+    # print(f"\t-str     :{str(e)}")
+    print(f"\t-line    :{traceback.tb_lineno}")
+    print(f"\t-lastInst:{traceback.tb_lasti}")
+    print(f"\t-file    :{traceback.tb_frame.f_code.co_filename}")
+    # print(f"\t-{}")
+    # print("!please report this!")
+
+# def exceptest(a,b,c):
+#     print(a)
+#     print(b)
+#     print(c)
+
+if not checkfor(".nocusttb"):
+    sys.excepthook = doerrorhandler
+# raise Exception
 try:
     f = open(proghome/".hvtag")
     vertag = f.read()
     f.close()
+
 except FileNotFoundError:
     logs.warning("version tag read error (no file)!")
     logs.info("file '.hvtag' not found")
@@ -267,16 +301,7 @@ def ask(_question="",default=False):
 startcomnum = 0
 startcomdone = False
 
-def checkfor(filename=""):
-    logs.info(str(proghome)+"/"+filename)
-    try:
-        checkfile = open(str(proghome)+"/"+filename)
-        checkfile.close()
-        logs.info("true")
-        return True
-    except FileNotFoundError:
-        logs.info("false")
-        return False
+
 def gettxtfrom(filename=""):
     logs.info(str(proghome)+"/"+filename)
     try:
@@ -329,7 +354,7 @@ class prefs:
     loadmetas = True
     autotitletxt = True
     insecurehttp = Path(proghome / ".HSHinsecureinst").exists()
-class fsmeta:
+class fsmeta: #kinds useless but i put too much effort in to remove now
     active = False
     forceoff = False
     noupdate = False
@@ -365,7 +390,7 @@ class fsmeta:
             fsmeta.active = False
         if fsmeta.forceoff:
             fsmeta.active = False
-class drvmetas:
+class drvmetas:#should prob remove ngl
     names = []
     def getnamefor(drive="c") -> str:
         return drvmetas.names[LETTERS.find(drive)]
@@ -492,13 +517,14 @@ def pluginreload():
                     logs.info(f"skipied plugin {i.name}")
                     print(f"<plugin {i.name} not loaded>\n")
             except Exception as e:
-                try:
-                    print(f"\n{gettheme(True)}!got error loading plugin {i.name}!{gettheme()}")
-                except:
-                    print(f"\n{gettheme(True)}!got error loading plugin [name not loaded]!{gettheme()}")
-                print(f"==info==:\n\t-class:{e.__class__}\n\t-str  :{str(e)}\n\t-line :{e.__traceback__.tb_lineno}\n\t-file :{i.name}")
-                print("!please report this!")
-                input("[ENTER]")
+                doerrorhandler(e,"got error loading plugin (recoverable)",e.__traceback__)
+                # try:
+                #     print(f"\n{gettheme(True)}!got error loading plugin {i.name}!{gettheme()}")
+                # except:
+                #     print(f"\n{gettheme(True)}!got error loading plugin [name not loaded]!{gettheme()}")
+                # print(f"==info==:\n\t-class:{e.__class__}\n\t-str  :{str(e)}\n\t-line :{e.__traceback__.tb_lineno}\n\t-file :{i.name}")
+                # print("!please report this!")
+                # input("[ENTER]")
     logs.info((plugins.plugintypes))
     print("saveing 'pluginfo.json'")
     f = open(proghome/"pluginfo.json","w")
