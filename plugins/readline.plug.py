@@ -2,14 +2,14 @@ COMS = ["hist"] #commands used
 META = {
     "name": "readline",
     "desc": "it literally just imports readline\nit also saves a bash-like history\nand also adds auto complete for files and builtin funtions (and builtin plugins)",
-    "pluginver": 1,
+    "pluginver": 2,
     "type":0,
     "oncommand" : True,
     "doafter" : True
 }#note type is the well type of plugin (false = normal, True = do every command (required for doafter))
 #type 0 is the normal one and is only called when a reserved command is used
 #type 1 is called every command and the used command is also run after
-PLUGVER = 1 #this is for compatibility or somthing
+PLUGVER = 2 #this is for compatibility or somthing
 HELPCOMS = ["hist"]
 HELPDESC = ["shows history"]
 from pathlib import Path
@@ -22,6 +22,7 @@ curdirls = []
 curdirfolds = []
 curdirfiles = []
 wi = os.get_terminal_size().columns
+hi = os.get_terminal_size().lines
 iswin = os.name == "nt"
 if iswin:
     print("!!!WINDOWS DETECTED!!!")
@@ -88,7 +89,7 @@ def complete(txt="",state=0):
 readline.set_completer(complete)
 readline.parse_and_bind("tab: complete")
 readline.set_completer_delims("")
-def oncommand(comfull,themestr,cd=Path()):
+def oncommand(comfull,themestr,cd=Path(),_unused1={},_unused2={}):
     try:
         global curcd
         global curdirls
@@ -113,7 +114,7 @@ def oncommand(comfull,themestr,cd=Path()):
         print(f"class : {e.__class__}")
         print(f"txt   : {e}")
         print(f"line  : {sys.exc_info()}")
-def docom(comfull,themestr,cd):
+def docom(comfull,themestr,cd,GLOBAL={},LOCAL={}):
     if iswin:
         print("!!!WINDOWS DETECTED!!!")
         print("readline plugin does\nnot work on windows\nplease delete this plugin")
@@ -121,9 +122,15 @@ def docom(comfull,themestr,cd):
         return
     print(themestr[1]+"--history--".center(wi,"-")+themestr[0])
     f = open(histfile)
+    l = []
     for i in f.read().splitlines():
         
-        print(i.center(wi))
+        l.append(i.center(wi))
     f.close()
-    
+    if GLOBAL["hi"]-3 > len(l):
+        for i in l[-(GLOBAL["hi"]-3):]:
+            print(i)
+    else:
+        for i in l:
+            print(i)
     print(themestr[1]+"".center(wi,"-")+themestr[0])
