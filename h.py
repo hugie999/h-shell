@@ -171,20 +171,21 @@ and   '\x1b[30;47mtheme\x1b[0m' showing the \x1b[1mbackground\x1b[0m colour"""]
         helpask = input[5:]
         if helpask == "":
             awnser = help.GHELP.splitlines()
-            for i in range(len(help.GHELP.splitlines())):
-                print(awnser[i])
+            return help.GHELP
+            # for i in range(len(help.GHELP.splitlines())):
+            #     print(awnser[i])
             
             
         elif helpask == "list":
             for i in range(len(help.HELPS)):
-                print(help.HELPS[i])
+                return (help.HELPS[i])
         else:
             try:
                 awnser = help.HELPS.index(helpask)
-                print(help.HELPTEX[awnser])
+                return (help.HELPTEX[awnser])
                 #print(HELPS.index(b))
             except ValueError:
-                print('no "{}" found in help docs'.format(helpask))
+                return ('no "{}" found in help docs'.format(helpask))
         #print(b)
         ret = 0
 theme = 0
@@ -224,8 +225,8 @@ def doerrorhandler(e=Exception,errvalue="",traceback=Exception.__traceback__):
 #     print(b)
 #     print(c)
 
-if not checkfor(".nocusttb"):
-    sys.excepthook = doerrorhandler
+# if not checkfor(".nocusttb"):
+#     sys.excepthook = doerrorhandler
 # raise Exception
 try:
     f = open(proghome/".hvtag")
@@ -429,6 +430,13 @@ class drvmetas:#should prob remove ngl
                 print("permission error on [drv: {}] please re-run as admin to create meta file here")
         drvmetas.update()
     #based on the LETTERS var
+
+class testreturndata: #shouldnt have made this a class but eh too bad
+    def __init__(self,retnum=0,title="",exdata={}) -> None:
+        self.retnum = retnum
+        self.title  = title
+        self.exdata = exdata
+
 if (not (proghome/"plugins").exists()) or (not (proghome/"plugins").is_dir()):
         logs.warning("no plugins folder detected!")
         print("no plugins folder!")
@@ -440,6 +448,7 @@ def pluginreload():
     # global plugins.pluginreserved
     # global plugins.pluginreservednum
     # global plugins.plugindata
+    errors = 0
     plugins.pluginreserved = []
     plugins.pluginreservednum = []
     plugins.plugindata = []
@@ -517,6 +526,7 @@ def pluginreload():
                     logs.info(f"skipied plugin {i.name}")
                     print(f"<plugin {i.name} not loaded>\n")
             except Exception as e:
+                errors += 1
                 doerrorhandler(e,"got error loading plugin (recoverable)",e.__traceback__)
                 # try:
                 #     print(f"\n{gettheme(True)}!got error loading plugin {i.name}!{gettheme()}")
@@ -532,6 +542,7 @@ def pluginreload():
     f.close()
     logs.info("done!----")
     load.loadcomplete()
+    return errors
 #input()
 pluginreload()
 if not iswindows:
@@ -669,7 +680,7 @@ def prnthead():
         #prompt = "[{}/{}/{}] | {} | : ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
 loadprefs()
 
-input("press [enter]")
+# input("press [enter]")
 clear()
 prnthead()
 print("Welcome to h-shell")
@@ -810,7 +821,7 @@ class usrmodif:#ment to be used by the user for the "py" command or by plugins t
 #clear()
 #-------------------------------
 #while True:
-def main():
+def main(commandtorun="",testmode=False) -> testreturndata:
     #big globals thingy (replace later)
     global wi
     global hi
@@ -822,6 +833,7 @@ def main():
     global startingcoms
     global cd
     global theme
+    testret = testreturndata(9000,"nodata")
     #===start of code===
     try:
         wi = os.get_terminal_size().columns
@@ -839,12 +851,16 @@ def main():
             usr = getpass.getuser()
         #wi = os.get_terminal_size().columns
         #hi = os.get_terminal_size().lines
-        print(gettheme(False),end="")
-        printEscape("[2K")
+        if not testmode:
+            print(gettheme(False),end="")
+            printEscape("[2K")
         #print("\x1b[0x07")
         
         if startcomdone:
-            a = input("{}{}{}".format(gettheme(True),prompt,gettheme(False)))
+            if commandtorun:
+                a = commandtorun
+            else:
+                a = input("{}{}{}".format(gettheme(True),prompt,gettheme(False))) #<--
                 
 
         else:
@@ -855,8 +871,9 @@ def main():
         
         print("\x1b[25m\x1b[24m",end="")
         a = a
-        printEscape("[1A")
-        printEscape("[2K")
+        if not testmode:
+            printEscape("[1A")
+            printEscape("[2K")
         b = 0
         if len(a) != 0:
             print(printcenter(":{}:".format(a),DoAsReturn=True))
@@ -873,11 +890,12 @@ def main():
             # for i in range(len(a)):
             #     astr += str(a[i]+" ")
             if a[0] == " ":
-                pass
+                testret = testreturndata(0,"no input")
             elif a[0] == "help":
-                help.gethelp(astr)
+                print(help.gethelp(astr))
+                testret = testreturndata(0,"printed help",{"helps":help.gethelp(astr)})
             elif a[0] == "pelp":
-                
+                pelptexts = ""
                 lennames = 0
                 lenhelps = 0
                 for i in plugins.helpnames:
@@ -889,8 +907,10 @@ def main():
                 print(gettheme(True)+"".ljust(wi,"-")+gettheme())
                 for i in range(len(plugins.helpnames)):
                     # "".ljust()
-                    print(f"{plugins.helpnames[i].ljust(lennames)} | {plugins.helphelps[i].ljust(lenhelps)} | {plugins.helpplugs[i]}")
+                    pelptexts += (f"{plugins.helpnames[i].ljust(lennames)} | {plugins.helphelps[i].ljust(lenhelps)} | {plugins.helpplugs[i]}\n")
+                print(pelptexts)
                 print(gettheme(True)+"".ljust(wi,"-")+gettheme())
+                testret = testreturndata(0,"pelp ran",{"helps":pelptexts})
                 # for i in range(len(plugins.helpnames)):
                 #     logs.info(plugins.helpplugs)
                 #     logs.info(plugins.helphelps)
@@ -905,17 +925,24 @@ def main():
                     print("please input a command")
                     b = 0
                 elif a[1] == "reload":
-                    pluginreload()
+                    pluginerrors = pluginreload()
+                    testret = testreturndata(0,"plugins reloaded",{"errors":pluginerrors})
                     b = 0
                 elif a[1] == "list":
                     print(gettheme(True)+"--plugins--"+gettheme(False))
+                    pluglist = ""
                     for i in range(len(plugins.plugindata)):
-                        print("[{}] ".format(str(i))+plugins.plugindata[i].META["name"])
+                        pluglist+=("[{}] ".format(str(i))+plugins.plugindata[i].META["name"])+"\n"
+                    print(pluglist)
+                    testret = testreturndata(0,"plugins listed",{"plugins":pluglist})
                     b = 0
                 elif a[1] == "filelist":
                     print(gettheme(True)+"--plugins--"+gettheme(False))
+                    filelst = []
                     for i in range(len(plugins.filenames)):
+                        filelst.append(plugins.filenames[i])
                         print("[{}] ".format(str(i))+plugins.filenames[i])
+                    testret = testreturndata(0,"plugin file list",{"files":filelst})
                     b = 0
                 elif a[1] == "set":
                     
@@ -1001,6 +1028,7 @@ def main():
                 saveprefs()
                 printEscape("[A")
                 printappname(custColour=gettheme(),custBannerColour=gettheme(True))
+                testret = testreturndata(0,"prefs set",{"newpref":prefs})
                 b = 0
             elif a[0] == "drv" or a[0] == "drive":
                 if not iswindows:
@@ -1146,8 +1174,10 @@ def main():
                     try:
                         theme = int(a[1])
                         saveprefs()
+                        testret = testreturndata(0,"theme set by id",{"id":a[1]})
                     except ValueError:
                         print("please input a number")
+                        testreturndata(1,"theme set by id failed (value error)",{"id":a[1]})
                 else:
                     printappname("themes",custBannerColour=gettheme(True))
                     for i in range(len(THEMES)):
@@ -1163,9 +1193,15 @@ def main():
                     print("")
                     printappname("",custBannerColour=gettheme(True))
                     print("\x1B[2A",end="")
-                    theme = int(input("new theme: "))
-                    print("")
-                    saveprefs()
+                    try:
+                        theme = int(input("new theme: "))
+                    except ValueError:
+                        print("bad theme :(")
+                        testret = testreturndata(0,"theme failed to set by ui")
+                    else:
+                        print("")
+                        saveprefs()
+                        testret = testreturndata(0,"theme set by ui",{"id":theme})
             elif a[0] == "exit" or a[0] == "quit":
                 logs.info("stoped")
                 # logs.save()
@@ -1582,24 +1618,26 @@ def main():
             print("working directory will be set to root")
             print(";) dont worry you probably just cd'ed into a file lol")
             print('\x1b[0m',end="")
-        if prefs.drawhead:
-            printEscape("[H")
-            #prompt = prefs[0]
-            #title  = prefs[1]
-            #theme  = prefs[2]
-            prnthead()
-            
-            #print(title + "-:{}".format(str(cd)))
-            
-            for i in range(hi-2):
-                printEscape("[1B")
-        else:
-            prnthead()        
+        if not testmode:
+            if prefs.drawhead:
+                printEscape("[H")
+                #prompt = prefs[0]
+                #title  = prefs[1]
+                #theme  = prefs[2]
+                prnthead()
+                
+                #print(title + "-:{}".format(str(cd)))
+                
+                for i in range(hi-2):
+                    printEscape("[1B")
+            else:
+                prnthead()        
     except KeyboardInterrupt:
         # print("\x1b[25m\x1b[0m")
         # print("exited")
         #print("")
         logs.warning("^C pressed please use stop command")
-
-while True:
-    main()
+    return testret
+if __name__ == "__main__":
+    while True:
+        main()
