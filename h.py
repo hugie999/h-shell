@@ -1028,6 +1028,7 @@ def main(commandtorun="",testmode=False) -> testreturndata:
                 saveprefs()
                 printEscape("[A")
                 printappname(custColour=gettheme(),custBannerColour=gettheme(True))
+                testret = testreturndata(0,"prefs set",{"newpref":prefs})
                 b = 0
             elif a[0] == "drv" or a[0] == "drive":
                 if not iswindows:
@@ -1173,8 +1174,10 @@ def main(commandtorun="",testmode=False) -> testreturndata:
                     try:
                         theme = int(a[1])
                         saveprefs()
+                        testret = testreturndata(0,"theme set by id",{"id":a[1]})
                     except ValueError:
                         print("please input a number")
+                        testreturndata(1,"theme set by id failed (value error)",{"id":a[1]})
                 else:
                     printappname("themes",custBannerColour=gettheme(True))
                     for i in range(len(THEMES)):
@@ -1190,9 +1193,15 @@ def main(commandtorun="",testmode=False) -> testreturndata:
                     print("")
                     printappname("",custBannerColour=gettheme(True))
                     print("\x1B[2A",end="")
-                    theme = int(input("new theme: "))
-                    print("")
-                    saveprefs()
+                    try:
+                        theme = int(input("new theme: "))
+                    except ValueError:
+                        print("bad theme :(")
+                        testret = testreturndata(0,"theme failed to set by ui")
+                    else:
+                        print("")
+                        saveprefs()
+                        testret = testreturndata(0,"theme set by ui",{"id":theme})
             elif a[0] == "exit" or a[0] == "quit":
                 logs.info("stoped")
                 # logs.save()
