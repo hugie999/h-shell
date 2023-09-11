@@ -448,6 +448,7 @@ def pluginreload():
     # global plugins.pluginreserved
     # global plugins.pluginreservednum
     # global plugins.plugindata
+    errors = 0
     plugins.pluginreserved = []
     plugins.pluginreservednum = []
     plugins.plugindata = []
@@ -525,6 +526,7 @@ def pluginreload():
                     logs.info(f"skipied plugin {i.name}")
                     print(f"<plugin {i.name} not loaded>\n")
             except Exception as e:
+                errors += 1
                 doerrorhandler(e,"got error loading plugin (recoverable)",e.__traceback__)
                 # try:
                 #     print(f"\n{gettheme(True)}!got error loading plugin {i.name}!{gettheme()}")
@@ -540,6 +542,7 @@ def pluginreload():
     f.close()
     logs.info("done!----")
     load.loadcomplete()
+    return errors
 #input()
 pluginreload()
 if not iswindows:
@@ -818,7 +821,7 @@ class usrmodif:#ment to be used by the user for the "py" command or by plugins t
 #clear()
 #-------------------------------
 #while True:
-def main(commandtorun="") -> testreturndata:
+def main(commandtorun="",testmode=False) -> testreturndata:
     #big globals thingy (replace later)
     global wi
     global hi
@@ -848,8 +851,9 @@ def main(commandtorun="") -> testreturndata:
             usr = getpass.getuser()
         #wi = os.get_terminal_size().columns
         #hi = os.get_terminal_size().lines
-        print(gettheme(False),end="")
-        printEscape("[2K")
+        if not testmode:
+            print(gettheme(False),end="")
+            printEscape("[2K")
         #print("\x1b[0x07")
         
         if startcomdone:
@@ -867,8 +871,9 @@ def main(commandtorun="") -> testreturndata:
         
         print("\x1b[25m\x1b[24m",end="")
         a = a
-        printEscape("[1A")
-        printEscape("[2K")
+        if not testmode:
+            printEscape("[1A")
+            printEscape("[2K")
         b = 0
         if len(a) != 0:
             print(printcenter(":{}:".format(a),DoAsReturn=True))
@@ -920,17 +925,24 @@ def main(commandtorun="") -> testreturndata:
                     print("please input a command")
                     b = 0
                 elif a[1] == "reload":
-                    pluginreload()
+                    pluginerrors = pluginreload()
+                    testret = testreturndata(0,"plugins reloaded",{"errors":pluginerrors})
                     b = 0
                 elif a[1] == "list":
                     print(gettheme(True)+"--plugins--"+gettheme(False))
+                    pluglist = ""
                     for i in range(len(plugins.plugindata)):
-                        print("[{}] ".format(str(i))+plugins.plugindata[i].META["name"])
+                        pluglist+=("[{}] ".format(str(i))+plugins.plugindata[i].META["name"])+"\n"
+                    print(pluglist)
+                    testret = testreturndata(0,"plugins listed",{"plugins":pluglist})
                     b = 0
                 elif a[1] == "filelist":
                     print(gettheme(True)+"--plugins--"+gettheme(False))
+                    filelst = []
                     for i in range(len(plugins.filenames)):
+                        filelst.append(plugins.filenames[i])
                         print("[{}] ".format(str(i))+plugins.filenames[i])
+                    testret = testreturndata(0,"plugin file list",{"files":filelst})
                     b = 0
                 elif a[1] == "set":
                     
@@ -1597,19 +1609,20 @@ def main(commandtorun="") -> testreturndata:
             print("working directory will be set to root")
             print(";) dont worry you probably just cd'ed into a file lol")
             print('\x1b[0m',end="")
-        if prefs.drawhead:
-            printEscape("[H")
-            #prompt = prefs[0]
-            #title  = prefs[1]
-            #theme  = prefs[2]
-            prnthead()
-            
-            #print(title + "-:{}".format(str(cd)))
-            
-            for i in range(hi-2):
-                printEscape("[1B")
-        else:
-            prnthead()        
+        if not testmode:
+            if prefs.drawhead:
+                printEscape("[H")
+                #prompt = prefs[0]
+                #title  = prefs[1]
+                #theme  = prefs[2]
+                prnthead()
+                
+                #print(title + "-:{}".format(str(cd)))
+                
+                for i in range(hi-2):
+                    printEscape("[1B")
+            else:
+                prnthead()        
     except KeyboardInterrupt:
         # print("\x1b[25m\x1b[0m")
         # print("exited")
