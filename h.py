@@ -225,8 +225,8 @@ def doerrorhandler(e=Exception,errvalue="",traceback=Exception.__traceback__):
 #     print(b)
 #     print(c)
 
-if not checkfor(".nocusttb"):
-    sys.excepthook = doerrorhandler
+# if not checkfor(".nocusttb"):
+#     sys.excepthook = doerrorhandler
 # raise Exception
 try:
     f = open(proghome/".hvtag")
