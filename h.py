@@ -171,20 +171,21 @@ and   '\x1b[30;47mtheme\x1b[0m' showing the \x1b[1mbackground\x1b[0m colour"""]
         helpask = input[5:]
         if helpask == "":
             awnser = help.GHELP.splitlines()
-            for i in range(len(help.GHELP.splitlines())):
-                print(awnser[i])
+            return help.GHELP
+            # for i in range(len(help.GHELP.splitlines())):
+            #     print(awnser[i])
             
             
         elif helpask == "list":
             for i in range(len(help.HELPS)):
-                print(help.HELPS[i])
+                return (help.HELPS[i])
         else:
             try:
                 awnser = help.HELPS.index(helpask)
-                print(help.HELPTEX[awnser])
+                return (help.HELPTEX[awnser])
                 #print(HELPS.index(b))
             except ValueError:
-                print('no "{}" found in help docs'.format(helpask))
+                return ('no "{}" found in help docs'.format(helpask))
         #print(b)
         ret = 0
 theme = 0
@@ -429,6 +430,13 @@ class drvmetas:#should prob remove ngl
                 print("permission error on [drv: {}] please re-run as admin to create meta file here")
         drvmetas.update()
     #based on the LETTERS var
+
+class testreturndata: #shouldnt have made this a class but eh too bad
+    def __init__(self,retnum=0,title="",exdata={}) -> None:
+        self.retnum = retnum
+        self.title  = title
+        self.exdata = exdata
+
 if (not (proghome/"plugins").exists()) or (not (proghome/"plugins").is_dir()):
         logs.warning("no plugins folder detected!")
         print("no plugins folder!")
@@ -669,7 +677,7 @@ def prnthead():
         #prompt = "[{}/{}/{}] | {} | : ".format(time.localtime()[0],time.localtime()[1],time.localtime()[2],strcd)
 loadprefs()
 
-input("press [enter]")
+# input("press [enter]")
 clear()
 prnthead()
 print("Welcome to h-shell")
@@ -810,7 +818,7 @@ class usrmodif:#ment to be used by the user for the "py" command or by plugins t
 #clear()
 #-------------------------------
 #while True:
-def main():
+def main(commandtorun="") -> testreturndata:
     #big globals thingy (replace later)
     global wi
     global hi
@@ -822,6 +830,7 @@ def main():
     global startingcoms
     global cd
     global theme
+    testret = testreturndata(9000,"nodata")
     #===start of code===
     try:
         wi = os.get_terminal_size().columns
@@ -844,7 +853,10 @@ def main():
         #print("\x1b[0x07")
         
         if startcomdone:
-            a = input("{}{}{}".format(gettheme(True),prompt,gettheme(False)))
+            if commandtorun:
+                a = commandtorun
+            else:
+                a = input("{}{}{}".format(gettheme(True),prompt,gettheme(False))) #<--
                 
 
         else:
@@ -873,11 +885,12 @@ def main():
             # for i in range(len(a)):
             #     astr += str(a[i]+" ")
             if a[0] == " ":
-                pass
+                testret = testreturndata(0,"no input")
             elif a[0] == "help":
-                help.gethelp(astr)
+                print(help.gethelp(astr))
+                testret = testreturndata(0,"printed help",{"helps":help.gethelp(astr)})
             elif a[0] == "pelp":
-                
+                pelptexts = ""
                 lennames = 0
                 lenhelps = 0
                 for i in plugins.helpnames:
@@ -889,8 +902,10 @@ def main():
                 print(gettheme(True)+"".ljust(wi,"-")+gettheme())
                 for i in range(len(plugins.helpnames)):
                     # "".ljust()
-                    print(f"{plugins.helpnames[i].ljust(lennames)} | {plugins.helphelps[i].ljust(lenhelps)} | {plugins.helpplugs[i]}")
+                    pelptexts += (f"{plugins.helpnames[i].ljust(lennames)} | {plugins.helphelps[i].ljust(lenhelps)} | {plugins.helpplugs[i]}\n")
+                print(pelptexts)
                 print(gettheme(True)+"".ljust(wi,"-")+gettheme())
+                testret = testreturndata(0,"pelp ran",{"helps":pelptexts})
                 # for i in range(len(plugins.helpnames)):
                 #     logs.info(plugins.helpplugs)
                 #     logs.info(plugins.helphelps)
@@ -1600,6 +1615,7 @@ def main():
         # print("exited")
         #print("")
         logs.warning("^C pressed please use stop command")
-
-while True:
-    main()
+    return testret
+if __name__ == "__main__":
+    while True:
+        main()
