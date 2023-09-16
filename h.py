@@ -49,6 +49,7 @@ import os
 from sys import exit as quit
 from pathlib import Path
 import platform
+import textwrap
 from importlib.machinery import SourceFileLoader
 import time
 import sys
