@@ -194,8 +194,8 @@ LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 iswindows = False
 isfloppy  = False
 isinserted= True
-ver = "0.1 Beta 3"
-vernum = 4
+ver = "0.1 Beta 4"
+vernum = 5
 vertag = ""
 proghome = Path(__file__).parent
 #----------------------
