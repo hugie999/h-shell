@@ -862,6 +862,8 @@ def main(commandtorun="",testmode=False) -> testreturndata:
                 a = commandtorun
             else:
                 a = input("{}{}{}".format(gettheme(True),prompt,gettheme(False))) #<--
+            if len(a) != 0 and startcomdone:
+                print(printcenter(":{}:".format(a),DoAsReturn=True))
                 
 
         else:
@@ -876,8 +878,7 @@ def main(commandtorun="",testmode=False) -> testreturndata:
             printEscape("[1A")
             printEscape("[2K")
         b = 0
-        if len(a) != 0:
-            print(printcenter(":{}:".format(a),DoAsReturn=True))
+        
         logs.info("usr: "+str(a))
         astr = a
         logs.info(astr)
@@ -1509,7 +1510,7 @@ def main(commandtorun="",testmode=False) -> testreturndata:
                 elif a == "path":
                     print("cd: "+str(cd))
                     b = 0
-            elif a[0]=="py":
+            elif a[0] == "py":
                 
                 c = astr[3:]
                 try:
@@ -1521,6 +1522,11 @@ def main(commandtorun="",testmode=False) -> testreturndata:
                     print("got error: {}".format(e))
                     usrmodif.latestexep = e
                     print("e has been saved to (usrmodif.latestexep)")
+            elif a[0] == "play":
+                print("now playing file...")
+                startingcoms = ["py print('hello')","echo yay"]
+                startcomnum = 0
+                startcomdone = False
             else:
                 if not len(a[0]) == 0:
                     didwindrive = False
