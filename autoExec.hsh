@@ -1,0 +1,4 @@
+!NOECHO
+loadPlugins
+echo [green]hello![/]
+!YESECHO

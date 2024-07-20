@@ -12,6 +12,8 @@ META = {
 PLUGVER = 2 #this is for compatibility or somthing
 HELPCOMS = ["hist"]
 HELPDESC = ["shows history"]
+
+DONTLOAD = True #dont load on new version
 from pathlib import Path
 
 histfile = str(Path("~/.HSHhist").expanduser())

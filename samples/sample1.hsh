@@ -1,0 +1,4 @@
+!NOECHO
+echo sample1.hsh!
+echo the working directory is `pwd`
+!YESECHO
