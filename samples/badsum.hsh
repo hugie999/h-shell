@@ -1,0 +1,6 @@
+!NOECHO
+#checksum works by checking the md5 of all text AFTER it
+#this is purposfully a bad checksum
+!CHECK a
+echo [green]this text should not appear[/]
+!YESECHO

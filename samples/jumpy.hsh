@@ -1,0 +1,10 @@
+!NOECHO
+!CHECK
+#this file tests jumping
+!SET itters 0
+!TAG jumpy1
+echo hello! `!MATH itters+1`
+!SET itters `!MATH itters+1`
+!SET canrun `!MATH itters<10`
+!RUNIF canrun !GOTO jumpy1
+!YESECHO

@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import rich
 import rich.style
+import rich.text
 
 #typeing
 # import sys
@@ -41,29 +42,24 @@ def runCommand(command:list[str],cdreal:Path,c:rich.console.Console,style:rich.s
         try:
             hi = os.get_terminal_size()[1]
             if hasmeta:
-                c.rule("listing of " + str(metaname),align='left')
+                c.rule(str(metaname))
             else:
-                c.rule("listing of " + str(cd),align='left')
+                c.rule(str(cd))
             a = 0
             for i in cd.iterdir():
                 a += 1
                 if i.is_dir():
-                    c.print(str(i.name) + " -[dir]-")
+                    c.print(str(i.name) + " -\\[dir]-",justify='center')
                 else:
                     if i.name != ".hmeta" and i.name != ".hdrvmeta  ":
-                        c.print(str(i.name))
-                
-                if a == hi - 1 or a == hi:
-                    input("--press enter to show more--")
-                    c.print("\x1B[1A",end="")
-                    c.print("\x1B[2K",end="")
-                    a = 0
+                        c.print(str(i.name),justify='center')
             #print(+"hello world im a plugin lol")
         except KeyboardInterrupt:
             pass
         #print("\x1B[1A",end="")
         # print("\x1B[2K",end="")
         # print("\x1B[0E",end="")
+        c.rule()
         return 0
     elif command[0] == "find":
         searchfor = ' '.join(command[1:])
@@ -87,8 +83,6 @@ def runCommand(command:list[str],cdreal:Path,c:rich.console.Console,style:rich.s
                     
                     if a == hi - 1 or a == hi:
                         input("--press enter to show more--")
-                        c.print("\x1B[1A",end="")
-                        c.print("\x1B[2K",end="")
                         a = 0
         except KeyboardInterrupt:
             pass

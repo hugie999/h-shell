@@ -1,16 +1,14 @@
 #v1
 COMS = ["ftp"] #commands used
 META = {
-    "name": "ftp.plug.py",
-    "desc": "my ATEMPT at makeing an ftp client (test plugin)",
-    "pluginver": 1,
-    "type":0,
-    "oncommand" : False,
-    "doafter" : False
-}# note plugin ver and ver are DIFFRENT ver is for the version of the plugin and plugin ver is what is used in the docom function
-#note2 type is the well type of plugin
-#type 0 is the normal one and is only called when a reserved command is used
-#type 1 is called every command and the used command is also run after
+    "id": "ca.hugie999.hshell.ftp",
+    'title':'ftp command plugin',
+    "description": "my ATEMPT at makeing an ftp client (test plugin)",
+    "version": 1.1,
+    "apiver":3,
+    "type" : 'command'
+}
+PLUGVER = 3
 HELPCOMS = ["ftp ([remote](:port))"]
 HELPDESC = ["ftp into a remote server or location"]
 import os
@@ -19,6 +17,8 @@ import ftplib
 from pathlib import Path
 from getpass import getpass
 import math
+import rich.console
+import rich.style
 ftp = FTP()
 hi = 0
 cwd = ""
@@ -119,12 +119,13 @@ def chd(newdir):
     except ftplib.error_perm as e:
         if getcode(e.args[0])[0] == 550:
             print("[couldent change directory (got 'ftplib.error_perm')]")
-def docom(comfull="",themestr=[],cd=Path()):
+def runCommand(command:list[str],cdreal:Path,c:rich.console.Console,style:rich.style.Style|str):
     global hi
     global cwd
     global listing
     listing = []
     cwd = ""
+    comfull = ' '.join(command)
     if len(comfull) > 4:
         ADDR = comfull.split()[1].split(":")[0]
         if ":" in comfull:
