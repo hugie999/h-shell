@@ -37,7 +37,7 @@ a = logging.StreamHandler()
 a.setLevel(logging.INFO)
 a.setFormatter(logging.Formatter('%(name)s - %(levelname)s - %(message)s'))
 reservedShellVars = ['FILE','LINES','INPUT']
-shellVars = {'FILE':None,'STRICT':False,'SPECIALCHARS':True,'DOCHECK':False,'SUM':None,'MULTILINE':False,'LINES':[],'LINENO':1,'TAGS':{},'PROMPT':'>','INPUT':None,'JUMPING':False,'JUMPLINES':-1}
+shellVars = {'FILE':None,'STRICT':False,'SPECIALCHARS':True,'DOCHECK':False,'SUM':None,'MULTILINE':False,'LINES':[],'LINENO':1,'TAGS':{},'PROMPT':'>','INPUT':None,'JUMPING':False,'JUMPLINES':-1,'newMode':True}
 loadedFuntions = {'autoExec':'!NOECHO\necho empty...\necho `!GET FILE`'}
 currentDirectory:Path = Path(HOME)
 logs.info(HOME)
@@ -71,42 +71,6 @@ def runFuntion(funcName:str,funcArgs:tuple):
         runFile(io.StringIO(loadedFuntions[funcName]),currentDirectory,fileName=f'__FUNC_{funcName}__')
     else:
         raise FileNotFoundError('no function')
-
-def preProcessCommand(cmd:str,console:rich.console.Console,cd:Path) -> str:
-    cmdSplit = cmd.split('`')
-    origCmdSplit = cmd.split('`')
-    substitutions = []
-    logs.info(f'cmd: {cmdSplit}')
-    
-    for ind,val in enumerate(origCmdSplit):
-        if ind%2!=0:
-            cmdSplit.pop(ind)
-
-    substitutions = re.findall('`.*`',cmd)
-    for indx,value in enumerate(substitutions):
-        value:str
-        substitutions[indx] = value.removeprefix('`').removesuffix('`')
-    
-    
-    
-    logs.info(f'command: {cmdSplit}')
-    logs.info(f'substitutions: {substitutions}')
-    
-    for ind,command in enumerate(substitutions):
-        try:
-            with console.capture() as cap:
-                logs.info(f'run substituion: {command}')
-                processCommand(command,console,ensureNoSystemCommands=True,dontAdvanceLines=True,dontAddLines=True)
-            outPut = str(rich.text.Text.from_ansi(cap.get().removesuffix('\n')))
-            logs.info(f'substitution output: {outPut}')
-        except classes.commandNotFoundError:
-            outPut = subprocess.getoutput(command)
-        cmdSplit.insert(ind*2+1,outPut)
-    logs.info(f'command: {cmdSplit}')
-    
-    return ''.join(cmdSplit)
-
-    runFile()
 
 def preProcessCommand(cmd:str,console:rich.console.Console,cd:Path) -> str:
     cmdSplit = cmd.split('`')
@@ -375,7 +339,10 @@ def processCommand(cmd:str,c:rich.console.Console,*,ensureNoSystemCommands:bool=
                     raise classes.commandNotFoundError('command not found!')
                 else:
                     try:
-                        code = subprocess.run(commandSplit).returncode
+                        if shellVars['newMode']:
+                            code = runShellCommandContained(commandSplit).returncode
+                        else:
+                            code = subprocess.run(commandSplit).returncode
                     except FileNotFoundError:
                         c.print('[red]command not found![/]')
                         return 1
@@ -386,6 +353,14 @@ def processCommand(cmd:str,c:rich.console.Console,*,ensureNoSystemCommands:bool=
                         currentDirectory = Path(os.getcwd())
                         return code
     return 0
+
+def runShellCommandContained(com:list[str]) -> subprocess.Popen:
+    process = subprocess.Popen(com,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE,encoding='utf-8')
+    # process.stdin.write(input(':'))
+    console.print()
+    print(process.stdout.read())
+    process.wait()
+    return process
 
 def runFile(file:io.StringIO|str,cd:Path,*,fileName:str|None=None):
     global shellVars

@@ -1,7 +1,2 @@
 # h-shell
-note: this isnt a real shell and needs bash to run stuff sorry
-a lil python shell thing
-or somthing idk
-it has commands and stuff
-and it can update
-idk what to put here
+yet another linux shell
