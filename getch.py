@@ -4,6 +4,9 @@ import select
 import tty
 import termios
 import contextlib
+import struct
+import fcntl
+
 
 class keyboardHolder(contextlib.AbstractContextManager):
     def __init__(self) -> None:
@@ -30,3 +33,6 @@ class keyboardHolder(contextlib.AbstractContextManager):
         return super().__exit__(exc_type, exc_value, traceback)
     # def __exit__(self,a,b,c) -> None:
     #     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.old_settings)
+def set_winsize(fd, row, col, xpix=0, ypix=0):
+    winsize = struct.pack("HHHH", row, col, xpix, ypix)
+    fcntl.ioctl(fd, termios.TIOCSWINSZ, winsize)

@@ -11,7 +11,9 @@ import typing
 import readline
 import io
 import re
+import rich.live
 import rich.markdown
+import rich.panel
 import rich.screen
 import rich.style
 import rich.table
@@ -24,6 +26,7 @@ from pathlib import Path
 import subprocess
 import json
 import getch
+import threading
 
 if os.name == 'nt':
     raise NotImplementedError('windows is NOT supported')
@@ -37,7 +40,7 @@ a = logging.StreamHandler()
 a.setLevel(logging.INFO)
 a.setFormatter(logging.Formatter('%(name)s - %(levelname)s - %(message)s'))
 reservedShellVars = ['FILE','LINES','INPUT']
-shellVars = {'FILE':None,'STRICT':False,'SPECIALCHARS':True,'DOCHECK':False,'SUM':None,'MULTILINE':False,'LINES':[],'LINENO':1,'TAGS':{},'PROMPT':'>','INPUT':None,'JUMPING':False,'JUMPLINES':-1,'newMode':True}
+shellVars = {'FILE':None,'STRICT':False,'SPECIALCHARS':True,'DOCHECK':False,'SUM':None,'MULTILINE':False,'LINES':[],'LINENO':1,'TAGS':{},'PROMPT':'>','INPUT':None,'JUMPING':False,'JUMPLINES':-1,'newMode':False}
 loadedFuntions = {'autoExec':'!NOECHO\necho empty...\necho `!GET FILE`'}
 currentDirectory:Path = Path(HOME)
 logs.info(HOME)
@@ -355,11 +358,30 @@ def processCommand(cmd:str,c:rich.console.Console,*,ensureNoSystemCommands:bool=
     return 0
 
 def runShellCommandContained(com:list[str]) -> subprocess.Popen:
-    process = subprocess.Popen(com,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE,encoding='utf-8')
-    # process.stdin.write(input(':'))
-    console.print()
-    print(process.stdout.read())
-    process.wait()
+    try:
+        newEnv = os.environ.copy()
+        newEnv['COLUMNS'] = '5'
+        process = subprocess.Popen(com,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,stdin=subprocess.PIPE,encoding='utf-8',env=newEnv)
+        # process.stdin.write(input(':'))
+        keys = ''
+        def keyboardThreadFuntion():
+            with getch.keyboardHolder() as key:
+                k = key.read()
+                keys += k
+                process.stdin.write(k)
+        pan = rich.panel.Panel('',title=com[0])
+        # termSize = os.get_terminal_size()
+        # getch.set_winsize(process.stdout.fileno(),termSize.lines,termSize.columns-2)
+        keyboardThread = threading.Thread(None,keyboardThreadFuntion)
+        keyboardThread.start()
+        with rich.live.Live(pan) as live:
+            pan.renderable += process.stdout.read()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        process.wait(10)
+        keyboardThread.join(3)
+        console.print(pan)
     return process
 
 def runFile(file:io.StringIO|str,cd:Path,*,fileName:str|None=None):
